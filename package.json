@@ -1,0 +1,13 @@
+{
+  "name": "templ-mount",
+  "description": "Allow templates to be loaded from url&#39;s",
+  "main": "templ-mount.js",
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0"
+  },
+  "devDependencies": {
+    "@polymer/iron-demo-helpers": "^3.0.0-pre.12",
+    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "wct-browser-legacy": "^1.0.0"
+  }
+}

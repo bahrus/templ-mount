@@ -1,0 +1,106 @@
+interface ICEParams{
+    tagName: string,
+    cls: any,
+    sharedTemplateTagName: string
+}
+const _cachedTemplates : {[key:string] : string} = {};
+const fetchInProgress : {[key:string] : boolean} = {};
+export function loadTemplate(template: HTMLTemplateElement, params?: ICEParams){
+    const src = template.dataset.src;
+    if(src){
+        if(_cachedTemplates[src]){
+            template.innerHTML = _cachedTemplates[src];
+            if(params) customElements.define(params.tagName, params.cls);
+        }else{
+            if(fetchInProgress[src]){
+                if(params){
+                    setTimeout(() =>{
+                        loadTemplate(template, params);
+                    }, 100);
+                }
+                return;
+            }
+            fetchInProgress[src] = true;
+            fetch(src, {
+                credentials: 'include'
+            }).then(resp =>{
+                resp.text().then(txt =>{
+                    fetchInProgress[src] = false;
+                    _cachedTemplates[src] = txt;
+                    template.innerHTML = txt;
+                    template.setAttribute('loaded', '');
+                    if(params) customElements.define(params.tagName, params.cls);
+                })
+            })
+        }
+
+    }else{
+        if(params) customElements.define(params.tagName, params.cls);
+    }
+}
+export function qsa(css, from?: HTMLElement | Document | DocumentFragment) : HTMLElement[]{
+    return  [].slice.call((from ? from : this).querySelectorAll(css));
+}
+export class TemplMount extends HTMLElement{
+    static get is(){return 'templ-mount';}
+    static _alreadyDidGlobalCheck = false;
+    constructor() {
+        super();
+        if(!TemplMount._alreadyDidGlobalCheck){
+            TemplMount._alreadyDidGlobalCheck = true;
+            this.loadTemplatesOutsideShadowDOM();
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", e => {
+                    this.loadTemplatesOutsideShadowDOM();
+                    this.monitorHeadForTemplates();
+                });
+            }else{
+                this.monitorHeadForTemplates();
+            }
+        }
+        
+
+    }
+
+    getHost(){
+        const parent = this.parentNode as HTMLElement;
+        return parent['host'];
+        // if(parent.nodeType !== 11){
+        //     return;
+        // }
+        
+    }
+    loadTemplates(from: DocumentFragment){
+        qsa('template[data-src]', from).forEach(externalRefTemplate =>{
+            loadTemplate(externalRefTemplate as HTMLTemplateElement);
+        })
+    }
+    loadTemplatesOutsideShadowDOM(){
+        this.loadTemplates(document);
+    }
+    loadTemplateInsideShadowDOM(){
+        const host = this.getHost();
+        if(!host) return;
+        this.loadTemplates(host);
+    }
+    _observer: MutationObserver;
+    monitorHeadForTemplates(){
+        const config = { childList: true};
+        this._observer =  new MutationObserver((mutationsList: MutationRecord[]) =>{
+            mutationsList.forEach(mutationRecord =>{
+                mutationRecord.addedNodes.forEach((node: HTMLElement) =>{
+                    if(node.tagName === 'TEMPLATE') loadTemplate(node as HTMLTemplateElement);
+                })
+            })
+        });
+    }
+    connectedCallback(){
+        this.loadTemplateInsideShadowDOM();
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", e => {
+                this.loadTemplateInsideShadowDOM();
+            });
+        }
+    }
+}
+customElements.define(TemplMount.is, TemplMount)
