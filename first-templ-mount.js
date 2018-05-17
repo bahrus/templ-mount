@@ -1,6 +1,9 @@
+
+//@ts-check
+(function () {
 const _cachedTemplates = {};
 const fetchInProgress = {};
-export function loadTemplate(template, params) {
+function loadTemplate(template, params) {
     const src = template.dataset.src;
     if (src) {
         if (_cachedTemplates[src]) {
@@ -37,10 +40,10 @@ export function loadTemplate(template, params) {
             customElements.define(params.tagName, params.cls);
     }
 }
-export function qsa(css, from) {
+function qsa(css, from) {
     return [].slice.call((from ? from : this).querySelectorAll(css));
 }
-export class TemplMount extends HTMLElement {
+class TemplMount extends HTMLElement {
     constructor() {
         super();
         if (!TemplMount._alreadyDidGlobalCheck) {
@@ -104,3 +107,5 @@ if (!customElements.get(TemplMount.is)) {
     customElements.define(TemplMount.is, TemplMount);
 }
 //# sourceMappingURL=templ-mount.js.map
+})();  
+    

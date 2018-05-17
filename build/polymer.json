@@ -1,0 +1,46 @@
+{
+  "entrypoint": "index.html",
+  "fragments": [],
+  "sources": [
+    "templ-mount.js",
+    "first-templ-mount.js",
+    "index.html"
+  ],
+  "extraDependencies": [
+    "bower_components/webcomponentsjs/*.js"
+  ],
+  "builds": [
+    {
+      "name": "ES5",
+      "js": {
+        "minify": true,
+        "compile": true
+      },
+      "html": {
+        "minify": true
+      },
+      "css": {
+        "minify": true
+      }
+    },
+    {
+      "name": "ES6",
+      "js": {
+        "minify": true,
+        "compile": false
+      },
+      "html": {
+        "minify": true
+      },
+      "css": {
+        "minify": true
+      }
+    }
+  ],
+  "lint": {
+    "rules": [
+      "polymer-2"
+    ]
+  },
+  "moduleResolution": "node"
+}

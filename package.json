@@ -3,7 +3,8 @@
   "description": "Allow templates to be loaded from url&#39;s",
   "main": "templ-mount.js",
   "dependencies": {
-    "@polymer/polymer": "^3.0.0"
+    "@polymer/polymer": "^3.0.0",
+    "@types/node": "^10.1.0"
   },
   "devDependencies": {
     "@polymer/iron-demo-helpers": "^3.0.0-pre.12",

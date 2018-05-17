@@ -1,8 +1,25 @@
 {
-  "npm": true,
+  "sources":[
+    "templ-mount.js",
+    "first-templ-mount.js"
+  ],
   "lint": {
     "rules": [
-      "polymer-3"
+      "polymer-2"
     ]
-  }
+  },
+  "builds":[
+    {
+      "name": "ES5",
+      "js": {"minify": true, "compile": true},
+      "html": {"minify": true},
+      "css" : {"minify": true}
+    },
+    {
+      "name": "ES6",
+      "js": {"minify": true, "compile": false},
+      "html": {"minify": true},
+      "css" : {"minify": true}
+    }    
+  ]
 }

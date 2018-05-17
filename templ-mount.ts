@@ -103,4 +103,6 @@ export class TemplMount extends HTMLElement{
         }
     }
 }
-customElements.define(TemplMount.is, TemplMount)
+if(!customElements.get(TemplMount.is)){
+    customElements.define(TemplMount.is, TemplMount);
+}
