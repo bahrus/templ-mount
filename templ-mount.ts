@@ -65,9 +65,7 @@ export class TemplMount extends HTMLElement{
     getHost(){
         const parent = this.parentNode as HTMLElement;
         return parent['host'];
-        // if(parent.nodeType !== 11){
-        //     return;
-        // }
+        
         
     }
     loadTemplates(from: DocumentFragment){
