@@ -2,7 +2,7 @@
 
 templ-mount is a 855B (gzipped / minified) dependency free custom element. 
 
-Allow templates to be loaded from url&#39;s
+It allows templates to be loaded from url&#39;s
 
 ```html
 <templ-mount></templ-mount>
@@ -11,8 +11,8 @@ Allow templates to be loaded from url&#39;s
 does the following:
 
 1)  It searches for template elements outside any Shadow DOM, with attribute data-src.  It preemptively downloads those template references.
-2)  It searches for template elements inside its parent Shadow DOM.
-3)  It monitors the document.head element for additional template elements and loads them as they get added.
+2)  It searches for template elements inside its parent element with attribute data-src.
+3)  It monitors the document.head element for additional template elements with attribute data-src and loads them as they get added.
 4)  Once the template is downloaded and inserted into the template, the "loaded" attribute is set.
 
 ## Install the Polymer-CLI
