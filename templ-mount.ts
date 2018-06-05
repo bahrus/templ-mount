@@ -1,43 +1,8 @@
-interface ICEParams{
-    tagName: string,
-    cls: any,
-    sharedTemplateTagName: string
-}
-const _cachedTemplates : {[key:string] : string} = {};
-const fetchInProgress : {[key:string] : boolean} = {};
-export function loadTemplate(template: HTMLTemplateElement, params?: ICEParams){
-    const src = template.dataset.src;
-    if(src){
-        if(_cachedTemplates[src]){
-            template.innerHTML = _cachedTemplates[src];
-            if(params) customElements.define(params.tagName, params.cls);
-        }else{
-            if(fetchInProgress[src]){
-                if(params){
-                    setTimeout(() =>{
-                        loadTemplate(template, params);
-                    }, 100);
-                }
-                return;
-            }
-            fetchInProgress[src] = true;
-            fetch(src, {
-                credentials: 'include'
-            }).then(resp =>{
-                resp.text().then(txt =>{
-                    fetchInProgress[src] = false;
-                    _cachedTemplates[src] = txt;
-                    template.innerHTML = txt;
-                    template.setAttribute('loaded', '');
-                    if(params) customElements.define(params.tagName, params.cls);
-                })
-            })
-        }
+import {ICEParams, loadTemplate} from './first-templ.js';
 
-    }else{
-        if(params) customElements.define(params.tagName, params.cls);
-    }
-}
+// const _cachedTemplates : {[key:string] : string} = {};
+// const fetchInProgress : {[key:string] : boolean} = {};
+
 export function qsa(css, from?: HTMLElement | Document | DocumentFragment) : HTMLElement[]{
     return  [].slice.call((from ? from : this).querySelectorAll(css));
 }

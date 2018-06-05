@@ -2,6 +2,7 @@
   "entrypoint": "index.html",
   "fragments": [],
   "sources": [
+    "first-templ.js",
     "templ-mount.js",
     "first-templ-mount.js",
     "index.html"

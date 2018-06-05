@@ -15,6 +15,13 @@ does the following:
 3)  It monitors the document.head element for additional template elements with attribute data-src and loads them as they get added.
 4)  Once the template is downloaded and inserted into the template, the "loaded" attribute is set.
 
+```html
+<!-- sample.html -->
+<head>
+</head>
+```
+
+
 ## Install the Polymer-CLI
 
 First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) and npm (packaged with [Node.js](https://nodejs.org)) installed. Run `npm install` to install your element's dependencies, then run `polymer serve` to serve your element locally.
