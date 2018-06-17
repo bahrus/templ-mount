@@ -50,6 +50,7 @@ export class TemplMount extends HTMLElement {
                 });
             });
         });
+        this._observer.observe(document.head, config);
     }
     connectedCallback() {
         this.loadTemplateInsideShadowDOM();

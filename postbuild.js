@@ -22,7 +22,7 @@ let newContent = `
 ${newLines.join('\n')}
 })();  
     `;
-fs.writeFileSync("first-templ-mount.js", newContent, 'utf8');
+fs.writeFileSync("first-templ.temple-mount.js", newContent, 'utf8');
 
 
 

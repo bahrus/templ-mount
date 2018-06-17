@@ -15,11 +15,7 @@ does the following:
 3)  It monitors the document.head element for additional template elements with attribute data-src and loads them as they get added.
 4)  Once the template is downloaded and inserted into the template, the "loaded" attribute is set.
 
-```html
-<!-- sample.html -->
-<head>
-</head>
-```
+
 
 
 ## Install the Polymer-CLI
