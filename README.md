@@ -1,6 +1,6 @@
 # \<templ-mount\>
 
-templ-mount is a 1.2 KB (gzipped / minified) dependency free custom element. 
+templ-mount is a ~1.2 KB (gzipped / minified) dependency free custom element. 
 
 It allows templates to be loaded from url&#39;s
 
