@@ -35,9 +35,12 @@ export class TemplMount extends HTMLElement{
     }
     loadTemplates(from: DocumentFragment){
         qsa('template[data-src]', from).forEach((externalRefTemplate : HTMLTemplateElement) =>{
-            if(!externalRefTemplate.dataset.dumped){
+            const ds = externalRefTemplate.dataset;
+            const ua = ds.ua;
+            if(ua && navigator.userAgent.indexOf(ua) === -1) return;
+            if(!ds.dumped){
                 document.head.appendChild(externalRefTemplate.content.cloneNode(true));
-                externalRefTemplate.dataset.dumped = 'true';
+                ds.dumped = 'true';
             }
             loadTemplate(externalRefTemplate as HTMLTemplateElement);
         })

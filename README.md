@@ -16,7 +16,24 @@ does the following:
 4)  Once the template is downloaded and inserted into the template, the "loaded" attribute is set.
 
 
+## Copying the contents of the preloaded template into the header.
 
+If the template contains some content, e.g.:
+
+```html
+<template id="bb_chart_template" data-src="billboardChart.html" data-ua="Chrome">
+    <script async src="https://unpkg.com/xtal-json-editor@0.0.19/xtal-json-editor.js"></script>
+    <script type="module" async src="https://unpkg.com/xtal-json-merge@0.2.21/xtal-insert-json.js?module"></script>
+    <script type="module" async src="https://unpkg.com/p-d.p-u@0.0.10/p-d.js?module"></script>
+    <script src="https://unpkg.com/billboard-charts@0.1.18/billboard-charts.js"></script>
+</template>
+```
+
+then the content inside the template gets cloned into document.head, prior to replacing it with the contents of the html file.
+
+Note that attribute data-ua.  This allows you to specify a user agent string.  Templates will only mount if the specified value is found inside the user agent of the browser.
+
+This can allow multiple templates pointing to the same html file to point to different javascript files, depending on the browser.
 
 ## Install the Polymer-CLI
 
