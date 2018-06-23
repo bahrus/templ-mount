@@ -1,6 +1,48 @@
 
-//@ts-check
-(function () {
+    //@ts-check
+    (function () {
+    const _cachedTemplates = {};
+const fetchInProgress = {};
+function loadTemplate(template, params) {
+    const src = template.dataset.src;
+    if (src) {
+        if (_cachedTemplates[src]) {
+            template.innerHTML = _cachedTemplates[src];
+            if (params)
+                customElements.define(params.tagName, params.cls);
+        }
+        else {
+            if (fetchInProgress[src]) {
+                if (params) {
+                    setTimeout(() => {
+                        loadTemplate(template, params);
+                    }, 100);
+                }
+                return;
+            }
+            fetchInProgress[src] = true;
+            fetch(src, {
+                credentials: 'same-origin'
+            }).then(resp => {
+                resp.text().then(txt => {
+                    fetchInProgress[src] = false;
+                    if (params && params.preProcessor)
+                        txt = params.preProcessor.process(txt);
+                    _cachedTemplates[src] = txt;
+                    template.innerHTML = txt;
+                    template.setAttribute('loaded', '');
+                    if (params)
+                        customElements.define(params.tagName, params.cls);
+                });
+            });
+        }
+    }
+    else {
+        if (params && params.tagName)
+            customElements.define(params.tagName, params.cls);
+    }
+}
+//# sourceMappingURL=first-templ.js.map
 // const _cachedTemplates : {[key:string] : string} = {};
 // const fetchInProgress : {[key:string] : boolean} = {};
 function qsa(css, from) {
@@ -29,7 +71,15 @@ class TemplMount extends HTMLElement {
         return parent['host'];
     }
     loadTemplates(from) {
-        qsa('template[data-src]', from).forEach(externalRefTemplate => {
+        qsa('template[data-src]', from).forEach((externalRefTemplate) => {
+            const ds = externalRefTemplate.dataset;
+            const ua = ds.ua;
+            if (ua && navigator.userAgent.indexOf(ua) === -1)
+                return;
+            if (!ds.dumped) {
+                document.head.appendChild(externalRefTemplate.content.cloneNode(true));
+                ds.dumped = 'true';
+            }
             loadTemplate(externalRefTemplate);
         });
     }
@@ -68,5 +118,5 @@ if (!customElements.get(TemplMount.is)) {
     customElements.define(TemplMount.is, TemplMount);
 }
 //# sourceMappingURL=templ-mount.js.map
-})();  
-    
+    })();  
+        
