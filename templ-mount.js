@@ -27,7 +27,11 @@ export class TemplMount extends HTMLElement {
         return parent['host'];
     }
     loadTemplates(from) {
-        qsa('template[data-src]', from).forEach(externalRefTemplate => {
+        qsa('template[data-src]', from).forEach((externalRefTemplate) => {
+            if (!externalRefTemplate.dataset.dumped) {
+                document.head.appendChild(externalRefTemplate.content.cloneNode(true));
+                externalRefTemplate.dataset.dumped = 'true';
+            }
             loadTemplate(externalRefTemplate);
         });
     }
