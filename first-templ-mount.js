@@ -4,7 +4,7 @@
     const _cachedTemplates = {};
 const fetchInProgress = {};
 function loadTemplate(template, params) {
-    const src = template.dataset.src;
+    const src = template.dataset.src || template.getAttribute('href');
     if (src) {
         if (_cachedTemplates[src]) {
             template.innerHTML = _cachedTemplates[src];

@@ -11,7 +11,7 @@ export interface ICEParams{
 const _cachedTemplates : {[key:string] : string} = {};
 const fetchInProgress : {[key:string] : boolean} = {};
 export function loadTemplate(template: HTMLTemplateElement, params?: ICEParams){
-    const src = template.dataset.src;
+    const src = template.dataset.src || template.getAttribute('href');
     if(src){
         if(_cachedTemplates[src]){
             template.innerHTML = _cachedTemplates[src];
