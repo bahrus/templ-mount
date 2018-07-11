@@ -2,7 +2,7 @@
   "sources":[
     "first-templ.js",
     "templ-mount.js",
-    "first-templ-mount.js"
+    "templ-mount.iife.js"
   ],
   "lint": {
     "rules": [
@@ -15,6 +15,12 @@
       "js": {"minify": true, "compile": true},
       "html": {"minify": true},
       "css" : {"minify": true}
+    },
+    {
+      "name": "ES5-no-mini",
+      "js": {"minify": false, "compile": true},
+      "html": {"minify": false},
+      "css" : {"minify": false}
     },
     {
       "name": "ES6",
