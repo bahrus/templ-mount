@@ -31,13 +31,10 @@ If the template contains some content, e.g.:
 
 then the content inside the template gets cloned into document.head, prior to replacing it with the contents of the html file.
 
-Note that attribute data-ua.  This allows you to specify a user agent string.  Templates will only mount if the specified value is found inside the user agent of the browser.
+Note the attribute data-ua.  This allows you to specify a user agent string.  Templates will only mount if the specified value is found inside the user agent of the browser.
 
 This can allow multiple templates pointing to the same html file to point to different javascript files, depending on the browser.
 
-## Templates that can work as both web components and as standalone pages.
-
-If combining templ-mount with carbon-copy
 
 ## Install the Polymer-CLI
 
