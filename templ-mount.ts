@@ -1,4 +1,4 @@
-import {ICEParams, loadTemplate} from './first-templ.js';
+import {ICEParams, loadTemplate, delayedLoad} from './first-templ.js';
 
 // const _cachedTemplates : {[key:string] : string} = {};
 // const fetchInProgress : {[key:string] : boolean} = {};
@@ -30,8 +30,6 @@ export class TemplMount extends HTMLElement{
     getHost(){
         const parent = this.parentNode as HTMLElement;
         return parent['host'];
-        
-        
     }
     loadTemplates(from: DocumentFragment){
         qsa('template[data-src]', from).forEach((externalRefTemplate : HTMLTemplateElement) =>{
@@ -42,7 +40,13 @@ export class TemplMount extends HTMLElement{
                 document.head.appendChild(externalRefTemplate.content.cloneNode(true));
                 ds.dumped = 'true';
             }
-            loadTemplate(externalRefTemplate as HTMLTemplateElement);
+            const delay = ds.delay;
+            if(delay){
+                delayedLoad(externalRefTemplate, parseInt(delay));
+            }else{
+                loadTemplate(externalRefTemplate as HTMLTemplateElement);
+            }
+            
         })
     }
     loadTemplatesOutsideShadowDOM(){

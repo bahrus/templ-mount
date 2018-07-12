@@ -10,7 +10,7 @@ It allows templates to be loaded from url&#39;s
 
 does the following:
 
-1)  It searches for template elements outside any Shadow DOM, with attribute data-src.  It preemptively downloads those template references.
+1)  It searches for template elements outside any Shadow DOM, with attribute data-src, which can specify the url.  Or you can just add attribute data-src, and specify the actual url using  the href attribute, if you are willing to assume href won't become a standard attribute in the future).  It preemptively downloads those template references.
 2)  It searches for template elements inside its parent element with attribute data-src, and downloads those as well.
 3)  It monitors the document.head element for additional template elements with attribute data-src and loads them as they get added.
 4)  Once the template is downloaded and inserted into the template, the "loaded" attribute is set.

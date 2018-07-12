@@ -3,6 +3,12 @@
   var _cachedTemplates = {};
   var fetchInProgress = {};
 
+  function delayedLoad(template, delay, params) {
+    setTimeout(function () {
+      loadTemplate(template, params);
+    }, delay);
+  }
+
   function loadTemplate(template, params) {
     var src = template.dataset.src || template.getAttribute('href');
 
@@ -96,7 +102,13 @@
             ds.dumped = 'true';
           }
 
-          loadTemplate(externalRefTemplate);
+          var delay = ds.delay;
+
+          if (delay) {
+            delayedLoad(externalRefTemplate, parseInt(delay));
+          } else {
+            loadTemplate(externalRefTemplate);
+          }
         });
       }
     }, {

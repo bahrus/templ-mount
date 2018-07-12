@@ -1,4 +1,4 @@
-import { loadTemplate } from './first-templ.js'; // const _cachedTemplates : {[key:string] : string} = {};
+import { loadTemplate, delayedLoad } from './first-templ.js'; // const _cachedTemplates : {[key:string] : string} = {};
 // const fetchInProgress : {[key:string] : boolean} = {};
 
 export function qsa(css, from) {
@@ -53,7 +53,13 @@ function (_HTMLElement) {
           ds.dumped = 'true';
         }
 
-        loadTemplate(externalRefTemplate);
+        var delay = ds.delay;
+
+        if (delay) {
+          delayedLoad(externalRefTemplate, parseInt(delay));
+        } else {
+          loadTemplate(externalRefTemplate);
+        }
       });
     }
   }, {

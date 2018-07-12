@@ -1,5 +1,10 @@
 const _cachedTemplates = {};
 const fetchInProgress = {};
+export function delayedLoad(template, delay, params) {
+    setTimeout(() => {
+        loadTemplate(template, params);
+    }, delay);
+}
 export function loadTemplate(template, params) {
     const src = template.dataset.src || template.getAttribute('href');
     if (src) {

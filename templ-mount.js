@@ -1,4 +1,4 @@
-import { loadTemplate } from './first-templ.js';
+import { loadTemplate, delayedLoad } from './first-templ.js';
 // const _cachedTemplates : {[key:string] : string} = {};
 // const fetchInProgress : {[key:string] : boolean} = {};
 export function qsa(css, from) {
@@ -36,7 +36,13 @@ export class TemplMount extends HTMLElement {
                 document.head.appendChild(externalRefTemplate.content.cloneNode(true));
                 ds.dumped = 'true';
             }
-            loadTemplate(externalRefTemplate);
+            const delay = ds.delay;
+            if (delay) {
+                delayedLoad(externalRefTemplate, parseInt(delay));
+            }
+            else {
+                loadTemplate(externalRefTemplate);
+            }
         });
     }
     loadTemplatesOutsideShadowDOM() {

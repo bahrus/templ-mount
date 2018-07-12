@@ -3,6 +3,11 @@
     (function () {
     const _cachedTemplates = {};
 const fetchInProgress = {};
+function delayedLoad(template, delay, params) {
+    setTimeout(() => {
+        loadTemplate(template, params);
+    }, delay);
+}
 function loadTemplate(template, params) {
     const src = template.dataset.src || template.getAttribute('href');
     if (src) {
@@ -80,7 +85,13 @@ class TemplMount extends HTMLElement {
                 document.head.appendChild(externalRefTemplate.content.cloneNode(true));
                 ds.dumped = 'true';
             }
-            loadTemplate(externalRefTemplate);
+            const delay = ds.delay;
+            if (delay) {
+                delayedLoad(externalRefTemplate, parseInt(delay));
+            }
+            else {
+                loadTemplate(externalRefTemplate);
+            }
         });
     }
     loadTemplatesOutsideShadowDOM() {
