@@ -33,6 +33,10 @@ function loadTemplate(template, params) {
                     fetchInProgress[src] = false;
                     if (params && params.preProcessor)
                         txt = params.preProcessor.process(txt);
+                    const split = txt.split('<!---->');
+                    if (split.length > 1) {
+                        txt = split[1];
+                    }
                     _cachedTemplates[src] = txt;
                     template.innerHTML = txt;
                     template.setAttribute('loaded', '');
