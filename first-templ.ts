@@ -10,11 +10,6 @@ export interface ICEParams{
 }
 const _cachedTemplates : {[key:string] : string} = {};
 const fetchInProgress : {[key:string] : boolean} = {};
-export function delayedLoad(template: HTMLTemplateElement, delay: number, params?: ICEParams){
-    setTimeout(() =>{
-        loadTemplate(template, params)
-    }, delay);
-}
 export function loadTemplate(template: HTMLTemplateElement, params?: ICEParams){
     const src = template.dataset.src || template.getAttribute('href');
     if(src){

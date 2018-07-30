@@ -3,12 +3,6 @@
   var _cachedTemplates = {};
   var fetchInProgress = {};
 
-  function delayedLoad(template, delay, params) {
-    setTimeout(function () {
-      loadTemplate(template, params);
-    }, delay);
-  }
-
   function loadTemplate(template, params) {
     var src = template.dataset.src || template.getAttribute('href');
 
@@ -51,13 +45,7 @@
       if (params && params.tagName) customElements.define(params.tagName, params.cls);
     }
   } //# sourceMappingURL=first-templ.js.map
-  // const _cachedTemplates : {[key:string] : string} = {};
-  // const fetchInProgress : {[key:string] : boolean} = {};
 
-
-  function qsa(css, from) {
-    return [].slice.call((from ? from : this).querySelectorAll(css));
-  }
 
   var TemplMount =
   /*#__PURE__*/
@@ -98,24 +86,38 @@
     }, {
       key: "loadTemplates",
       value: function loadTemplates(from) {
-        qsa('template[data-src]', from).forEach(function (externalRefTemplate) {
-          var ds = externalRefTemplate.dataset;
-          var ua = ds.ua;
-          if (ua && navigator.userAgent.indexOf(ua) === -1) return;
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
 
-          if (!ds.dumped) {
-            document.head.appendChild(externalRefTemplate.content.cloneNode(true));
-            ds.dumped = 'true';
-          }
+        try {
+          for (var _iterator = from.querySelectorAll('template[data-src]')[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var externalRefTemplate = _step.value;
+            var ds = externalRefTemplate.dataset;
+            var ua = ds.ua;
+            if (ua && navigator.userAgent.indexOf(ua) === -1) return;
 
-          var delay = ds.delay;
+            if (!ds.dumped) {
+              document.head.appendChild(externalRefTemplate.content.cloneNode(true));
+              ds.dumped = 'true';
+            }
 
-          if (delay) {
-            delayedLoad(externalRefTemplate, parseInt(delay));
-          } else {
             loadTemplate(externalRefTemplate);
           }
-        });
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
       }
     }, {
       key: "loadTemplatesOutsideShadowDOM",
@@ -168,9 +170,5 @@
   }(HTMLElement);
 
   TemplMount._alreadyDidGlobalCheck = false;
-
-  if (!customElements.get(TemplMount.is)) {
-    customElements.define(TemplMount.is, TemplMount);
-  } //# sourceMappingURL=templ-mount.js.map
-
+  customElements.define(TemplMount.is, TemplMount); //# sourceMappingURL=templ-mount.js.map
 })();

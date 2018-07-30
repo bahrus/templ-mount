@@ -3,11 +3,6 @@
     (function () {
     const _cachedTemplates = {};
 const fetchInProgress = {};
-function delayedLoad(template, delay, params) {
-    setTimeout(() => {
-        loadTemplate(template, params);
-    }, delay);
-}
 function loadTemplate(template, params) {
     const src = template.dataset.src || template.getAttribute('href');
     if (src) {
@@ -52,11 +47,6 @@ function loadTemplate(template, params) {
     }
 }
 //# sourceMappingURL=first-templ.js.map
-// const _cachedTemplates : {[key:string] : string} = {};
-// const fetchInProgress : {[key:string] : boolean} = {};
-function qsa(css, from) {
-    return [].slice.call((from ? from : this).querySelectorAll(css));
-}
 class TemplMount extends HTMLElement {
     constructor() {
         super();
@@ -80,7 +70,7 @@ class TemplMount extends HTMLElement {
         return parent['host'];
     }
     loadTemplates(from) {
-        qsa('template[data-src]', from).forEach((externalRefTemplate) => {
+        for (const externalRefTemplate of from.querySelectorAll('template[data-src]')) {
             const ds = externalRefTemplate.dataset;
             const ua = ds.ua;
             if (ua && navigator.userAgent.indexOf(ua) === -1)
@@ -89,14 +79,8 @@ class TemplMount extends HTMLElement {
                 document.head.appendChild(externalRefTemplate.content.cloneNode(true));
                 ds.dumped = 'true';
             }
-            const delay = ds.delay;
-            if (delay) {
-                delayedLoad(externalRefTemplate, parseInt(delay));
-            }
-            else {
-                loadTemplate(externalRefTemplate);
-            }
-        });
+            loadTemplate(externalRefTemplate);
+        }
     }
     loadTemplatesOutsideShadowDOM() {
         this.loadTemplates(document);
@@ -129,9 +113,7 @@ class TemplMount extends HTMLElement {
     }
 }
 TemplMount._alreadyDidGlobalCheck = false;
-if (!customElements.get(TemplMount.is)) {
-    customElements.define(TemplMount.is, TemplMount);
-}
+customElements.define(TemplMount.is, TemplMount);
 //# sourceMappingURL=templ-mount.js.map
     })();  
         
