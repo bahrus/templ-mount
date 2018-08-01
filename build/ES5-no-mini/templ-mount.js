@@ -1,4 +1,7 @@
 import { loadTemplate } from './first-templ.js';
+export function qsa(css, from) {
+  return [].slice.call((from ? from : this).querySelectorAll(css));
+}
 export var TemplMount =
 /*#__PURE__*/
 function (_HTMLElement) {
@@ -13,16 +16,16 @@ function (_HTMLElement) {
     if (!TemplMount._alreadyDidGlobalCheck) {
       TemplMount._alreadyDidGlobalCheck = true;
 
-      _this.loadTemplatesOutsideShadowDOM();
-
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", function (e) {
-          _this.loadTemplatesOutsideShadowDOM();
-
           _this.monitorHeadForTemplates();
+
+          _this.loadTemplatesOutsideShadowDOM();
         });
       } else {
         _this.monitorHeadForTemplates();
+
+        _this.loadTemplatesOutsideShadowDOM();
       }
     }
 
@@ -38,38 +41,18 @@ function (_HTMLElement) {
   }, {
     key: "loadTemplates",
     value: function loadTemplates(from) {
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+      qsa('template[data-src]', from).forEach(function (externalRefTemplate) {
+        var ds = externalRefTemplate.dataset;
+        var ua = ds.ua;
+        if (ua && navigator.userAgent.indexOf(ua) === -1) return;
 
-      try {
-        for (var _iterator = from.querySelectorAll('template[data-src]')[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var externalRefTemplate = _step.value;
-          var ds = externalRefTemplate.dataset;
-          var ua = ds.ua;
-          if (ua && navigator.userAgent.indexOf(ua) === -1) return;
-
-          if (!ds.dumped) {
-            document.head.appendChild(externalRefTemplate.content.cloneNode(true));
-            ds.dumped = 'true';
-          }
-
-          loadTemplate(externalRefTemplate);
+        if (!ds.dumped) {
+          document.head.appendChild(externalRefTemplate.content.cloneNode(true));
+          ds.dumped = 'true';
         }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return != null) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
+
+        loadTemplate(externalRefTemplate);
+      });
     }
   }, {
     key: "loadTemplatesOutsideShadowDOM",

@@ -1,5 +1,8 @@
 import {ICEParams, loadTemplate} from './first-templ.js';
 
+export function qsa(css, from?: HTMLElement | Document | DocumentFragment) : HTMLElement[]{
+    return  [].slice.call((from ? from : this).querySelectorAll(css));
+}
 export class TemplMount extends HTMLElement{
     static get is(){return 'templ-mount';}
     static _alreadyDidGlobalCheck = false;
@@ -7,15 +10,16 @@ export class TemplMount extends HTMLElement{
         super();
         if(!TemplMount._alreadyDidGlobalCheck){
             TemplMount._alreadyDidGlobalCheck = true;
-            this.loadTemplatesOutsideShadowDOM();
             if (document.readyState === "loading") {
                 document.addEventListener("DOMContentLoaded", e => {
-                    this.loadTemplatesOutsideShadowDOM();
                     this.monitorHeadForTemplates();
+                    this.loadTemplatesOutsideShadowDOM();
                 });
             }else{
                 this.monitorHeadForTemplates();
+                this.loadTemplatesOutsideShadowDOM();
             }
+            
         }
         
 
@@ -26,7 +30,7 @@ export class TemplMount extends HTMLElement{
         return parent['host'];
     }
     loadTemplates(from: DocumentFragment){
-        for(const externalRefTemplate  of from.querySelectorAll('template[data-src]')){
+        qsa('template[data-src]', from).forEach((externalRefTemplate : HTMLTemplateElement) =>{
             const ds = (<HTMLElement>externalRefTemplate).dataset;
             const ua = ds.ua;
             if(ua && navigator.userAgent.indexOf(ua) === -1) return;
@@ -35,7 +39,7 @@ export class TemplMount extends HTMLElement{
                 ds.dumped = 'true';
             }
             loadTemplate(externalRefTemplate as HTMLTemplateElement);
-        }
+        })
 
     }
     loadTemplatesOutsideShadowDOM(){

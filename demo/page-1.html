@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+    <script type="module" src="../templ-mount.js"></script>
+    <script type="module" src="https://unpkg.com/carbon-copy@0.1.25/c-c.js?module"></script>
+    <template id="page-2" data-src href="page-2.html">
+        <template id="page-3" data-src href="page-3.html"></template>
+        <c-c from="/page-3"></c-c>
+    </template>
+    <c-c from="/page-2"></c-c>
+</head>
+<body>
+    <templ-mount></templ-mount>
+    <page-2></page-2>
+</body>
+</html>

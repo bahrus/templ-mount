@@ -1,18 +1,21 @@
 import { loadTemplate } from './first-templ.js';
+export function qsa(css, from) {
+    return [].slice.call((from ? from : this).querySelectorAll(css));
+}
 export class TemplMount extends HTMLElement {
     constructor() {
         super();
         if (!TemplMount._alreadyDidGlobalCheck) {
             TemplMount._alreadyDidGlobalCheck = true;
-            this.loadTemplatesOutsideShadowDOM();
             if (document.readyState === "loading") {
                 document.addEventListener("DOMContentLoaded", e => {
-                    this.loadTemplatesOutsideShadowDOM();
                     this.monitorHeadForTemplates();
+                    this.loadTemplatesOutsideShadowDOM();
                 });
             }
             else {
                 this.monitorHeadForTemplates();
+                this.loadTemplatesOutsideShadowDOM();
             }
         }
     }
@@ -22,7 +25,7 @@ export class TemplMount extends HTMLElement {
         return parent['host'];
     }
     loadTemplates(from) {
-        for (const externalRefTemplate of from.querySelectorAll('template[data-src]')) {
+        qsa('template[data-src]', from).forEach((externalRefTemplate) => {
             const ds = externalRefTemplate.dataset;
             const ua = ds.ua;
             if (ua && navigator.userAgent.indexOf(ua) === -1)
@@ -32,7 +35,7 @@ export class TemplMount extends HTMLElement {
                 ds.dumped = 'true';
             }
             loadTemplate(externalRefTemplate);
-        }
+        });
     }
     loadTemplatesOutsideShadowDOM() {
         this.loadTemplates(document);
