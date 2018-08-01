@@ -3,6 +3,15 @@ import {ICEParams, loadTemplate} from './first-templ.js';
 export function qsa(css, from?: HTMLElement | Document | DocumentFragment) : HTMLElement[]{
     return  [].slice.call((from ? from : this).querySelectorAll(css));
 }
+
+/**
+* `templ-mount`
+* Dependency free web component that loads templates from data-src (optionally href) attribute
+*
+* @customElement
+* @polymer
+* @demo demo/index.html
+*/
 export class TemplMount extends HTMLElement{
     static get is(){return 'templ-mount';}
     static _alreadyDidGlobalCheck = false;
@@ -31,6 +40,10 @@ export class TemplMount extends HTMLElement{
         const parent = this.parentNode as HTMLElement;
         return parent['host'];
     }
+    /**
+     * 
+     * @param from
+     */
     loadTemplates(from: DocumentFragment){
         qsa('template[data-src]', from).forEach((externalRefTemplate : HTMLTemplateElement) =>{
             const ds = (<HTMLElement>externalRefTemplate).dataset;

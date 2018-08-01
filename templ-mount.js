@@ -2,6 +2,14 @@ import { loadTemplate } from './first-templ.js';
 export function qsa(css, from) {
     return [].slice.call((from ? from : this).querySelectorAll(css));
 }
+/**
+* `templ-mount`
+* Dependency free web component that loads templates from data-src (optionally href) attribute
+*
+* @customElement
+* @polymer
+* @demo demo/index.html
+*/
 export class TemplMount extends HTMLElement {
     constructor() {
         super();
@@ -27,6 +35,10 @@ export class TemplMount extends HTMLElement {
         const parent = this.parentNode;
         return parent['host'];
     }
+    /**
+     *
+     * @param from
+     */
     loadTemplates(from) {
         qsa('template[data-src]', from).forEach((externalRefTemplate) => {
             const ds = externalRefTemplate.dataset;

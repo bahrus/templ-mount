@@ -23,12 +23,27 @@
       "css": {
         "minify": true
       }
+    },
+    {
+      "name": "ES6",
+      "js": {
+        "minify": true,
+        "compile": false
+      },
+      "html": {
+        "minify": true
+      },
+      "css": {
+        "minify": true
+      }
     }
   ],
   "lint": {
     "rules": [
-      "polymer-2"
+      "polymer-3"
     ]
   },
+  "npm": true,
+  "componentDir": "node_modules/",
   "moduleResolution": "node"
 }

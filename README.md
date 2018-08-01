@@ -39,6 +39,8 @@ Note the attribute data-ua.  This allows you to specify a user agent string.  Te
 
 This can allow multiple templates pointing to the same html file to point to different javascript files, depending on the browser.
 
+Templates can be nested, and this will load resources in a somewhat logical order.
+
 If the html file / html stream contains at least two instances of the following "magic string":
 
 ```html
@@ -46,6 +48,8 @@ If the html file / html stream contains at least two instances of the following 
 ```
 
 Then it will only import the content between the first two such strings.  This helps allow an html file / stream to serve both as standalone web page, but also as a template that could be used as web component.
+
+templ-mount works well in combination with [carbon-copy](https://www.webcomponents.org/element/carbon-copy).
 
 ## Referencing:
 
