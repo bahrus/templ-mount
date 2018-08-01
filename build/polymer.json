@@ -14,27 +14,14 @@
     {
       "name": "ES5",
       "js": {
-        "minify": true,
-        "compile": true
-      },
-      "html": {
-        "minify": true
-      },
-      "css": {
-        "minify": true
-      }
-    },
-    {
-      "name": "ES5-no-mini",
-      "js": {
         "minify": false,
         "compile": true
       },
       "html": {
-        "minify": false
+        "minify": true
       },
       "css": {
-        "minify": false
+        "minify": true
       }
     }
   ],

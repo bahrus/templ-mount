@@ -24,7 +24,9 @@ export class TemplMount extends HTMLElement{
         
 
     }
-
+    /**
+     * Gets host from parent
+     */
     getHost(){
         const parent = this.parentNode as HTMLElement;
         return parent['host'];

@@ -43,6 +43,37 @@ If the html file / html stream contains at least two instances of the following 
 
 Then it will only import the content between the first two such strings.  This helps allow an html file / stream to serve both as standalone web page, but also as a template that could be used as web component.
 
+## Referencing:
+
+### Node-based local development
+
+>yarn add templ-mount
+
+or
+
+>np install templ-mount --save
+
+If you are using Polymer 3.0 cli server, or you are doing a build-time bundling with webpack (e.g.), you can reference templ-mount.js
+
+### Weightless development
+
+#### Unbundled / non minified
+
+Chrome or Firefox Nightly (possibly Safari), but not Edge (due to bug?):
+
+```html
+<script type="module" src="https://unpkg.com/templ-mount@0.0.13/templ-mount.js?module"></script>
+<!-- IE11 bundled non minified -->
+<script nomodule src="https://unpkg.com/templ-mount@0.0.13/build/ES5-no-mini/templ-mount.iife.js"></script>
+```
+
+### Bundled / minified
+```html
+<script type="module" src="http://cdn.jsdelivr.net/npm/templ-mount@0.0.13/templ-mount.iife.min.js"></script> <!-- not minified, for some reason-->
+<!-- IE11 bundled minified -->
+<script nomodule src="http://cdn.jsdelivr.net/npm/templ-mount@0.0.13//build/ES5-no-mini/templ-mount.iife.min.js"></script>
+```
+
 ## Install the Polymer-CLI
 
 First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) and npm (packaged with [Node.js](https://nodejs.org)) installed. Run `npm install` to install your element's dependencies, then run `polymer serve` to serve your element locally.

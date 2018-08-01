@@ -20,6 +20,9 @@ export class TemplMount extends HTMLElement {
         }
     }
     static get is() { return 'templ-mount'; }
+    /**
+     * Gets host from parent
+     */
     getHost() {
         const parent = this.parentNode;
         return parent['host'];

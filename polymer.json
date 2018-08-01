@@ -12,15 +12,9 @@
   "builds":[
     {
       "name": "ES5",
-      "js": {"minify": true, "compile": true},
+      "js": {"minify": false, "compile": true},
       "html": {"minify": true},
       "css" : {"minify": true}
-    },
-    {
-      "name": "ES5-no-mini",
-      "js": {"minify": false, "compile": true},
-      "html": {"minify": false},
-      "css" : {"minify": false}
-    } 
+    }
   ]
 }
