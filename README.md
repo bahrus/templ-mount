@@ -1,3 +1,7 @@
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/bahrus/templ-mount)
+
+<a href="https://nodei.co/npm/templ-mount/"><img src="https://nodei.co/npm/templ-mount.png"></a>
+
 # \<templ-mount\>
 
 templ-mount is a ~1.0 KB (gzipped / minified) dependency free custom element. 
