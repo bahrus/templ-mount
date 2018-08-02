@@ -35,21 +35,24 @@ export class TemplMount extends HTMLElement {
         const parent = this.parentNode;
         return parent['host'];
     }
+    initTemplate(template) {
+        const ds = template.dataset;
+        const ua = ds.ua;
+        if (ua && navigator.userAgent.indexOf(ua) === -1)
+            return;
+        if (!ds.dumped) {
+            document.head.appendChild(template.content.cloneNode(true));
+            ds.dumped = 'true';
+        }
+        loadTemplate(template);
+    }
     /**
      *
      * @param from
      */
     loadTemplates(from) {
         qsa('template[data-src]', from).forEach((externalRefTemplate) => {
-            const ds = externalRefTemplate.dataset;
-            const ua = ds.ua;
-            if (ua && navigator.userAgent.indexOf(ua) === -1)
-                return;
-            if (!ds.dumped) {
-                document.head.appendChild(externalRefTemplate.content.cloneNode(true));
-                ds.dumped = 'true';
-            }
-            loadTemplate(externalRefTemplate);
+            this.initTemplate(externalRefTemplate);
         });
     }
     loadTemplatesOutsideShadowDOM() {
@@ -67,7 +70,7 @@ export class TemplMount extends HTMLElement {
             mutationsList.forEach(mutationRecord => {
                 mutationRecord.addedNodes.forEach((node) => {
                     if (node.tagName === 'TEMPLATE')
-                        loadTemplate(node);
+                        this.initTemplate(node);
                 });
             });
         });

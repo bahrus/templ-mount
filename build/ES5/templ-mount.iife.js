@@ -50,6 +50,15 @@
   function qsa(css, from) {
     return [].slice.call((from ? from : this).querySelectorAll(css));
   }
+  /**
+  * `templ-mount`
+  * Dependency free web component that loads templates from data-src (optionally href) attribute
+  *
+  * @customElement
+  * @polymer
+  * @demo demo/index.html
+  */
+
 
   var TemplMount =
   /*#__PURE__*/
@@ -92,19 +101,31 @@
         return parent['host'];
       }
     }, {
+      key: "initTemplate",
+      value: function initTemplate(template) {
+        var ds = template.dataset;
+        var ua = ds.ua;
+        if (ua && navigator.userAgent.indexOf(ua) === -1) return;
+
+        if (!ds.dumped) {
+          document.head.appendChild(template.content.cloneNode(true));
+          ds.dumped = 'true';
+        }
+
+        loadTemplate(template);
+      }
+      /**
+       *
+       * @param from
+       */
+
+    }, {
       key: "loadTemplates",
       value: function loadTemplates(from) {
+        var _this2 = this;
+
         qsa('template[data-src]', from).forEach(function (externalRefTemplate) {
-          var ds = externalRefTemplate.dataset;
-          var ua = ds.ua;
-          if (ua && navigator.userAgent.indexOf(ua) === -1) return;
-
-          if (!ds.dumped) {
-            document.head.appendChild(externalRefTemplate.content.cloneNode(true));
-            ds.dumped = 'true';
-          }
-
-          loadTemplate(externalRefTemplate);
+          _this2.initTemplate(externalRefTemplate);
         });
       }
     }, {
@@ -122,13 +143,15 @@
     }, {
       key: "monitorHeadForTemplates",
       value: function monitorHeadForTemplates() {
+        var _this3 = this;
+
         var config = {
           childList: true
         };
         this._observer = new MutationObserver(function (mutationsList) {
           mutationsList.forEach(function (mutationRecord) {
             mutationRecord.addedNodes.forEach(function (node) {
-              if (node.tagName === 'TEMPLATE') loadTemplate(node);
+              if (node.tagName === 'TEMPLATE') _this3.initTemplate(node);
             });
           });
         });
@@ -138,13 +161,13 @@
     }, {
       key: "connectedCallback",
       value: function connectedCallback() {
-        var _this2 = this;
+        var _this4 = this;
 
         this.loadTemplateInsideShadowDOM();
 
         if (document.readyState === "loading") {
           document.addEventListener("DOMContentLoaded", function (e) {
-            _this2.loadTemplateInsideShadowDOM();
+            _this4.loadTemplateInsideShadowDOM();
           });
         }
       }

@@ -40,20 +40,25 @@ export class TemplMount extends HTMLElement{
         const parent = this.parentNode as HTMLElement;
         return parent['host'];
     }
+
+    initTemplate(template: HTMLTemplateElement){
+        const ds = (<HTMLElement>template).dataset;
+        const ua = ds.ua;
+        if(ua && navigator.userAgent.indexOf(ua) === -1) return;
+        if(!ds.dumped){
+            document.head.appendChild((<HTMLTemplateElement>template).content.cloneNode(true));
+            ds.dumped = 'true';
+        }
+        loadTemplate(template as HTMLTemplateElement);
+    }
+
     /**
      * 
      * @param from
      */
     loadTemplates(from: DocumentFragment){
         qsa('template[data-src]', from).forEach((externalRefTemplate : HTMLTemplateElement) =>{
-            const ds = (<HTMLElement>externalRefTemplate).dataset;
-            const ua = ds.ua;
-            if(ua && navigator.userAgent.indexOf(ua) === -1) return;
-            if(!ds.dumped){
-                document.head.appendChild((<HTMLTemplateElement>externalRefTemplate).content.cloneNode(true));
-                ds.dumped = 'true';
-            }
-            loadTemplate(externalRefTemplate as HTMLTemplateElement);
+            this.initTemplate(externalRefTemplate);
         })
 
     }
@@ -71,7 +76,7 @@ export class TemplMount extends HTMLElement{
         this._observer =  new MutationObserver((mutationsList: MutationRecord[]) =>{
             mutationsList.forEach(mutationRecord =>{
                 mutationRecord.addedNodes.forEach((node: HTMLElement) =>{
-                    if(node.tagName === 'TEMPLATE') loadTemplate(node as HTMLTemplateElement);
+                    if(node.tagName === 'TEMPLATE') this.initTemplate(node as HTMLTemplateElement);
                 })
             })
         });

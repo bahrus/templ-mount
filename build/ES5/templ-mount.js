@@ -51,6 +51,20 @@ function (_HTMLElement) {
       var parent = this.parentNode;
       return parent['host'];
     }
+  }, {
+    key: "initTemplate",
+    value: function initTemplate(template) {
+      var ds = template.dataset;
+      var ua = ds.ua;
+      if (ua && navigator.userAgent.indexOf(ua) === -1) return;
+
+      if (!ds.dumped) {
+        document.head.appendChild(template.content.cloneNode(true));
+        ds.dumped = 'true';
+      }
+
+      loadTemplate(template);
+    }
     /**
      *
      * @param from
@@ -59,17 +73,10 @@ function (_HTMLElement) {
   }, {
     key: "loadTemplates",
     value: function loadTemplates(from) {
+      var _this2 = this;
+
       qsa('template[data-src]', from).forEach(function (externalRefTemplate) {
-        var ds = externalRefTemplate.dataset;
-        var ua = ds.ua;
-        if (ua && navigator.userAgent.indexOf(ua) === -1) return;
-
-        if (!ds.dumped) {
-          document.head.appendChild(externalRefTemplate.content.cloneNode(true));
-          ds.dumped = 'true';
-        }
-
-        loadTemplate(externalRefTemplate);
+        _this2.initTemplate(externalRefTemplate);
       });
     }
   }, {
@@ -87,13 +94,15 @@ function (_HTMLElement) {
   }, {
     key: "monitorHeadForTemplates",
     value: function monitorHeadForTemplates() {
+      var _this3 = this;
+
       var config = {
         childList: true
       };
       this._observer = new MutationObserver(function (mutationsList) {
         mutationsList.forEach(function (mutationRecord) {
           mutationRecord.addedNodes.forEach(function (node) {
-            if (node.tagName === 'TEMPLATE') loadTemplate(node);
+            if (node.tagName === 'TEMPLATE') _this3.initTemplate(node);
           });
         });
       });
@@ -103,13 +112,13 @@ function (_HTMLElement) {
   }, {
     key: "connectedCallback",
     value: function connectedCallback() {
-      var _this2 = this;
+      var _this4 = this;
 
       this.loadTemplateInsideShadowDOM();
 
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", function (e) {
-          _this2.loadTemplateInsideShadowDOM();
+          _this4.loadTemplateInsideShadowDOM();
         });
       }
     }
