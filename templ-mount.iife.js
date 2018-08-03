@@ -73,7 +73,6 @@ class TemplMount extends HTMLElement {
                 this.monitorHeadForTemplates();
             }
         }
-        this.loadTemplatesOutsideShadowDOM();
     }
     static get is() { return 'templ-mount'; }
     /**
@@ -126,6 +125,7 @@ class TemplMount extends HTMLElement {
     }
     connectedCallback() {
         this.loadTemplateInsideShadowDOM();
+        this.loadTemplatesOutsideShadowDOM();
         if (document.readyState === "loading") {
             document.addEventListener("DOMContentLoaded", e => {
                 this.loadTemplateInsideShadowDOM();

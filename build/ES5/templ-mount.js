@@ -36,8 +36,6 @@ function (_HTMLElement) {
       }
     }
 
-    _this.loadTemplatesOutsideShadowDOM();
-
     return _this;
   }
 
@@ -115,6 +113,7 @@ function (_HTMLElement) {
       var _this4 = this;
 
       this.loadTemplateInsideShadowDOM();
+      this.loadTemplatesOutsideShadowDOM();
 
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", function (e) {

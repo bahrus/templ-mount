@@ -85,8 +85,6 @@
         }
       }
 
-      _this.loadTemplatesOutsideShadowDOM();
-
       return _this;
     }
 
@@ -164,6 +162,7 @@
         var _this4 = this;
 
         this.loadTemplateInsideShadowDOM();
+        this.loadTemplatesOutsideShadowDOM();
 
         if (document.readyState === "loading") {
           document.addEventListener("DOMContentLoaded", function (e) {
