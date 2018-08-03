@@ -1,7 +1,7 @@
-import {ICEParams, loadTemplate} from './first-templ.js';
+import { ICEParams, loadTemplate } from './first-templ.js';
 
-export function qsa(css, from?: HTMLElement | Document | DocumentFragment) : HTMLElement[]{
-    return  [].slice.call((from ? from : this).querySelectorAll(css));
+export function qsa(css, from?: HTMLElement | Document | DocumentFragment): HTMLElement[] {
+    return [].slice.call((from ? from : this).querySelectorAll(css));
 }
 
 /**
@@ -12,76 +12,99 @@ export function qsa(css, from?: HTMLElement | Document | DocumentFragment) : HTM
 * @polymer
 * @demo demo/index.html
 */
-export class TemplMount extends HTMLElement{
-    static get is(){return 'templ-mount';}
+export class TemplMount extends HTMLElement {
+    static get is() { return 'templ-mount'; }
     static _alreadyDidGlobalCheck = false;
     constructor() {
         super();
-        if(!TemplMount._alreadyDidGlobalCheck){
+        if (!TemplMount._alreadyDidGlobalCheck) {
             TemplMount._alreadyDidGlobalCheck = true;
             if (document.readyState === "loading") {
                 document.addEventListener("DOMContentLoaded", e => {
                     this.monitorHeadForTemplates();
                     this.loadTemplatesOutsideShadowDOM();
                 });
-            }else{
+            } else {
                 this.monitorHeadForTemplates();
             }
-            
+
         }
-        
+
 
     }
     /**
      * Gets host from parent
      */
-    getHost(){
+    getHost() {
         const parent = this.parentNode as HTMLElement;
         return parent['host'];
     }
 
-    initTemplate(template: HTMLTemplateElement){
+    initTemplate(template: HTMLTemplateElement) {
         const ds = (<HTMLElement>template).dataset;
         const ua = ds.ua;
-        if(ua && navigator.userAgent.indexOf(ua) === -1) return;
-        if(!ds.dumped){
-            document.head.appendChild((<HTMLTemplateElement>template).content.cloneNode(true));
+        if (ua && navigator.userAgent.indexOf(ua) === -1) return;
+        if (!ds.dumped) {
+            //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
+            const clonedNode = (<HTMLTemplateElement>template).content.cloneNode(true);
+            const inner = (<any>clonedNode).children;
+            console.log(inner.length);
+            for (let i = 0, ii = inner.length; i < ii; i++) {
+                const child = inner[i];
+                console.log(child);
+                if (!child) continue;
+                switch (child.tagName) {
+                    case 'SCRIPT':
+                        const clone = document.createElement(child.tagName);
+                        clone.src = child.src;
+                        clone.type = child.type;
+                        document.head.appendChild(clone);
+                    default:
+                    //document.head.appendChild(child);
+                }
+
+            }
+            document.head.appendChild(clonedNode);
             ds.dumped = 'true';
         }
         loadTemplate(template as HTMLTemplateElement);
+    }
+
+    dumpChildren(templClone: any) {
+
     }
 
     /**
      * 
      * @param from
      */
-    loadTemplates(from: DocumentFragment){
-        qsa('template[data-src]', from).forEach((externalRefTemplate : HTMLTemplateElement) =>{
+    loadTemplates(from: DocumentFragment) {
+        qsa('template[data-src]', from).forEach((externalRefTemplate: HTMLTemplateElement) => {
             this.initTemplate(externalRefTemplate);
         })
 
     }
-    loadTemplatesOutsideShadowDOM(){
+    loadTemplatesOutsideShadowDOM() {
         this.loadTemplates(document);
     }
-    loadTemplateInsideShadowDOM(){
+    loadTemplateInsideShadowDOM() {
         const host = this.getHost();
-        if(!host) return;
+        if (!host) return;
         this.loadTemplates(host);
     }
     _observer: MutationObserver;
-    monitorHeadForTemplates(){
-        const config = { childList: true};
-        this._observer =  new MutationObserver((mutationsList: MutationRecord[]) =>{
-            mutationsList.forEach(mutationRecord =>{
-                mutationRecord.addedNodes.forEach((node: HTMLElement) =>{
-                    if(node.tagName === 'TEMPLATE') this.initTemplate(node as HTMLTemplateElement);
+    monitorHeadForTemplates() {
+        const config = { childList: true };
+        this._observer = new MutationObserver((mutationsList: MutationRecord[]) => {
+            mutationsList.forEach(mutationRecord => {
+                mutationRecord.addedNodes.forEach((node: HTMLElement) => {
+                    if (node.tagName === 'TEMPLATE') this.initTemplate(node as HTMLTemplateElement);
                 })
             })
         });
         this._observer.observe(document.head, config);
     }
-    connectedCallback(){
+    connectedCallback() {
         this.loadTemplateInsideShadowDOM();
         this.loadTemplatesOutsideShadowDOM();
         if (document.readyState === "loading") {
