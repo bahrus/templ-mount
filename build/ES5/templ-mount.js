@@ -33,10 +33,10 @@ function (_HTMLElement) {
         });
       } else {
         _this.monitorHeadForTemplates();
-
-        _this.loadTemplatesOutsideShadowDOM();
       }
     }
+
+    _this.loadTemplatesOutsideShadowDOM();
 
     return _this;
   }

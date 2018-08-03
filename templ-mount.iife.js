@@ -71,9 +71,9 @@ class TemplMount extends HTMLElement {
             }
             else {
                 this.monitorHeadForTemplates();
-                this.loadTemplatesOutsideShadowDOM();
             }
         }
+        this.loadTemplatesOutsideShadowDOM();
     }
     static get is() { return 'templ-mount'; }
     /**
