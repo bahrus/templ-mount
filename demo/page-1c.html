@@ -9,17 +9,17 @@
 
     <script type="module" src="../templ-mount.js"></script>
     <script type="module" src="https://unpkg.com/carbon-copy@0.1.25/c-c.js?module"></script>
-    <template id="page-2" data-src href="page-2.html">
+    <template id="page-2c" data-src href="page-2c.html">
         <script type="module" src="https://unpkg.com/xtal-tree@0.0.28/xtal-tree.js?module"></script>
-        <template id="page-3" data-src href="page-3.html">
+        <template id="page-3c" data-src href="page-3c.html">
                 <script type="module" src="https://unpkg.com/xtal-fetch@0.0.35/xtal-fetch-get.js?module"></script>
         </template>
-        <c-c noshadow from="/page-3"></c-c>
+        <c-c from="/page-3c"></c-c>
     </template>
-    <c-c noshadow from="/page-2"></c-c>
+    <c-c from="/page-2c"></c-c>
 </head>
 <body>
     <templ-mount></templ-mount>
-    <page-2></page-2>
+    <page-2c></page-2c>
 </body>
 </html>

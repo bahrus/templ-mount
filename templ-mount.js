@@ -43,10 +43,8 @@ export class TemplMount extends HTMLElement {
             //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
             const clonedNode = template.content.cloneNode(true);
             const inner = clonedNode.children;
-            console.log(inner.length);
             for (let i = 0, ii = inner.length; i < ii; i++) {
                 const child = inner[i];
-                console.log(child);
                 if (!child)
                     continue;
                 switch (child.tagName) {
