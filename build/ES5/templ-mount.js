@@ -54,7 +54,9 @@ function (_HTMLElement) {
     value: function initTemplate(template) {
       var ds = template.dataset;
       var ua = ds.ua;
-      if (ua && navigator.userAgent.indexOf(ua) === -1) return;
+      var noMatch = navigator.userAgent.indexOf(ua) === -1;
+      if (ua[0] === '!') noMatch = !noMatch;
+      if (ua && noMatch) return;
 
       if (!ds.dumped) {
         //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template

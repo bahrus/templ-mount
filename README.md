@@ -35,7 +35,7 @@ If the template contains some content, e.g.:
 
 then the content inside the template gets cloned into document.head, prior to replacing it with the contents of the html file.
 
-Note the attribute data-ua.  This allows you to specify a user agent string.  Templates will only mount if the specified value is found inside the user agent of the browser.
+Note the attribute data-ua.  This allows you to specify a user agent string.  Templates will only mount if the specified value is found inside the user agent of the browser.  If the value of data-ua starts with "!" then it will activate if the user agent does *not* contain the value.
 
 This can allow multiple templates pointing to the same html file to point to different javascript files, depending on the browser.
 
