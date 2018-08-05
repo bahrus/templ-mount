@@ -95,8 +95,7 @@
        * Gets host from parent
        */
       value: function getHost() {
-        var parent = this.parentNode;
-        return parent['host'];
+        return this.parentNode;
       }
     }, {
       key: "initTemplate",
@@ -104,7 +103,7 @@
         var ds = template.dataset;
         var ua = ds.ua;
         var noMatch = navigator.userAgent.indexOf(ua) === -1;
-        if (ua[0] === '!') noMatch = !noMatch;
+        if (ua && ua[0] === '!') noMatch = !noMatch;
         if (ua && noMatch) return;
 
         if (!ds.dumped) {

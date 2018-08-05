@@ -36,15 +36,14 @@ export class TemplMount extends HTMLElement {
      * Gets host from parent
      */
     getHost() {
-        const parent = this.parentNode as HTMLElement;
-        return parent['host'];
+        return this.parentNode as DocumentFragment;
     }
 
     initTemplate(template: HTMLTemplateElement) {
         const ds = (<HTMLElement>template).dataset;
         const ua = ds.ua;
         let noMatch = navigator.userAgent.indexOf(ua) === -1;
-        if(ua[0]==='!') noMatch = !noMatch;
+        if(ua && ua[0]==='!') noMatch = !noMatch;
         if (ua && noMatch) return;
         if (!ds.dumped) {
             //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template

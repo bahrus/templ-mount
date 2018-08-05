@@ -31,14 +31,13 @@ export class TemplMount extends HTMLElement {
      * Gets host from parent
      */
     getHost() {
-        const parent = this.parentNode;
-        return parent['host'];
+        return this.parentNode;
     }
     initTemplate(template) {
         const ds = template.dataset;
         const ua = ds.ua;
         let noMatch = navigator.userAgent.indexOf(ua) === -1;
-        if (ua[0] === '!')
+        if (ua && ua[0] === '!')
             noMatch = !noMatch;
         if (ua && noMatch)
             return;
