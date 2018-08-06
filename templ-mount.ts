@@ -48,30 +48,12 @@ export class TemplMount extends HTMLElement {
         if (!ds.dumped) {
             //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
             const clonedNode = (<HTMLTemplateElement>template).content.cloneNode(true);
-            const inner = (<any>clonedNode).children;
-            for (let i = 0, ii = inner.length; i < ii; i++) {
-                const child = inner[i];
-                if (!child) continue;
-                switch (child.tagName) {
-                    case 'SCRIPT':
-                        const clone = document.createElement(child.tagName);
-                        clone.src = child.src;
-                        clone.type = child.type;
-                        document.head.appendChild(clone);
-                    default:
-                    //document.head.appendChild(child);
-                }
-
-            }
             document.head.appendChild(clonedNode);
             ds.dumped = 'true';
         }
         loadTemplate(template as HTMLTemplateElement);
     }
 
-    dumpChildren(templClone: any) {
-
-    }
 
     /**
      * 
@@ -112,5 +94,6 @@ export class TemplMount extends HTMLElement {
             });
         }
     }
+    
 }
 customElements.define(TemplMount.is, TemplMount);

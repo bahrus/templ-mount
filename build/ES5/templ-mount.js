@@ -60,33 +60,12 @@ function (_HTMLElement) {
       if (!ds.dumped) {
         //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
         var clonedNode = template.content.cloneNode(true);
-        var inner = clonedNode.children;
-
-        for (var i = 0, ii = inner.length; i < ii; i++) {
-          var child = inner[i];
-          if (!child) continue;
-
-          switch (child.tagName) {
-            case 'SCRIPT':
-              var clone = document.createElement(child.tagName);
-              clone.src = child.src;
-              clone.type = child.type;
-              document.head.appendChild(clone);
-
-            default: //document.head.appendChild(child);
-
-          }
-        }
-
         document.head.appendChild(clonedNode);
         ds.dumped = 'true';
       }
 
       loadTemplate(template);
     }
-  }, {
-    key: "dumpChildren",
-    value: function dumpChildren(templClone) {}
     /**
      *
      * @param from
