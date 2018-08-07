@@ -109,6 +109,13 @@
         if (!ds.dumped) {
           //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
           var clonedNode = template.content.cloneNode(true);
+
+          if (template.hasAttribute('clone-script')) {
+            qsa('script', clonedNode).forEach(function (node) {
+              node.setAttribute('clone-me', '');
+            });
+          }
+
           document.head.appendChild(clonedNode);
           ds.dumped = 'true';
         }

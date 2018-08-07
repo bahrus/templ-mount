@@ -35,6 +35,10 @@ If the template contains some content, e.g.:
 
 then the content inside the template gets cloned into document.head, prior to replacing it with the contents of the html file.
 
+Although there are some complications mentioned below, by adding script tags as shown above in document.head, those script tags will be activated.
+
+You don't need to give a specific url in data-src to cause the script tags to be added (and activated) int he header, as long as data-src attribute is present.
+
 Note the attribute data-ua.  This allows you to specify a user agent string.  Templates will only mount if the specified value is found inside the user agent of the browser.  If the value of data-ua starts with "!" then it will activate if the user agent does *not* contain the value.
 
 This can allow multiple templates pointing to the same html file to point to different javascript files, depending on the browser.
@@ -61,7 +65,7 @@ The work around is to reference this file:
 
 <script type="module" src="../activateScript.js"></script>
 
-and add a "clone-me" attribute to the script tags needing to be activated.
+and add a "clone-script" attribute to templates containing script tags which are failing to get activated.
 
 ## Referencing:
 

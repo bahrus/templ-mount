@@ -47,7 +47,12 @@ export class TemplMount extends HTMLElement {
         if (ua && noMatch) return;
         if (!ds.dumped) {
             //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
-            const clonedNode = (<HTMLTemplateElement>template).content.cloneNode(true);
+            const clonedNode = (<HTMLTemplateElement>template).content.cloneNode(true) as DocumentFragment;
+            if(template.hasAttribute('clone-script')){
+                qsa('script', clonedNode).forEach(node =>{
+                    node.setAttribute('clone-me', '');
+                })
+            }
             document.head.appendChild(clonedNode);
             ds.dumped = 'true';
         }
