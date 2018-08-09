@@ -1,5 +1,10 @@
 const config = { childList: true };
 const script = 'SCRIPT';
+function copyAttrs(src: HTMLScriptElement, dest: HTMLScriptElement, attrs: string[]){
+    attrs.forEach(attr =>{
+        if(src.hasAttribute(attr)) dest.setAttribute(attr, src.getAttribute(attr));
+    })
+}
 const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
     mutationsList.forEach(mutationRecord => {
         mutationRecord.addedNodes.forEach((node: HTMLScriptElement) => {
@@ -7,9 +12,7 @@ const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
                 case script:
                     if(node.hasAttribute('clone-me')){
                         const clone = document.createElement(script) as HTMLScriptElement;
-                        clone.src = node.src;
-                        clone.type = node.type;
-                        clone.noModule = node.noModule;
+                        copyAttrs(node, clone, ['src', 'type', 'nomodule']);
                         document.head.appendChild(clone);
                     }
                     break;
