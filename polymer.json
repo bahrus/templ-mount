@@ -3,8 +3,7 @@
   "sources":[
     "first-templ.js",
     "templ-mount.js",
-    "templ-mount.iife.js",
-    "activateScript.js"
+    "templ-mount.iife.js"
   ],
   "lint": {
     "rules": [

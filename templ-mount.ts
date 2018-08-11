@@ -38,7 +38,11 @@ export class TemplMount extends HTMLElement {
     getHost() {
         return this.parentNode as DocumentFragment;
     }
-
+    copyAttrs(src: HTMLScriptElement, dest: HTMLScriptElement, attrs: string[]){
+        attrs.forEach(attr =>{
+            if(src.hasAttribute(attr)) dest.setAttribute(attr, src.getAttribute(attr));
+        })
+    }
     initTemplate(template: HTMLTemplateElement) {
         const ds = (<HTMLElement>template).dataset;
         const ua = ds.ua;
@@ -48,12 +52,16 @@ export class TemplMount extends HTMLElement {
         if (!ds.dumped) {
             //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
             const clonedNode = (<HTMLTemplateElement>template).content.cloneNode(true) as DocumentFragment;
-            if(template.hasAttribute('clone-script')){
+            //if(template.hasAttribute('clone-script')){
                 qsa('script', clonedNode).forEach(node =>{
-                    node.setAttribute('clone-me', '');
+                    //node.setAttribute('clone-me', '');
+                    const clone = document.createElement('script') as HTMLScriptElement;
+                    this.copyAttrs(node as HTMLScriptElement, clone, ['src', 'type', 'nomodule']);
+                    clone.innerHTML = node.innerHTML;
+                    document.head.appendChild(clone);
                 })
-            }
-            document.head.appendChild(clonedNode);
+            //}
+            //document.head.appendChild(clonedNode);
             ds.dumped = 'true';
         }
         loadTemplate(template as HTMLTemplateElement);

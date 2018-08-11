@@ -4,9 +4,20 @@
 
 # \<templ-mount\>
 
-templ-mount is a ~1.1 KB (gzipped / minified) dependency free custom element. 
+templ-mount is a ~1.2 KB (gzipped / minified) dependency free custom element. 
 
-It allows templates to be loaded from url&#39;s
+It allows templates to be loaded from url's, where templates have the following syntax:
+
+```html
+<template data-src="path/to/some/fileOrStream.html"></template>
+```
+
+or
+
+```html
+<template data-src href="path/to/some/fileOrStream.html"></template>
+```
+
 
 ```html
 <templ-mount></templ-mount>
@@ -55,17 +66,6 @@ Then it will only import the content between the first two such strings.  This h
 
 templ-mount works well in combination with [carbon-copy](https://www.webcomponents.org/element/carbon-copy).
 
-## Weird browser behavior and work around when working with recursive template imports.
-
-It appears that if you clone a template containing script tags, into a header,  as shown above, the script tags get loaded.
-
-However if you insert a template via fetch into the header, and that template has script tags, and that template is cloned into the header, although the script tags appear in the header, they *don't* get activated!  The same behavior is observed in multiple browsers.
-
-The work around is to reference this file:
-
-<script type="module" src="../activateScript.js"></script>
-
-and add a "clone-script" attribute to templates containing script tags which are failing to get activated.
 
 ## Referencing:
 

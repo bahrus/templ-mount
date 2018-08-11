@@ -9,9 +9,12 @@
 <body>
     <!---->
     Page 2b
-    <template id="page-3b" data-src href="page-3b.html" clone-script>
+    <template id="page-3b" data-src href="page-3b.html">
             <script type="module" src="https://unpkg.com/xtal-fetch@0.0.35/xtal-fetch-get.js?module"></script>
             <script nomodule src="https://unpkg.com/xtal-fetch@0.0.35/xtal-fetch-get.js?module"></script>
+            <script>
+                console.log('i am here');
+            </script>
     </template>
     <c-c noshadow from="/page-3b"></c-c>
 

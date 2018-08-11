@@ -49,8 +49,17 @@ function (_HTMLElement) {
       return this.parentNode;
     }
   }, {
+    key: "copyAttrs",
+    value: function copyAttrs(src, dest, attrs) {
+      attrs.forEach(function (attr) {
+        if (src.hasAttribute(attr)) dest.setAttribute(attr, src.getAttribute(attr));
+      });
+    }
+  }, {
     key: "initTemplate",
     value: function initTemplate(template) {
+      var _this2 = this;
+
       var ds = template.dataset;
       var ua = ds.ua;
       var noMatch = navigator.userAgent.indexOf(ua) === -1;
@@ -59,15 +68,19 @@ function (_HTMLElement) {
 
       if (!ds.dumped) {
         //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
-        var clonedNode = template.content.cloneNode(true);
+        var clonedNode = template.content.cloneNode(true); //if(template.hasAttribute('clone-script')){
 
-        if (template.hasAttribute('clone-script')) {
-          qsa('script', clonedNode).forEach(function (node) {
-            node.setAttribute('clone-me', '');
-          });
-        }
+        qsa('script', clonedNode).forEach(function (node) {
+          //node.setAttribute('clone-me', '');
+          var clone = document.createElement('script');
 
-        document.head.appendChild(clonedNode);
+          _this2.copyAttrs(node, clone, ['src', 'type', 'nomodule']);
+
+          clone.innerHTML = node.innerHTML;
+          document.head.appendChild(clone);
+        }); //}
+        //document.head.appendChild(clonedNode);
+
         ds.dumped = 'true';
       }
 
@@ -81,10 +94,10 @@ function (_HTMLElement) {
   }, {
     key: "loadTemplates",
     value: function loadTemplates(from) {
-      var _this2 = this;
+      var _this3 = this;
 
       qsa('template[data-src]', from).forEach(function (externalRefTemplate) {
-        _this2.initTemplate(externalRefTemplate);
+        _this3.initTemplate(externalRefTemplate);
       });
     }
   }, {
@@ -102,7 +115,7 @@ function (_HTMLElement) {
   }, {
     key: "monitorHeadForTemplates",
     value: function monitorHeadForTemplates() {
-      var _this3 = this;
+      var _this4 = this;
 
       var config = {
         childList: true
@@ -110,7 +123,7 @@ function (_HTMLElement) {
       this._observer = new MutationObserver(function (mutationsList) {
         mutationsList.forEach(function (mutationRecord) {
           mutationRecord.addedNodes.forEach(function (node) {
-            if (node.tagName === 'TEMPLATE') _this3.initTemplate(node);
+            if (node.tagName === 'TEMPLATE') _this4.initTemplate(node);
           });
         });
       });
@@ -120,14 +133,14 @@ function (_HTMLElement) {
   }, {
     key: "connectedCallback",
     value: function connectedCallback() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.loadTemplateInsideShadowDOM();
       this.loadTemplatesOutsideShadowDOM();
 
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", function (e) {
-          _this4.loadTemplateInsideShadowDOM();
+          _this5.loadTemplateInsideShadowDOM();
         });
       }
     }

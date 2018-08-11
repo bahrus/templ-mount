@@ -5,7 +5,6 @@
     "first-templ.js",
     "templ-mount.js",
     "templ-mount.iife.js",
-    "activateScript.js",
     "index.html"
   ],
   "extraDependencies": [
