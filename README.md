@@ -33,7 +33,11 @@ does the following:
 
 ## Copying the contents of the preloaded template into the header.
 
-If the template contains some content, e.g.:
+As a prelude to the discussion that follows, let's remember that if you clone a template with inert DOM into the document, making it "come alive", script elements do not get activated.  This is a point worth bringing up early, and with emphasis, to a new developer just starting out with web components so they don't get confused and frustrated.
+
+But the need to activate script elements associated with a template is of paramount importance.  Hence the lengthy discussion that follows (and I also note that this abilit to activate scripts is responsible for a significant share of the 1.2 kb file size for templ-mount)
+
+If the template contains some script tags, e.g.:
 
 ```html
 <template id="bb_chart_template" data-src="billboardChart.html" data-ua="Chrome">
@@ -41,30 +45,39 @@ If the template contains some content, e.g.:
     <script type="module" async src="https://unpkg.com/xtal-json-merge@0.2.21/xtal-insert-json.js?module"></script>
     <script type="module" async src="https://unpkg.com/p-d.p-u@0.0.10/p-d.js?module"></script>
     <script src="https://unpkg.com/billboard-charts@0.1.18/billboard-charts.js"></script>
+    <script>
+            console.log('i am here');
+    </script>
 </template>
 ```
 
-then the content inside the template gets cloned into document.head, prior to replacing it with the contents of the html file.
+then those script tags  get cloned into document.head, prior to replacing it with the contents of the html file.
 
-Although there are some complications mentioned below, by adding script tags as shown above in document.head, those script tags will be activated.
+Note the attribute data-ua.  This allows one to specify a user agent string.  Templates will only mount if the specified value is found inside the user agent of the browser.  If the value of data-ua starts with "!" then it will activate if the user agent does *not* contain the value.
 
-You don't need to give a specific url in data-src to cause the script tags to be added (and activated) int he header, as long as data-src attribute is present.
+This can allow multiple templates pointing to the same html file / stream to point to different javascript files, depending on the browser.
 
-Note the attribute data-ua.  This allows you to specify a user agent string.  Templates will only mount if the specified value is found inside the user agent of the browser.  If the value of data-ua starts with "!" then it will activate if the user agent does *not* contain the value.
+## Rambling Comments on Script Loading
 
-This can allow multiple templates pointing to the same html file to point to different javascript files, depending on the browser.
+There are two (non exclusive) approaches to how you could use this way of loading JavaScript files:  "Preemptive script loading" vs activating scripts found inside the template file itself, "on demand".  In the latter case, the data-src/href attributes need not have any values.  It's just a way of activating scripts found inside a template document fragment.
 
-Templates can be nested, and this will load resources in a somewhat logical order.
+The case for using this first approach -- preemptively starting downloading the JavaScript files while waiting for the template definition itself to download -- is a bit weakened by the existence of the preload / preloadmodule resource hints.  However, loading scripts in this way does allow js files needed with more urgency to load sooner, based on how templates are nested.  And of course the ability to select by user agent could be helpful, as that is not supported out of the box with browsers (the closest thing is the nomodule attribute).
 
-If the html file / html stream contains at least two instances of the following "magic string":
+The biggest disadvantage of using preemptive loading, is that it means you will likely need duplicate references:  Once  inside the template tag, and once inside the actual html document, assuming you want to support the ability to open the template document as a standalone web page (as discussed briefly below.)
+
+I.e. reducing redundancy means delaying loading of files a bit.  So there's a bit of a trade-off there, and the right answer may depend on the use case.
+
+## Snipping
+
+If the html file / html stream being imported contains at least two instances of the following "magic string":
 
 ```html
 <!---->
 ```
 
-Then it will only import the content between the first two such strings.  This helps allow an html file / stream to serve both as standalone web page, but also as a template that could be used as web component.
+then it will only import the content between the first two such strings.  This helps allow an html file / stream to serve both as standalone web page, but also as a template that could be used as web component.
 
-templ-mount works well in combination with [carbon-copy](https://www.webcomponents.org/element/carbon-copy).
+On this topic, templ-mount works well in combination with [carbon-copy](https://www.webcomponents.org/element/carbon-copy).
 
 
 ## Referencing:
@@ -83,12 +96,14 @@ If you are using Polymer 3.0 cli server, or you are doing a build-time bundling 
 
 #### Unbundled / non minified
 
-Chrome or Firefox Nightly (possibly Safari), but not Edge (due to bug?):
+Chrome works well with unpkg's bare import specifiers, where the js reference is followed by the ?module query string parameter.  Other browsers seem more "iffy" with this kind of link, and may require the "iife" link shown below.
 
 ```html
 <script type="module" src="https://unpkg.com/templ-mount@0.0.13/templ-mount.js?module"></script>
 <!-- IE11 bundled non minified -->
 <script nomodule src="https://unpkg.com/templ-mount@0.0.13/build/ES5-no-mini/templ-mount.iife.js"></script>
+<!-- ES6 IIFE bundled non minified -->
+<script type="module" src="https://unpkg.com/templ-mount@0.0.13/templ-mount.iife.js?"></script>
 ```
 
 ### Bundled / minified
