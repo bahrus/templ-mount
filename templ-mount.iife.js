@@ -46,7 +46,6 @@ function loadTemplate(template, params) {
             customElements.define(params.tagName, params.cls);
     }
 }
-//# sourceMappingURL=first-templ.js.map
 function qsa(css, from) {
     return [].slice.call((from ? from : this).querySelectorAll(css));
 }
@@ -117,7 +116,7 @@ class TemplMount extends HTMLElement {
      * @param from
      */
     loadTemplates(from) {
-        qsa('template[data-src]', from).forEach((externalRefTemplate) => {
+        qsa('template[data-src],template[data-activate]', from).forEach((externalRefTemplate) => {
             this.initTemplate(externalRefTemplate);
         });
     }
@@ -154,6 +153,5 @@ class TemplMount extends HTMLElement {
 }
 TemplMount._alreadyDidGlobalCheck = false;
 customElements.define(TemplMount.is, TemplMount);
-//# sourceMappingURL=templ-mount.js.map
     })();  
         

@@ -18,6 +18,11 @@ or
 <template data-src href="path/to/some/fileOrStream.html"></template>
 ```
 
+The latter syntax is more IDE friendly, but bears a remote risk that browsers may someday add support for the href attribute for template whose behavior differs from what templ-mount provides.
+
+## Syntax of templ-mount
+
+Placing templ-mount inside an html document:
 
 ```html
 <templ-mount></templ-mount>
@@ -25,7 +30,8 @@ or
 
 does the following:
 
-1)  It searches for template elements outside any Shadow DOM, with attribute data-src, which can specify the url.  Or you can just add attribute data-src, and specify the actual url using  the href attribute, if you are willing to assume href won't become a standard attribute in the future).  It preemptively downloads those template references.
+1)  It searches for template elements outside any Shadow DOM, with attribute data-src, which can specify the url.  Or you can just add attribute data-src, and specify the actual url using  the href attribute.
+2)  It activates script tags found inside template elements containing attribute data-src or data-activate.
 2)  It searches for template elements inside its parent element with attribute data-src, and downloads those as well.
 3)  It monitors the document.head element for additional template elements with attribute data-src and loads them as they get added.
 4)  Once the template is downloaded and inserted into the template, the "loaded" attribute is set.
@@ -33,11 +39,14 @@ does the following:
 
 ## Copying the contents of the preloaded template into the header.
 
-As a prelude to the discussion that follows, let's remember that if you clone a template with inert DOM into the document, making it "come alive", script elements do not get activated.  This is a point worth bringing up early, and with emphasis, to a new developer just starting out with web components so they don't get confused and frustrated.
+As a prelude to the discussion that follows, let's remember (or become aware) that if you clone a template with inert DOM into the document, making it "come alive", script elements contained inside the template do *not* get activated.  This is a point worth bringing up early, and with emphasis, to a new developer just starting out with web components, so they don't get confused and frustrated.  It doesn't seem to be mentioned in the [most](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots) widely available documentation on the template element.  The fact that style tags *do* become active contributes to the confusion, I think.
 
-But the need to activate script elements associated with a template is of paramount importance.  Hence the lengthy discussion that follows (and I also note that this abilit to activate scripts is responsible for a significant share of the 1.2 kb file size for templ-mount)
+But the need to activate script elements associated with a template is of paramount importance.  Hence the lengthy discussion that follows (and I also note that this ability to activate scripts with templ-mount is responsible for a significant share of the 1.2 kb file size).
 
-If the template contains some script tags, e.g.:
+
+### Preemptive loading
+
+If the original template markup, prior to loading the content from a fetch request, contains some script tags, e.g.:
 
 ```html
 <template id="bb_chart_template" data-src="billboardChart.html" data-ua="Chrome">
@@ -51,19 +60,36 @@ If the template contains some script tags, e.g.:
 </template>
 ```
 
-then those script tags  get cloned into document.head, prior to replacing it with the contents of the html file.
+then templ-mount clones those script tags into document.head, prior to replacing it with the contents of the html file.
 
 Note the attribute data-ua.  This allows one to specify a user agent string.  Templates will only mount if the specified value is found inside the user agent of the browser.  If the value of data-ua starts with "!" then it will activate if the user agent does *not* contain the value.
 
 This can allow multiple templates pointing to the same html file / stream to point to different javascript files, depending on the browser.
 
-## Rambling Comments on Script Loading
+### Template tags used just to load script
 
-There are two (non exclusive) approaches to how you could use this way of loading JavaScript files:  "Preemptive script loading" vs activating scripts found inside the template file itself, "on demand".  In the latter case, the data-src/href attributes need not have any values.  It's just a way of activating scripts found inside a template document fragment.
+Inside your template document itself, you may also want to load some (additional) script dependencies.  This can most transparently be done with the following syntax, where the attribute data-activate is utilized:
 
-The case for using this first approach -- preemptively starting downloading the JavaScript files while waiting for the template definition itself to download -- is a bit weakened by the existence of the preload / preloadmodule resource hints.  However, loading scripts in this way does allow js files needed with more urgency to load sooner, based on how templates are nested.  And of course the ability to select by user agent could be helpful, as that is not supported out of the box with browsers (the closest thing is the nomodule attribute).
+```html
+<template id="bb_chart_template" data-activate data-ua="!Trident">
+    <script async src="https://unpkg.com/xtal-json-editor@0.0.19/xtal-json-editor.js"></script>
+    <script type="module" async src="https://unpkg.com/xtal-json-merge@0.2.21/xtal-insert-json.js?module"></script>
+    <script type="module" async src="https://unpkg.com/p-d.p-u@0.0.10/p-d.js?module"></script>
+    <script src="https://unpkg.com/billboard-charts@0.1.18/billboard-charts.js"></script>
+    <script>
+            console.log('i am here');
+    </script>
+</template>
+```
 
-The biggest disadvantage of using preemptive loading, is that it means you will likely need duplicate references:  Once  inside the template tag, and once inside the actual html document, assuming you want to support the ability to open the template document as a standalone web page (as discussed briefly below.)
+
+### Rambling Comments on Script Loading
+
+In the preceding discussion, we've suggested two (non exclusive) approaches to how you could use templ-mount to load JavaScript files:  "Preemptive script loading" vs "activating" scripts found inside the template file itself, "on demand".  
+
+The case for using the first approach -- preemptively starting downloading the JavaScript files while waiting for the template definition itself to download -- is a bit weakened by the existence of the preload / preloadmodule resource hints.  However, loading scripts in this way does allow js files needed with more urgency to load sooner, based on how templates are nested.  And of course the ability to select by user agent could be helpful, as that is not supported out of the box with browsers (the closest thing is the nomodule attribute).
+
+The biggest disadvantage of using preemptive loading, is that in practice it means you will likely need to duplicate references:  Once  inside the template tag, and once inside the actual html document, assuming you want to support the ability to open the template document as a standalone web page (as discussed briefly below).
 
 I.e. reducing redundancy means delaying loading of files a bit.  So there's a bit of a trade-off there, and the right answer may depend on the use case.
 

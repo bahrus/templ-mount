@@ -44,8 +44,7 @@
     } else {
       if (params && params.tagName) customElements.define(params.tagName, params.cls);
     }
-  } //# sourceMappingURL=first-templ.js.map
-
+  }
 
   function qsa(css, from) {
     return [].slice.call((from ? from : this).querySelectorAll(css));
@@ -145,7 +144,7 @@
       value: function loadTemplates(from) {
         var _this3 = this;
 
-        qsa('template[data-src]', from).forEach(function (externalRefTemplate) {
+        qsa('template[data-src],template[data-activate]', from).forEach(function (externalRefTemplate) {
           _this3.initTemplate(externalRefTemplate);
         });
       }
@@ -203,5 +202,5 @@
   }(HTMLElement);
 
   TemplMount._alreadyDidGlobalCheck = false;
-  customElements.define(TemplMount.is, TemplMount); //# sourceMappingURL=templ-mount.js.map
+  customElements.define(TemplMount.is, TemplMount);
 })();

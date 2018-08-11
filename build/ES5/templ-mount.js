@@ -96,7 +96,7 @@ function (_HTMLElement) {
     value: function loadTemplates(from) {
       var _this3 = this;
 
-      qsa('template[data-src]', from).forEach(function (externalRefTemplate) {
+      qsa('template[data-src],template[data-activate]', from).forEach(function (externalRefTemplate) {
         _this3.initTemplate(externalRefTemplate);
       });
     }

@@ -69,7 +69,7 @@ export class TemplMount extends HTMLElement {
      * @param from
      */
     loadTemplates(from) {
-        qsa('template[data-src]', from).forEach((externalRefTemplate) => {
+        qsa('template[data-src],template[data-activate]', from).forEach((externalRefTemplate) => {
             this.initTemplate(externalRefTemplate);
         });
     }
