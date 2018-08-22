@@ -1,18 +1,18 @@
 
     //@ts-check
     (function () {
-    const _cachedTemplates = {};
-const fetchInProgress = {};
+    const _cT = {}; //cachedTemplates
+const fip = {}; //fetch in progress
 function loadTemplate(template, params) {
     const src = template.dataset.src || template.getAttribute('href');
     if (src) {
-        if (_cachedTemplates[src]) {
-            template.innerHTML = _cachedTemplates[src];
+        if (_cT[src]) {
+            template.innerHTML = _cT[src];
             if (params)
                 customElements.define(params.tagName, params.cls);
         }
         else {
-            if (fetchInProgress[src]) {
+            if (fip[src]) {
                 if (params) {
                     setTimeout(() => {
                         loadTemplate(template, params);
@@ -20,19 +20,19 @@ function loadTemplate(template, params) {
                 }
                 return;
             }
-            fetchInProgress[src] = true;
+            fip[src] = true;
             fetch(src, {
                 credentials: 'same-origin'
             }).then(resp => {
                 resp.text().then(txt => {
-                    fetchInProgress[src] = false;
+                    fip[src] = false;
                     if (params && params.preProcessor)
                         txt = params.preProcessor.process(txt);
                     const split = txt.split('<!---->');
                     if (split.length > 1) {
                         txt = split[1];
                     }
-                    _cachedTemplates[src] = txt;
+                    _cT[src] = txt;
                     template.innerHTML = txt;
                     template.setAttribute('loaded', '');
                     if (params)
@@ -65,7 +65,7 @@ class TemplMount extends HTMLElement {
             if (document.readyState === "loading") {
                 document.addEventListener("DOMContentLoaded", e => {
                     this.mhft();
-                    this.loadTemplatesOutsideShadowDOM();
+                    this.ltosd();
                 });
             }
             else {
@@ -98,8 +98,11 @@ class TemplMount extends HTMLElement {
     initTemplate(template) {
         const ds = template.dataset;
         const ua = ds.ua;
-        let noMatch = navigator.userAgent.indexOf(ua) === -1;
-        if (ua && ua[0] === '!')
+        let noMatch = false;
+        if (ua) {
+            noMatch = navigator.userAgent.search(new RegExp(ua)) === -1;
+        }
+        if (ua && template.hasAttribute('data-exclude'))
             noMatch = !noMatch;
         if (ua && noMatch)
             return;
@@ -116,19 +119,19 @@ class TemplMount extends HTMLElement {
      *
      * @param from
      */
-    loadTemplates(from) {
-        qsa('template[data-src],template[data-activate]', from).forEach((externalRefTemplate) => {
-            this.initTemplate(externalRefTemplate);
+    lt(from) {
+        qsa('template[data-src],template[data-activate]', from).forEach((t) => {
+            this.initTemplate(t);
         });
     }
-    loadTemplatesOutsideShadowDOM() {
-        this.loadTemplates(document);
+    ltosd() {
+        this.lt(document);
     }
     ltisd() {
         const host = this.getHost();
         if (!host)
             return;
-        this.loadTemplates(host);
+        this.lt(host);
     }
     mhft() {
         const config = { childList: true };
@@ -144,7 +147,7 @@ class TemplMount extends HTMLElement {
     }
     connectedCallback() {
         this.ltisd();
-        this.loadTemplatesOutsideShadowDOM();
+        this.ltosd();
         if (document.readyState === "loading") {
             document.addEventListener("DOMContentLoaded", e => {
                 this.ltisd();

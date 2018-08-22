@@ -1,17 +1,18 @@
 //@ts-check
 (function () {
-  var _cachedTemplates = {};
-  var fetchInProgress = {};
+  var _cT = {}; //cachedTemplates
+
+  var fip = {}; //fetch in progress
 
   function loadTemplate(template, params) {
     var src = template.dataset.src || template.getAttribute('href');
 
     if (src) {
-      if (_cachedTemplates[src]) {
-        template.innerHTML = _cachedTemplates[src];
+      if (_cT[src]) {
+        template.innerHTML = _cT[src];
         if (params) customElements.define(params.tagName, params.cls);
       } else {
-        if (fetchInProgress[src]) {
+        if (fip[src]) {
           if (params) {
             setTimeout(function () {
               loadTemplate(template, params);
@@ -21,12 +22,12 @@
           return;
         }
 
-        fetchInProgress[src] = true;
+        fip[src] = true;
         fetch(src, {
           credentials: 'same-origin'
         }).then(function (resp) {
           resp.text().then(function (txt) {
-            fetchInProgress[src] = false;
+            fip[src] = false;
             if (params && params.preProcessor) txt = params.preProcessor.process(txt);
             var split = txt.split('<!---->');
 
@@ -34,7 +35,7 @@
               txt = split[1];
             }
 
-            _cachedTemplates[src] = txt;
+            _cT[src] = txt;
             template.innerHTML = txt;
             template.setAttribute('loaded', '');
             if (params) customElements.define(params.tagName, params.cls);
@@ -77,7 +78,7 @@
           document.addEventListener("DOMContentLoaded", function (e) {
             _this.mhft();
 
-            _this.loadTemplatesOutsideShadowDOM();
+            _this.ltosd();
           });
         } else {
           _this.mhft();
@@ -123,8 +124,13 @@
       value: function initTemplate(template) {
         var ds = template.dataset;
         var ua = ds.ua;
-        var noMatch = navigator.userAgent.indexOf(ua) === -1;
-        if (ua && ua[0] === '!') noMatch = !noMatch;
+        var noMatch = false;
+
+        if (ua) {
+          noMatch = navigator.userAgent.search(new RegExp(ua)) === -1;
+        }
+
+        if (ua && template.hasAttribute('data-exclude')) noMatch = !noMatch;
         if (ua && noMatch) return;
 
         if (!ds.dumped) {
@@ -143,25 +149,25 @@
        */
 
     }, {
-      key: "loadTemplates",
-      value: function loadTemplates(from) {
+      key: "lt",
+      value: function lt(from) {
         var _this3 = this;
 
-        qsa('template[data-src],template[data-activate]', from).forEach(function (externalRefTemplate) {
-          _this3.initTemplate(externalRefTemplate);
+        qsa('template[data-src],template[data-activate]', from).forEach(function (t) {
+          _this3.initTemplate(t);
         });
       }
     }, {
-      key: "loadTemplatesOutsideShadowDOM",
-      value: function loadTemplatesOutsideShadowDOM() {
-        this.loadTemplates(document);
+      key: "ltosd",
+      value: function ltosd() {
+        this.lt(document);
       }
     }, {
       key: "ltisd",
       value: function ltisd() {
         var host = this.getHost();
         if (!host) return;
-        this.loadTemplates(host);
+        this.lt(host);
       }
     }, {
       key: "mhft",
@@ -187,7 +193,7 @@
         var _this5 = this;
 
         this.ltisd();
-        this.loadTemplatesOutsideShadowDOM();
+        this.ltosd();
 
         if (document.readyState === "loading") {
           document.addEventListener("DOMContentLoaded", function (e) {

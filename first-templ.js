@@ -1,15 +1,15 @@
-const _cachedTemplates = {};
-const fetchInProgress = {};
+const _cT = {}; //cachedTemplates
+const fip = {}; //fetch in progress
 export function loadTemplate(template, params) {
     const src = template.dataset.src || template.getAttribute('href');
     if (src) {
-        if (_cachedTemplates[src]) {
-            template.innerHTML = _cachedTemplates[src];
+        if (_cT[src]) {
+            template.innerHTML = _cT[src];
             if (params)
                 customElements.define(params.tagName, params.cls);
         }
         else {
-            if (fetchInProgress[src]) {
+            if (fip[src]) {
                 if (params) {
                     setTimeout(() => {
                         loadTemplate(template, params);
@@ -17,19 +17,19 @@ export function loadTemplate(template, params) {
                 }
                 return;
             }
-            fetchInProgress[src] = true;
+            fip[src] = true;
             fetch(src, {
                 credentials: 'same-origin'
             }).then(resp => {
                 resp.text().then(txt => {
-                    fetchInProgress[src] = false;
+                    fip[src] = false;
                     if (params && params.preProcessor)
                         txt = params.preProcessor.process(txt);
                     const split = txt.split('<!---->');
                     if (split.length > 1) {
                         txt = split[1];
                     }
-                    _cachedTemplates[src] = txt;
+                    _cT[src] = txt;
                     template.innerHTML = txt;
                     template.setAttribute('loaded', '');
                     if (params)

@@ -54,8 +54,11 @@ export class TemplMount extends HTMLElement {
     initTemplate(template: HTMLTemplateElement) {
         const ds = (<HTMLElement>template).dataset;
         const ua = ds.ua;
-        let noMatch = navigator.userAgent.indexOf(ua) === -1;
-        if(ua && ua[0]==='!') noMatch = !noMatch;
+        let noMatch = false;
+        if(ua){
+            noMatch = navigator.userAgent.search(new RegExp(ua)) === -1;
+        }
+        if(ua && template.hasAttribute('data-exclude')) noMatch = !noMatch;
         if (ua && noMatch) return;
         if (!ds.dumped) {
             //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
@@ -73,8 +76,8 @@ export class TemplMount extends HTMLElement {
      * @param from
      */
     lt(from: DocumentFragment) { //load template
-        qsa('template[data-src],template[data-activate]', from).forEach((externalRefTemplate: HTMLTemplateElement) => {
-            this.initTemplate(externalRefTemplate);
+        qsa('template[data-src],template[data-activate]', from).forEach((t: HTMLTemplateElement) => {
+            this.initTemplate(t);
         })
 
     }

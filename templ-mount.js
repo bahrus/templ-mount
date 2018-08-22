@@ -51,8 +51,11 @@ export class TemplMount extends HTMLElement {
     initTemplate(template) {
         const ds = template.dataset;
         const ua = ds.ua;
-        let noMatch = navigator.userAgent.indexOf(ua) === -1;
-        if (ua && ua[0] === '!')
+        let noMatch = false;
+        if (ua) {
+            noMatch = navigator.userAgent.search(new RegExp(ua)) === -1;
+        }
+        if (ua && template.hasAttribute('data-exclude'))
             noMatch = !noMatch;
         if (ua && noMatch)
             return;
@@ -70,8 +73,8 @@ export class TemplMount extends HTMLElement {
      * @param from
      */
     lt(from) {
-        qsa('template[data-src],template[data-activate]', from).forEach((externalRefTemplate) => {
-            this.initTemplate(externalRefTemplate);
+        qsa('template[data-src],template[data-activate]', from).forEach((t) => {
+            this.initTemplate(t);
         });
     }
     ltosd() {

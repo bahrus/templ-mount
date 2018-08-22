@@ -62,7 +62,7 @@ If the original template markup, prior to loading the content from a fetch reque
 
 then templ-mount clones those script tags into document.head, prior to replacing it with the contents of the html file.
 
-Note the attribute data-ua.  This allows one to specify a user agent string.  Templates will only mount if the specified value is found inside the user agent of the browser.  If the value of data-ua starts with "!" then it will activate if the user agent does *not* contain the value.
+Note the attribute data-ua.  This allows one to specify a user agent string (regular expression).  Templates will only mount if the specified value is found inside the user agent of the browser.  If an additional attribute data-exclude is present, it will only activate if the user agent does *not* match the expression..
 
 This can allow multiple templates pointing to the same html file / stream to point to different javascript files, depending on the browser.
 
@@ -71,7 +71,7 @@ This can allow multiple templates pointing to the same html file / stream to poi
 Inside your template document itself, you may also want to load some (additional) script dependencies.  This can most transparently be done with the following syntax, where the attribute data-activate is utilized:
 
 ```html
-<template id="bb_chart_template" data-activate data-ua="!Trident">
+<template id="bb_chart_template" data-activate data-ua="Trident" data-exclude>
     <script async src="https://unpkg.com/xtal-json-editor@0.0.19/xtal-json-editor.js"></script>
     <script type="module" async src="https://unpkg.com/xtal-json-merge@0.2.21/xtal-insert-json.js?module"></script>
     <script type="module" async src="https://unpkg.com/p-d.p-u@0.0.10/p-d.js?module"></script>

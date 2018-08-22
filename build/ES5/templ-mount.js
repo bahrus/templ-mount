@@ -29,7 +29,7 @@ function (_HTMLElement) {
         document.addEventListener("DOMContentLoaded", function (e) {
           _this.mhft();
 
-          _this.loadTemplatesOutsideShadowDOM();
+          _this.ltosd();
         });
       } else {
         _this.mhft();
@@ -75,8 +75,13 @@ function (_HTMLElement) {
     value: function initTemplate(template) {
       var ds = template.dataset;
       var ua = ds.ua;
-      var noMatch = navigator.userAgent.indexOf(ua) === -1;
-      if (ua && ua[0] === '!') noMatch = !noMatch;
+      var noMatch = false;
+
+      if (ua) {
+        noMatch = navigator.userAgent.search(new RegExp(ua)) === -1;
+      }
+
+      if (ua && template.hasAttribute('data-exclude')) noMatch = !noMatch;
       if (ua && noMatch) return;
 
       if (!ds.dumped) {
@@ -95,25 +100,25 @@ function (_HTMLElement) {
      */
 
   }, {
-    key: "loadTemplates",
-    value: function loadTemplates(from) {
+    key: "lt",
+    value: function lt(from) {
       var _this3 = this;
 
-      qsa('template[data-src],template[data-activate]', from).forEach(function (externalRefTemplate) {
-        _this3.initTemplate(externalRefTemplate);
+      qsa('template[data-src],template[data-activate]', from).forEach(function (t) {
+        _this3.initTemplate(t);
       });
     }
   }, {
-    key: "loadTemplatesOutsideShadowDOM",
-    value: function loadTemplatesOutsideShadowDOM() {
-      this.loadTemplates(document);
+    key: "ltosd",
+    value: function ltosd() {
+      this.lt(document);
     }
   }, {
     key: "ltisd",
     value: function ltisd() {
       var host = this.getHost();
       if (!host) return;
-      this.loadTemplates(host);
+      this.lt(host);
     }
   }, {
     key: "mhft",
@@ -139,7 +144,7 @@ function (_HTMLElement) {
       var _this5 = this;
 
       this.ltisd();
-      this.loadTemplatesOutsideShadowDOM();
+      this.ltosd();
 
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", function (e) {
