@@ -69,19 +69,19 @@ export class TemplMount extends HTMLElement {
      *
      * @param from
      */
-    loadTemplates(from) {
+    lt(from) {
         qsa('template[data-src],template[data-activate]', from).forEach((externalRefTemplate) => {
             this.initTemplate(externalRefTemplate);
         });
     }
     ltosd() {
-        this.loadTemplates(document);
+        this.lt(document);
     }
     ltisd() {
         const host = this.getHost();
         if (!host)
             return;
-        this.loadTemplates(host);
+        this.lt(host);
     }
     mhft() {
         const config = { childList: true };

@@ -72,19 +72,19 @@ export class TemplMount extends HTMLElement {
      * 
      * @param from
      */
-    loadTemplates(from: DocumentFragment) {
+    lt(from: DocumentFragment) { //load template
         qsa('template[data-src],template[data-activate]', from).forEach((externalRefTemplate: HTMLTemplateElement) => {
             this.initTemplate(externalRefTemplate);
         })
 
     }
-    ltosd() {
-        this.loadTemplates(document);
+    ltosd() { //load template outside shadow dom
+        this.lt(document);
     }
     ltisd() { //load template inside shadow dom
         const host = this.getHost();
         if (!host) return;
-        this.loadTemplates(host);
+        this.lt(host);
     }
     _observer: MutationObserver;
     mhft() { //monitof head for templates
