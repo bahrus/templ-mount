@@ -13,16 +13,16 @@ export function qsa(css, from) {
 export class TemplMount extends HTMLElement {
     constructor() {
         super();
-        if (!TemplMount._alreadyDidGlobalCheck) {
-            TemplMount._alreadyDidGlobalCheck = true;
+        if (!TemplMount._adgc) {
+            TemplMount._adgc = true;
             if (document.readyState === "loading") {
                 document.addEventListener("DOMContentLoaded", e => {
-                    this.monitorHeadForTemplates();
+                    this.mhft();
                     this.loadTemplatesOutsideShadowDOM();
                 });
             }
             else {
-                this.monitorHeadForTemplates();
+                this.mhft();
             }
         }
     }
@@ -77,13 +77,13 @@ export class TemplMount extends HTMLElement {
     loadTemplatesOutsideShadowDOM() {
         this.loadTemplates(document);
     }
-    loadTemplateInsideShadowDOM() {
+    ltisd() {
         const host = this.getHost();
         if (!host)
             return;
         this.loadTemplates(host);
     }
-    monitorHeadForTemplates() {
+    mhft() {
         const config = { childList: true };
         this._observer = new MutationObserver((mutationsList) => {
             mutationsList.forEach(mutationRecord => {
@@ -96,15 +96,15 @@ export class TemplMount extends HTMLElement {
         this._observer.observe(document.head, config);
     }
     connectedCallback() {
-        this.loadTemplateInsideShadowDOM();
+        this.ltisd();
         this.loadTemplatesOutsideShadowDOM();
         if (document.readyState === "loading") {
             document.addEventListener("DOMContentLoaded", e => {
-                this.loadTemplateInsideShadowDOM();
+                this.ltisd();
             });
         }
     }
 }
-TemplMount._alreadyDidGlobalCheck = false;
+TemplMount._adgc = false; //already did global check
 customElements.define(TemplMount.is, TemplMount);
 //# sourceMappingURL=templ-mount.js.map

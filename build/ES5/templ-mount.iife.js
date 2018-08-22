@@ -70,17 +70,17 @@
       babelHelpers.classCallCheck(this, TemplMount);
       _this = babelHelpers.possibleConstructorReturn(this, (TemplMount.__proto__ || Object.getPrototypeOf(TemplMount)).call(this));
 
-      if (!TemplMount._alreadyDidGlobalCheck) {
-        TemplMount._alreadyDidGlobalCheck = true;
+      if (!TemplMount._adgc) {
+        TemplMount._adgc = true;
 
         if (document.readyState === "loading") {
           document.addEventListener("DOMContentLoaded", function (e) {
-            _this.monitorHeadForTemplates();
+            _this.mhft();
 
             _this.loadTemplatesOutsideShadowDOM();
           });
         } else {
-          _this.monitorHeadForTemplates();
+          _this.mhft();
         }
       }
 
@@ -157,15 +157,15 @@
         this.loadTemplates(document);
       }
     }, {
-      key: "loadTemplateInsideShadowDOM",
-      value: function loadTemplateInsideShadowDOM() {
+      key: "ltisd",
+      value: function ltisd() {
         var host = this.getHost();
         if (!host) return;
         this.loadTemplates(host);
       }
     }, {
-      key: "monitorHeadForTemplates",
-      value: function monitorHeadForTemplates() {
+      key: "mhft",
+      value: function mhft() {
         var _this4 = this;
 
         var config = {
@@ -186,12 +186,12 @@
       value: function connectedCallback() {
         var _this5 = this;
 
-        this.loadTemplateInsideShadowDOM();
+        this.ltisd();
         this.loadTemplatesOutsideShadowDOM();
 
         if (document.readyState === "loading") {
           document.addEventListener("DOMContentLoaded", function (e) {
-            _this5.loadTemplateInsideShadowDOM();
+            _this5.ltisd();
           });
         }
       }
@@ -204,6 +204,7 @@
     return TemplMount;
   }(HTMLElement);
 
-  TemplMount._alreadyDidGlobalCheck = false;
+  TemplMount._adgc = false; //already did global check
+
   customElements.define(TemplMount.is, TemplMount);
 })();

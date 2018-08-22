@@ -13,18 +13,18 @@ export function qsa(css, from?: HTMLElement | Document | DocumentFragment): HTML
 */
 export class TemplMount extends HTMLElement {
     static get is() { return 'templ-mount'; }
-    static _alreadyDidGlobalCheck = false;
+    static _adgc = false; //already did global check
     constructor() {
         super();
-        if (!TemplMount._alreadyDidGlobalCheck) {
-            TemplMount._alreadyDidGlobalCheck = true;
+        if (!TemplMount._adgc) {
+            TemplMount._adgc = true;
             if (document.readyState === "loading") {
                 document.addEventListener("DOMContentLoaded", e => {
-                    this.monitorHeadForTemplates();
+                    this.mhft();
                     this.loadTemplatesOutsideShadowDOM();
                 });
             } else {
-                this.monitorHeadForTemplates();
+                this.mhft();
             }
 
         }
@@ -81,13 +81,13 @@ export class TemplMount extends HTMLElement {
     loadTemplatesOutsideShadowDOM() {
         this.loadTemplates(document);
     }
-    loadTemplateInsideShadowDOM() {
+    ltisd() { //load template inside shadow dom
         const host = this.getHost();
         if (!host) return;
         this.loadTemplates(host);
     }
     _observer: MutationObserver;
-    monitorHeadForTemplates() {
+    mhft() { //monitof head for templates
         const config = { childList: true };
         this._observer = new MutationObserver((mutationsList: MutationRecord[]) => {
             mutationsList.forEach(mutationRecord => {
@@ -99,11 +99,11 @@ export class TemplMount extends HTMLElement {
         this._observer.observe(document.head, config);
     }
     connectedCallback() {
-        this.loadTemplateInsideShadowDOM();
+        this.ltisd();
         this.loadTemplatesOutsideShadowDOM();
         if (document.readyState === "loading") {
             document.addEventListener("DOMContentLoaded", e => {
-                this.loadTemplateInsideShadowDOM();
+                this.ltisd();
             });
         }
     }
