@@ -18,7 +18,7 @@ export class TemplMount extends HTMLElement {
             if (document.readyState === "loading") {
                 document.addEventListener("DOMContentLoaded", e => {
                     this.mhft();
-                    this.loadTemplatesOutsideShadowDOM();
+                    this.ltosd();
                 });
             }
             else {
@@ -74,7 +74,7 @@ export class TemplMount extends HTMLElement {
             this.initTemplate(externalRefTemplate);
         });
     }
-    loadTemplatesOutsideShadowDOM() {
+    ltosd() {
         this.loadTemplates(document);
     }
     ltisd() {
@@ -97,7 +97,7 @@ export class TemplMount extends HTMLElement {
     }
     connectedCallback() {
         this.ltisd();
-        this.loadTemplatesOutsideShadowDOM();
+        this.ltosd();
         if (document.readyState === "loading") {
             document.addEventListener("DOMContentLoaded", e => {
                 this.ltisd();
