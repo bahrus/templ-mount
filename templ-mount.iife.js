@@ -86,6 +86,15 @@ class TemplMount extends HTMLElement {
                 dest.setAttribute(attr, src.getAttribute(attr));
         });
     }
+    cloneTags(clonedNode, tagName, copyAttrs) {
+        qsa(tagName, clonedNode).forEach(node => {
+            //node.setAttribute('clone-me', '');
+            const clone = document.createElement(tagName);
+            this.copyAttrs(node, clone, copyAttrs);
+            clone.innerHTML = node.innerHTML;
+            document.head.appendChild(clone);
+        });
+    }
     initTemplate(template) {
         const ds = template.dataset;
         const ua = ds.ua;
@@ -97,16 +106,8 @@ class TemplMount extends HTMLElement {
         if (!ds.dumped) {
             //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
             const clonedNode = template.content.cloneNode(true);
-            //if(template.hasAttribute('clone-script')){
-            qsa('script', clonedNode).forEach(node => {
-                //node.setAttribute('clone-me', '');
-                const clone = document.createElement('script');
-                this.copyAttrs(node, clone, ['src', 'type', 'nomodule']);
-                clone.innerHTML = node.innerHTML;
-                document.head.appendChild(clone);
-            });
-            //}
-            //document.head.appendChild(clonedNode);
+            this.cloneTags(clonedNode, 'script', ['src', 'type', 'nomodule']);
+            this.cloneTags(clonedNode, 'template', ['data-src', 'href', 'data-activate']);
             ds.dumped = 'true';
         }
         loadTemplate(template);

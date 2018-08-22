@@ -56,10 +56,23 @@ function (_HTMLElement) {
       });
     }
   }, {
-    key: "initTemplate",
-    value: function initTemplate(template) {
+    key: "cloneTags",
+    value: function cloneTags(clonedNode, tagName, copyAttrs) {
       var _this2 = this;
 
+      qsa(tagName, clonedNode).forEach(function (node) {
+        //node.setAttribute('clone-me', '');
+        var clone = document.createElement(tagName);
+
+        _this2.copyAttrs(node, clone, copyAttrs);
+
+        clone.innerHTML = node.innerHTML;
+        document.head.appendChild(clone);
+      });
+    }
+  }, {
+    key: "initTemplate",
+    value: function initTemplate(template) {
       var ds = template.dataset;
       var ua = ds.ua;
       var noMatch = navigator.userAgent.indexOf(ua) === -1;
@@ -68,19 +81,9 @@ function (_HTMLElement) {
 
       if (!ds.dumped) {
         //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
-        var clonedNode = template.content.cloneNode(true); //if(template.hasAttribute('clone-script')){
-
-        qsa('script', clonedNode).forEach(function (node) {
-          //node.setAttribute('clone-me', '');
-          var clone = document.createElement('script');
-
-          _this2.copyAttrs(node, clone, ['src', 'type', 'nomodule']);
-
-          clone.innerHTML = node.innerHTML;
-          document.head.appendChild(clone);
-        }); //}
-        //document.head.appendChild(clonedNode);
-
+        var clonedNode = template.content.cloneNode(true);
+        this.cloneTags(clonedNode, 'script', ['src', 'type', 'nomodule']);
+        this.cloneTags(clonedNode, 'template', ['data-src', 'href', 'data-activate']);
         ds.dumped = 'true';
       }
 
