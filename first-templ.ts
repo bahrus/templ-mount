@@ -44,7 +44,7 @@ export function loadTemplate(template: HTMLTemplateElement, params?: ICEParams){
                     _cT[src] = txt;
                     template.innerHTML = txt;
                     template.setAttribute('loaded', '');
-                    if(params && params.tagName) customElements.define(params.tagName, params.cls);
+                    if(params && params.tagName && params.cls) customElements.define(params.tagName, params.cls);
                 })
             })
         }

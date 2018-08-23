@@ -37,7 +37,7 @@ function loadTemplate(template, params) {
                     _cT[src] = txt;
                     template.innerHTML = txt;
                     template.setAttribute('loaded', '');
-                    if (params && params.tagName)
+                    if (params && params.tagName && params.cls)
                         customElements.define(params.tagName, params.cls);
                 });
             });
