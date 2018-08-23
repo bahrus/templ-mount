@@ -34,7 +34,7 @@ export function loadTemplate(template, params) {
                     _cT[src] = txt;
                     template.innerHTML = txt;
                     template.setAttribute('loaded', '');
-                    if (params)
+                    if (params && params.tagName)
                         customElements.define(params.tagName, params.cls);
                 });
             });

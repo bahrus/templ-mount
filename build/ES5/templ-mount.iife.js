@@ -41,7 +41,7 @@
             _cT[src] = txt;
             template.innerHTML = txt;
             template.setAttribute('loaded', '');
-            if (params) customElements.define(params.tagName, params.cls);
+            if (params && params.tagName) customElements.define(params.tagName, params.cls);
           });
         });
       }
