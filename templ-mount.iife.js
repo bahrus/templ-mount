@@ -3,13 +3,22 @@
     (function () {
     const _cT = {}; //cachedTemplates
 const fip = {}; //fetch in progress
+function def(params) {
+    if (params && params.tagName && params.cls) {
+        if (customElements.get(params.tagName)) {
+            console.warn(params.tagName + ' already defined.');
+        }
+        else {
+            customElements.define(params.tagName, params.cls);
+        }
+    }
+}
 function loadTemplate(template, params) {
     const src = template.dataset.src || template.getAttribute('href');
     if (src) {
         if (_cT[src]) {
             template.innerHTML = _cT[src];
-            if (params)
-                customElements.define(params.tagName, params.cls);
+            def(params);
         }
         else {
             if (fip[src]) {
@@ -37,15 +46,13 @@ function loadTemplate(template, params) {
                     _cT[src] = txt;
                     template.innerHTML = txt;
                     template.setAttribute('loaded', '');
-                    if (params && params.tagName && params.cls)
-                        customElements.define(params.tagName, params.cls);
+                    def(params);
                 });
             });
         }
     }
     else {
-        if (params && params.tagName)
-            customElements.define(params.tagName, params.cls);
+        def(params);
     }
 }
 function qsa(css, from) {

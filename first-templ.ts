@@ -12,13 +12,21 @@ export interface ICEParams{
 const _cT : {[key:string] : string} = {}; //cachedTemplates
 const fip : {[key:string] : boolean} = {}; //fetch in progress
 
-
+function def(params: ICEParams){
+    if(params && params.tagName && params.cls){
+        if(customElements.get(params.tagName)){
+            console.warn(params.tagName + ' already defined.')
+        }else{
+            customElements.define(params.tagName, params.cls);
+        }
+    }
+}
 export function loadTemplate(template: HTMLTemplateElement, params?: ICEParams){
     const src = template.dataset.src || template.getAttribute('href');
     if(src){
         if(_cT[src]){
             template.innerHTML = _cT[src];
-            if(params) customElements.define(params.tagName, params.cls);
+            def(params);
         }else{
             if(fip[src]){
                 if(params){
@@ -44,13 +52,13 @@ export function loadTemplate(template: HTMLTemplateElement, params?: ICEParams){
                     _cT[src] = txt;
                     template.innerHTML = txt;
                     template.setAttribute('loaded', '');
-                    if(params && params.tagName && params.cls) customElements.define(params.tagName, params.cls);
+                    def(params);
                 })
             })
         }
 
     }else{
-        if(params && params.tagName) customElements.define(params.tagName, params.cls);
+        def(params)
     }
 }
 
