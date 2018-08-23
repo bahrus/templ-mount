@@ -3,10 +3,11 @@ export interface IProcessor{
 }
 
 export interface ICEParams{
-    tagName: string,
-    cls: any,
-    sharedTemplateTagName: string,
+    tagName?: string,
+    cls?: any,
+    sharedTemplateTagName?: string,
     preProcessor?: IProcessor;
+    noSnip?: boolean;
 }
 const _cT : {[key:string] : string} = {}; //cachedTemplates
 const fip : {[key:string] : boolean} = {}; //fetch in progress
@@ -34,9 +35,11 @@ export function loadTemplate(template: HTMLTemplateElement, params?: ICEParams){
                 resp.text().then(txt =>{
                     fip[src] = false;
                     if(params && params.preProcessor) txt = params.preProcessor.process(txt);
-                    const split = txt.split('<!---->');
-                    if(split.length > 1){
-                        txt = split[1];
+                    if(!params || !params.noSnip){
+                        const split = txt.split('<!---->');
+                        if(split.length > 1){
+                            txt = split[1];
+                        }
                     }
                     _cT[src] = txt;
                     template.innerHTML = txt;

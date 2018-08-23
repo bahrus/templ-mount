@@ -25,9 +25,11 @@ export function loadTemplate(template, params) {
                     fip[src] = false;
                     if (params && params.preProcessor)
                         txt = params.preProcessor.process(txt);
-                    const split = txt.split('<!---->');
-                    if (split.length > 1) {
-                        txt = split[1];
+                    if (!params || !params.noSnip) {
+                        const split = txt.split('<!---->');
+                        if (split.length > 1) {
+                            txt = split[1];
+                        }
                     }
                     _cT[src] = txt;
                     template.innerHTML = txt;

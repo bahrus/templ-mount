@@ -92,7 +92,9 @@ function (_HTMLElement) {
         ds.dumped = 'true';
       }
 
-      loadTemplate(template);
+      loadTemplate(template, {
+        noSnip: template.hasAttribute('nosnip')
+      });
     }
     /**
      *

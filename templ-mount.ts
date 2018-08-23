@@ -67,7 +67,9 @@ export class TemplMount extends HTMLElement {
             this.cloneTags(clonedNode, 'template', ['data-src', 'href', 'data-activate'])
             ds.dumped = 'true';
         }
-        loadTemplate(template as HTMLTemplateElement);
+        loadTemplate(template as HTMLTemplateElement, {
+            noSnip: template.hasAttribute('nosnip'),
+        });
     }
 
 

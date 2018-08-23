@@ -27,10 +27,13 @@ export function loadTemplate(template, params) {
         resp.text().then(function (txt) {
           fip[src] = false;
           if (params && params.preProcessor) txt = params.preProcessor.process(txt);
-          var split = txt.split('<!---->');
 
-          if (split.length > 1) {
-            txt = split[1];
+          if (!params || !params.noSnip) {
+            var split = txt.split('<!---->');
+
+            if (split.length > 1) {
+              txt = split[1];
+            }
           }
 
           _cT[src] = txt;
