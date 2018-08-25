@@ -13,6 +13,7 @@ export function qsa(css, from) {
 export class TemplMount extends HTMLElement {
     constructor() {
         super();
+        this.style.display = 'none';
         if (!TemplMount._adgc) {
             TemplMount._adgc = true;
             if (document.readyState === "loading") {
@@ -63,7 +64,7 @@ export class TemplMount extends HTMLElement {
             //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
             const clonedNode = template.content.cloneNode(true);
             this.cloneTags(clonedNode, 'script', ['src', 'type', 'nomodule']);
-            this.cloneTags(clonedNode, 'template', ['data-src', 'href', 'data-activate']);
+            this.cloneTags(clonedNode, 'template', ['data-src', 'href', 'data-activate', 'data-ua', 'data-exclude']);
             ds.dumped = 'true';
         }
         loadTemplate(template, {
