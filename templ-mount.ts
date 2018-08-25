@@ -62,10 +62,11 @@ export class TemplMount extends HTMLElement {
         if(ua && template.hasAttribute('data-exclude')) noMatch = !noMatch;
         if (ua && noMatch) return;
         if (!ds.dumped) {
-            //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
+            //This shouldn't be so hard, but Chrome (and other browsers) doesn't seem to consistently like just appending the cloned children of the template
             const clonedNode = (<HTMLTemplateElement>template).content.cloneNode(true) as DocumentFragment;
             this.cloneTags(clonedNode, 'script', ['src', 'type', 'nomodule']);
-            this.cloneTags(clonedNode, 'template', ['data-src', 'href', 'data-activate', 'data-ua', 'data-exclude'])
+            this.cloneTags(clonedNode, 'template', ['id', 'data-src', 'href', 'data-activate', 'data-ua', 'data-exclude', 'data-methods'])
+            this.cloneTags(clonedNode, 'c-c', ['from', 'noshadow', 'copy'])
             ds.dumped = 'true';
         }
         loadTemplate(template as HTMLTemplateElement, {
