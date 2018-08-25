@@ -9,6 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const test = require('tape');
 const puppeteer = require('puppeteer');
 const path = require('path');
+// function delay(time) {
+//     return new Promise(function(resolve) { 
+//         setTimeout(resolve, time)
+//     });
+//  }
 (() => __awaiter(this, void 0, void 0, function* () {
     const browser = yield puppeteer.launch({
         headless: true,
@@ -18,11 +23,13 @@ const path = require('path');
     page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
     const devFile = path.resolve(__dirname, '../demo/page-1c.html');
     yield page.goto(devFile);
-    const textContent = yield page.$eval('#secondEditor', (c) => c.input);
+    //await delay(4000);
+    yield page.waitFor(4000);
+    const textContent = yield page.$eval('page-2c', (c) => c.shadowRoot.querySelector('page-3c'));
     yield page.screenshot({ path: 'example.png' });
     yield browser.close();
     test('testing dev.html', (t) => {
-        t.equal(textContent.data[0].name, 'Harry Potter');
+        t.ok(textContent);
         t.end();
     });
 }))();

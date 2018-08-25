@@ -5,14 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
-    <script type="module" src="../templ-mount.js"></script>
-    <script type="module" src="https://unpkg.com/carbon-copy@0.1.25/c-c.js?module"></script>
-    <template id="page-2c" data-src href="page-2c.html">
-        <script type="module" src="https://unpkg.com/xtal-tree@0.0.28/xtal-tree.js?module"></script>
-        <template id="page-3c" data-src href="page-3c.html">
-                <script type="module" src="https://unpkg.com/xtal-fetch@0.0.35/xtal-fetch-get.js?module"></script>
+    <script src="../templ-mount.iife.js"></script>
+    <script src="https://unpkg.com/carbon-copy@0.1.34/carbon-copy.js"></script>
+    <template id="page-2c" data-src href="https://unpkg.com/templ-mount@0.0.37/demo/page-2c.html">
+        <template id="page-3c" data-src href="https://unpkg.com/templ-mount@0.0.37/demo/page-3c.html">
         </template>
         <c-c from="/page-3c"></c-c>
     </template>

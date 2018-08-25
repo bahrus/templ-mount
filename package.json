@@ -11,7 +11,11 @@
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "jiife": "^0.0.4",
     "puppeteer": "1.7.0",
+    "@types/puppeteer": "1.6.0",
     "tape": "^4.9.1"
   },
-  "version": "0.0.37"
+  "version": "0.0.37",
+  "scripts": {
+    "test": "node createIIFE.js && tape test/*.js"
+  }
 }

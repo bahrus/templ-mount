@@ -40,7 +40,7 @@ export class TemplMount extends HTMLElement {
                 dest.setAttribute(attr, src.getAttribute(attr));
         });
     }
-    cloneTags(clonedNode, tagName, copyAttrs) {
+    cT(clonedNode, tagName, copyAttrs) {
         qsa(tagName, clonedNode).forEach(node => {
             //node.setAttribute('clone-me', '');
             const clone = document.createElement(tagName);
@@ -49,7 +49,7 @@ export class TemplMount extends HTMLElement {
             document.head.appendChild(clone);
         });
     }
-    initTemplate(template) {
+    iT(template) {
         const ds = template.dataset;
         const ua = ds.ua;
         let noMatch = false;
@@ -63,9 +63,9 @@ export class TemplMount extends HTMLElement {
         if (!ds.dumped) {
             //This shouldn't be so hard, but Chrome (and other browsers) doesn't seem to consistently like just appending the cloned children of the template
             const clonedNode = template.content.cloneNode(true);
-            this.cloneTags(clonedNode, 'script', ['src', 'type', 'nomodule']);
-            this.cloneTags(clonedNode, 'template', ['id', 'data-src', 'href', 'data-activate', 'data-ua', 'data-exclude', 'data-methods']);
-            this.cloneTags(clonedNode, 'c-c', ['from', 'noshadow', 'copy']);
+            this.cT(clonedNode, 'script', ['src', 'type', 'nomodule']);
+            this.cT(clonedNode, 'template', ['id', 'data-src', 'href', 'data-activate', 'data-ua', 'data-exclude', 'data-methods']);
+            this.cT(clonedNode, 'c-c', ['from', 'noshadow', 'copy']);
             ds.dumped = 'true';
         }
         loadTemplate(template, {
@@ -78,7 +78,7 @@ export class TemplMount extends HTMLElement {
      */
     lt(from) {
         qsa('template[data-src],template[data-activate]', from).forEach((t) => {
-            this.initTemplate(t);
+            this.iT(t);
         });
     }
     ltosd() {
@@ -92,11 +92,11 @@ export class TemplMount extends HTMLElement {
     }
     mhft() {
         const config = { childList: true };
-        this._observer = new MutationObserver((mutationsList) => {
-            mutationsList.forEach(mutationRecord => {
-                mutationRecord.addedNodes.forEach((node) => {
+        this._observer = new MutationObserver((mL) => {
+            mL.forEach(mR => {
+                mR.addedNodes.forEach((node) => {
                     if (node.tagName === 'TEMPLATE')
-                        this.initTemplate(node);
+                        this.iT(node);
                 });
             });
         });

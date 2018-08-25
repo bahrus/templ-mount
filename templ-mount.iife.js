@@ -3,28 +3,28 @@
     (function () {
     const _cT = {}; //cachedTemplates
 const fip = {}; //fetch in progress
-function def(params) {
-    if (params && params.tagName && params.cls) {
-        if (customElements.get(params.tagName)) {
-            console.warn(params.tagName + ' already defined.');
+function def(p) {
+    if (p && p.tagName && p.cls) {
+        if (customElements.get(p.tagName)) {
+            console.warn(p.tagName + '!!');
         }
         else {
-            customElements.define(params.tagName, params.cls);
+            customElements.define(p.tagName, p.cls);
         }
     }
 }
-function loadTemplate(template, params) {
-    const src = template.dataset.src || template.getAttribute('href');
+function loadTemplate(t, p) {
+    const src = t.dataset.src || t.getAttribute('href');
     if (src) {
         if (_cT[src]) {
-            template.innerHTML = _cT[src];
-            def(params);
+            t.innerHTML = _cT[src];
+            def(p);
         }
         else {
             if (fip[src]) {
-                if (params) {
+                if (p) {
                     setTimeout(() => {
-                        loadTemplate(template, params);
+                        loadTemplate(t, p);
                     }, 100);
                 }
                 return;
@@ -35,24 +35,24 @@ function loadTemplate(template, params) {
             }).then(resp => {
                 resp.text().then(txt => {
                     fip[src] = false;
-                    if (params && params.preProcessor)
-                        txt = params.preProcessor.process(txt);
-                    if (!params || !params.noSnip) {
+                    if (p && p.preProcessor)
+                        txt = p.preProcessor.process(txt);
+                    if (!p || !p.noSnip) {
                         const split = txt.split('<!---->');
                         if (split.length > 1) {
                             txt = split[1];
                         }
                     }
                     _cT[src] = txt;
-                    template.innerHTML = txt;
-                    template.setAttribute('loaded', '');
-                    def(params);
+                    t.innerHTML = txt;
+                    t.setAttribute('loaded', '');
+                    def(p);
                 });
             });
         }
     }
     else {
-        def(params);
+        def(p);
     }
 }
 function qsa(css, from) {
@@ -69,6 +69,7 @@ function qsa(css, from) {
 class TemplMount extends HTMLElement {
     constructor() {
         super();
+        this.style.display = 'none';
         if (!TemplMount._adgc) {
             TemplMount._adgc = true;
             if (document.readyState === "loading") {
@@ -95,7 +96,7 @@ class TemplMount extends HTMLElement {
                 dest.setAttribute(attr, src.getAttribute(attr));
         });
     }
-    cloneTags(clonedNode, tagName, copyAttrs) {
+    cT(clonedNode, tagName, copyAttrs) {
         qsa(tagName, clonedNode).forEach(node => {
             //node.setAttribute('clone-me', '');
             const clone = document.createElement(tagName);
@@ -104,7 +105,7 @@ class TemplMount extends HTMLElement {
             document.head.appendChild(clone);
         });
     }
-    initTemplate(template) {
+    iT(template) {
         const ds = template.dataset;
         const ua = ds.ua;
         let noMatch = false;
@@ -116,10 +117,11 @@ class TemplMount extends HTMLElement {
         if (ua && noMatch)
             return;
         if (!ds.dumped) {
-            //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
+            //This shouldn't be so hard, but Chrome (and other browsers) doesn't seem to consistently like just appending the cloned children of the template
             const clonedNode = template.content.cloneNode(true);
-            this.cloneTags(clonedNode, 'script', ['src', 'type', 'nomodule']);
-            this.cloneTags(clonedNode, 'template', ['data-src', 'href', 'data-activate']);
+            this.cT(clonedNode, 'script', ['src', 'type', 'nomodule']);
+            this.cT(clonedNode, 'template', ['id', 'data-src', 'href', 'data-activate', 'data-ua', 'data-exclude', 'data-methods']);
+            this.cT(clonedNode, 'c-c', ['from', 'noshadow', 'copy']);
             ds.dumped = 'true';
         }
         loadTemplate(template, {
@@ -132,7 +134,7 @@ class TemplMount extends HTMLElement {
      */
     lt(from) {
         qsa('template[data-src],template[data-activate]', from).forEach((t) => {
-            this.initTemplate(t);
+            this.iT(t);
         });
     }
     ltosd() {
@@ -146,11 +148,11 @@ class TemplMount extends HTMLElement {
     }
     mhft() {
         const config = { childList: true };
-        this._observer = new MutationObserver((mutationsList) => {
-            mutationsList.forEach(mutationRecord => {
-                mutationRecord.addedNodes.forEach((node) => {
+        this._observer = new MutationObserver((mL) => {
+            mL.forEach(mR => {
+                mR.addedNodes.forEach((node) => {
                     if (node.tagName === 'TEMPLATE')
-                        this.initTemplate(node);
+                        this.iT(node);
                 });
             });
         });

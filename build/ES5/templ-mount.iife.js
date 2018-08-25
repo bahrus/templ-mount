@@ -4,28 +4,28 @@
 
   var fip = {}; //fetch in progress
 
-  function def(params) {
-    if (params && params.tagName && params.cls) {
-      if (customElements.get(params.tagName)) {
-        console.warn(params.tagName + ' already defined.');
+  function def(p) {
+    if (p && p.tagName && p.cls) {
+      if (customElements.get(p.tagName)) {
+        console.warn(p.tagName + '!!');
       } else {
-        customElements.define(params.tagName, params.cls);
+        customElements.define(p.tagName, p.cls);
       }
     }
   }
 
-  function loadTemplate(template, params) {
-    var src = template.dataset.src || template.getAttribute('href');
+  function loadTemplate(t, p) {
+    var src = t.dataset.src || t.getAttribute('href');
 
     if (src) {
       if (_cT[src]) {
-        template.innerHTML = _cT[src];
-        def(params);
+        t.innerHTML = _cT[src];
+        def(p);
       } else {
         if (fip[src]) {
-          if (params) {
+          if (p) {
             setTimeout(function () {
-              loadTemplate(template, params);
+              loadTemplate(t, p);
             }, 100);
           }
 
@@ -38,9 +38,9 @@
         }).then(function (resp) {
           resp.text().then(function (txt) {
             fip[src] = false;
-            if (params && params.preProcessor) txt = params.preProcessor.process(txt);
+            if (p && p.preProcessor) txt = p.preProcessor.process(txt);
 
-            if (!params || !params.noSnip) {
+            if (!p || !p.noSnip) {
               var split = txt.split('<!---->');
 
               if (split.length > 1) {
@@ -49,14 +49,14 @@
             }
 
             _cT[src] = txt;
-            template.innerHTML = txt;
-            template.setAttribute('loaded', '');
-            def(params);
+            t.innerHTML = txt;
+            t.setAttribute('loaded', '');
+            def(p);
           });
         });
       }
     } else {
-      def(params);
+      def(p);
     }
   }
 
@@ -83,6 +83,7 @@
 
       babelHelpers.classCallCheck(this, TemplMount);
       _this = babelHelpers.possibleConstructorReturn(this, (TemplMount.__proto__ || Object.getPrototypeOf(TemplMount)).call(this));
+      _this.style.display = 'none';
 
       if (!TemplMount._adgc) {
         TemplMount._adgc = true;
@@ -118,8 +119,8 @@
         });
       }
     }, {
-      key: "cloneTags",
-      value: function cloneTags(clonedNode, tagName, copyAttrs) {
+      key: "cT",
+      value: function cT(clonedNode, tagName, copyAttrs) {
         var _this2 = this;
 
         qsa(tagName, clonedNode).forEach(function (node) {
@@ -133,8 +134,8 @@
         });
       }
     }, {
-      key: "initTemplate",
-      value: function initTemplate(template) {
+      key: "iT",
+      value: function iT(template) {
         var ds = template.dataset;
         var ua = ds.ua;
         var noMatch = false;
@@ -147,10 +148,11 @@
         if (ua && noMatch) return;
 
         if (!ds.dumped) {
-          //This shouldn't be so hard, but Chrome doesn't seem to consistently like just appending the cloned children of the template
+          //This shouldn't be so hard, but Chrome (and other browsers) doesn't seem to consistently like just appending the cloned children of the template
           var clonedNode = template.content.cloneNode(true);
-          this.cloneTags(clonedNode, 'script', ['src', 'type', 'nomodule']);
-          this.cloneTags(clonedNode, 'template', ['data-src', 'href', 'data-activate']);
+          this.cT(clonedNode, 'script', ['src', 'type', 'nomodule']);
+          this.cT(clonedNode, 'template', ['id', 'data-src', 'href', 'data-activate', 'data-ua', 'data-exclude', 'data-methods']);
+          this.cT(clonedNode, 'c-c', ['from', 'noshadow', 'copy']);
           ds.dumped = 'true';
         }
 
@@ -169,7 +171,7 @@
         var _this3 = this;
 
         qsa('template[data-src],template[data-activate]', from).forEach(function (t) {
-          _this3.initTemplate(t);
+          _this3.iT(t);
         });
       }
     }, {
@@ -192,10 +194,10 @@
         var config = {
           childList: true
         };
-        this._observer = new MutationObserver(function (mutationsList) {
-          mutationsList.forEach(function (mutationRecord) {
-            mutationRecord.addedNodes.forEach(function (node) {
-              if (node.tagName === 'TEMPLATE') _this4.initTemplate(node);
+        this._observer = new MutationObserver(function (mL) {
+          mL.forEach(function (mR) {
+            mR.addedNodes.forEach(function (node) {
+              if (node.tagName === 'TEMPLATE') _this4.iT(node);
             });
           });
         });

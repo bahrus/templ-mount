@@ -20,7 +20,7 @@ or
 
 The latter syntax is more IDE friendly, but bears a remote risk that browsers may someday add support for the href attribute for the template element, where the behavior differs from what templ-mount provides.
 
-One of the driving forces behind this component is it allows applications to follow the [rule of least power](https://en.wikipedia.org/wiki/Rule_of_least_power) and to send data to the browser in the format that the browser will consume it, without (excepensive) translations from one format into another.  It can work well with server-side centric frameworks, like PHP, asp.net MVC, or Java EE MVC.
+One of the driving forces behind this component is it allows applications to follow the [rule of least power](https://en.wikipedia.org/wiki/Rule_of_least_power) and to send data to the browser in the format that the browser will consume it, without (expensive) translations from one format into another.  It can work well with server-side-centric frameworks, like PHP, asp.net MVC, or Java EE MVC.
 
 ## Syntax of templ-mount
 
@@ -107,13 +107,15 @@ then it will only import the content between the first two such strings.  This h
 
 On this topic, templ-mount works well in combination with [carbon-copy](https://www.webcomponents.org/element/carbon-copy).
 
-At the top of this document, we mentioned the desire to allow servers to send content down in the native format that the browser will consume it.  This snipping solution goes against that strategy, in the sense that here we are suggesting doing some string manipulation of the content.  But most server-side solutions can easily snip out content in a similar way to what we are doing above.  If the developer takes the time to implement this, they won't reap much reward if templ-mount searches for these magic comment strings anyway.
+At the top of this document, we mentioned the desire to allow servers to send content down in the native format that the browser will consume it.  This snipping solution goes against that strategy a bit, in the sense that here we are suggesting doing some string manipulation of the content.  But most server-side solutions can easily snip out content in a similar way to what we are doing above.  If the developer takes the time to implement this, they won't reap much reward if templ-mount searches for these magic comment strings anyway.
 
-To tell templ-mount not to do any kind of snipping, ad:
+To tell templ-mount not to do any kind of snipping, add:
 
 ```html
 <template data-src="path/to/some/fileOrStream.html" nosnip></template>
 ```
+
+This will give a slight performance boost.
 
 ## Referencing:
 
@@ -161,7 +163,7 @@ $ polymer serve
 ## Running Tests
 
 ```
-$ polymer test
+$ pnpm test
 ```
 
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+

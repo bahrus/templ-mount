@@ -2,28 +2,28 @@ var _cT = {}; //cachedTemplates
 
 var fip = {}; //fetch in progress
 
-function def(params) {
-  if (params && params.tagName && params.cls) {
-    if (customElements.get(params.tagName)) {
-      console.warn(params.tagName + ' already defined.');
+function def(p) {
+  if (p && p.tagName && p.cls) {
+    if (customElements.get(p.tagName)) {
+      console.warn(p.tagName + '!!');
     } else {
-      customElements.define(params.tagName, params.cls);
+      customElements.define(p.tagName, p.cls);
     }
   }
 }
 
-export function loadTemplate(template, params) {
-  var src = template.dataset.src || template.getAttribute('href');
+export function loadTemplate(t, p) {
+  var src = t.dataset.src || t.getAttribute('href');
 
   if (src) {
     if (_cT[src]) {
-      template.innerHTML = _cT[src];
-      def(params);
+      t.innerHTML = _cT[src];
+      def(p);
     } else {
       if (fip[src]) {
-        if (params) {
+        if (p) {
           setTimeout(function () {
-            loadTemplate(template, params);
+            loadTemplate(t, p);
           }, 100);
         }
 
@@ -36,9 +36,9 @@ export function loadTemplate(template, params) {
       }).then(function (resp) {
         resp.text().then(function (txt) {
           fip[src] = false;
-          if (params && params.preProcessor) txt = params.preProcessor.process(txt);
+          if (p && p.preProcessor) txt = p.preProcessor.process(txt);
 
-          if (!params || !params.noSnip) {
+          if (!p || !p.noSnip) {
             var split = txt.split('<!---->');
 
             if (split.length > 1) {
@@ -47,13 +47,13 @@ export function loadTemplate(template, params) {
           }
 
           _cT[src] = txt;
-          template.innerHTML = txt;
-          template.setAttribute('loaded', '');
-          def(params);
+          t.innerHTML = txt;
+          t.setAttribute('loaded', '');
+          def(p);
         });
       });
     }
   } else {
-    def(params);
+    def(p);
   }
 } //# sourceMappingURL=first-templ.js.map
