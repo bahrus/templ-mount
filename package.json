@@ -14,7 +14,7 @@
     "@types/puppeteer": "1.6.0",
     "tape": "^4.9.1"
   },
-  "version": "0.0.37",
+  "version": "0.0.38",
   "scripts": {
     "test": "node createIIFE.js && tape test/*.js"
   }
