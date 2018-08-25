@@ -163,7 +163,7 @@ $ polymer serve
 ## Running Tests
 
 ```
-$ pnpm test
+$ npm test
 ```
 
 
