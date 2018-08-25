@@ -2,6 +2,8 @@
 
 <a href="https://nodei.co/npm/templ-mount/"><img src="https://nodei.co/npm/templ-mount.png"></a>
 
+<img src="http://img.badgesize.io/https://github.com/bahrus/templ-mount/master/build/ES6/templ-mount.iife.js?compression=gzip">
+
 # \<templ-mount\>
 
 templ-mount is a ~1.2 KB (gzipped / minified) dependency free custom element. 
