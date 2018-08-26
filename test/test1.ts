@@ -1,5 +1,5 @@
-//import {runTests} from 'xtal-test/index.js';
-const xt = require('xtal-test/index') as any;
+import {IXtalTestRunner} from 'xtal-test/index.js';
+const xt = require('xtal-test/index') as IXtalTestRunner;
 const test = require('tape');
 console.log(xt);
 import { ConsoleMessage, Browser, LaunchOptions, Page } from "puppeteer"; //typescript
