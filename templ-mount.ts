@@ -40,7 +40,10 @@ export class TemplMount extends HTMLElement {
     }
     copyAttrs(src: HTMLScriptElement, dest: HTMLScriptElement, attrs: string[]){
         attrs.forEach(attr =>{
-            if(src.hasAttribute(attr)) dest.setAttribute(attr, src.getAttribute(attr));
+            if(!src.hasAttribute(attr)) return;
+            let attrVal = src.getAttribute(attr);
+            if(attr==='type') attrVal = attrVal.replace(':','');
+            dest.setAttribute(attr, attrVal);
         })
     }
     cT(clonedNode: DocumentFragment, tagName: string, copyAttrs: string[]){ //clone Tags

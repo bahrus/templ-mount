@@ -115,7 +115,10 @@
       key: "copyAttrs",
       value: function copyAttrs(src, dest, attrs) {
         attrs.forEach(function (attr) {
-          if (src.hasAttribute(attr)) dest.setAttribute(attr, src.getAttribute(attr));
+          if (!src.hasAttribute(attr)) return;
+          var attrVal = src.getAttribute(attr);
+          if (attr === 'type') attrVal = attrVal.replace(':', '');
+          dest.setAttribute(attr, attrVal);
         });
       }
     }, {

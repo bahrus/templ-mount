@@ -92,8 +92,12 @@ class TemplMount extends HTMLElement {
     }
     copyAttrs(src, dest, attrs) {
         attrs.forEach(attr => {
-            if (src.hasAttribute(attr))
-                dest.setAttribute(attr, src.getAttribute(attr));
+            if (!src.hasAttribute(attr))
+                return;
+            let attrVal = src.getAttribute(attr);
+            if (attr === 'type')
+                attrVal = attrVal.replace(':', '');
+            dest.setAttribute(attr, attrVal);
         });
     }
     cT(clonedNode, tagName, copyAttrs) {

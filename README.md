@@ -48,6 +48,8 @@ As a prelude to the discussion that follows, let's remember (or become aware) th
 But the need to activate script elements associated with a template is of paramount importance.  Hence the lengthy discussion that follows (and I also note that this ability to activate scripts with templ-mount is responsible for a significant share of the 1.2 kb file size).
 
 
+
+
 ### Preemptive loading
 
 If the original template markup, prior to loading the content from a fetch request, contains some script tags, e.g.:
@@ -66,9 +68,17 @@ If the original template markup, prior to loading the content from a fetch reque
 
 then templ-mount clones those script tags into document.head, prior to replacing it with the contents of the html file.
 
-Note the attribute data-ua.  This allows one to specify a user agent string (regular expression).  Templates will only mount if the specified value is found inside the user agent of the browser.  If an additional attribute data-exclude is present, it will only activate if the user agent does *not* match the expression..
+Note the attribute data-ua.  This allows one to specify a user agent string (regular expression).  Templates will only mount if the specified value is found inside the user agent of the browser.  If an additional attribute data-exclude is present, it will only activate if the user agent does *not* match the expression.
 
 This can allow multiple templates pointing to the same html file / stream to point to different javascript files, depending on the browser.
+
+NB:  Unlike Chrome, if MS Edge and Firefox (nightly) see script tags with "src" attributes inside a template, they may (uselessly?) *download* the script references, but they don't *activate* the script.  Edge does this download regardless of the "type" attribute.  Firefox only does this if it recognizes the "type" as a valid JavaScript value.  In my view, this is buggy behavior for both browsers.  Since Edge doesn't have much of a mobile footprint on mobile devices (it uses Safari and Chromium on Android and iOS), the extra download that templ-mount would cause would probably not lead to the destruction of rainforest.  To accommodate Firefox, you can place a colon in the "type" attribute, and templ-mount will remove that colon when it activates the script tags (sigh):
+
+```html
+<script type=":module" async src="https://unpkg.com/p-d.p-u@0.0.10/p-d.js?module"></script>
+```
+
+The script doesn't get downloaded again when it is activated.
 
 ### Template tags used just to load script
 
