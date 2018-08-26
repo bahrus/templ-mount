@@ -13,7 +13,6 @@ export function qsa(css, from) {
 export class TemplMount extends HTMLElement {
     constructor() {
         super();
-        this.style.display = 'none';
         if (!TemplMount._adgc) {
             TemplMount._adgc = true;
             if (document.readyState === "loading") {
@@ -107,6 +106,7 @@ export class TemplMount extends HTMLElement {
         this._observer.observe(document.head, config);
     }
     connectedCallback() {
+        this.style.display = 'none';
         this.ltisd();
         this.ltosd();
         if (document.readyState === "loading") {

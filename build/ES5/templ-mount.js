@@ -21,7 +21,6 @@ function (_HTMLElement) {
 
     babelHelpers.classCallCheck(this, TemplMount);
     _this = babelHelpers.possibleConstructorReturn(this, (TemplMount.__proto__ || Object.getPrototypeOf(TemplMount)).call(this));
-    _this.style.display = 'none';
 
     if (!TemplMount._adgc) {
       TemplMount._adgc = true;
@@ -150,6 +149,7 @@ function (_HTMLElement) {
     value: function connectedCallback() {
       var _this5 = this;
 
+      this.style.display = 'none';
       this.ltisd();
       this.ltosd();
 
