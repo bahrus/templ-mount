@@ -19,7 +19,7 @@ async function customTests(page: Page) {
 }
 (async () => {
     await  xt.runTests({
-        path: 'demo/page-1c.html'
+        path: 'test/page-1c.html'
     }, customTests);
 })();
 

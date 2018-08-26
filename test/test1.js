@@ -26,7 +26,7 @@ function customTests(page) {
 }
 (() => __awaiter(this, void 0, void 0, function* () {
     yield xt.runTests({
-        path: 'demo/page-1c.html'
+        path: 'test/page-1c.html'
     }, customTests);
 }))();
 //# sourceMappingURL=test1.js.map
