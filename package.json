@@ -10,7 +10,8 @@
     "@types/tape": "4.2.32",
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "jiife": "^0.0.4",
-    "xtal-test": "0.0.4"
+    "xtal-test": "0.0.8",
+    "tape": "^4.9.1"
   },
   "version": "0.0.38",
   "scripts": {
