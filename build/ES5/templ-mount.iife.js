@@ -1,5 +1,20 @@
 //@ts-check
 (function () {
+  function define(custEl) {
+    var tagName = custEl.is;
+
+    if (customElements.get(tagName)) {
+      console.warn('Already registered ' + tagName);
+      return;
+    }
+
+    customElements.define(tagName, custEl);
+  }
+
+  function qsa(css, from) {
+    return [].slice.call(from.querySelectorAll(css));
+  }
+
   var _cT = {}; //cachedTemplates
 
   var fip = {}; //fetch in progress
@@ -58,10 +73,6 @@
     } else {
       def(p);
     }
-  }
-
-  function qsa(css, from) {
-    return [].slice.call((from ? from : this).querySelectorAll(css));
   }
   /**
   * `templ-mount`

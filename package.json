@@ -5,7 +5,9 @@
   "repository": "https://github.com/bahrus/templ-mount",
   "author": "bahrus <anderson.bruce.b@gmail.com>",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "xtal-latx": "0.0.37"
+  },
   "devDependencies": {
     "@types/tape": "4.2.32",
     "@webcomponents/webcomponentsjs": "^2.0.0",

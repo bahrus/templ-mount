@@ -1,7 +1,5 @@
 import { loadTemplate } from './first-templ.js';
-export function qsa(css, from) {
-  return [].slice.call((from ? from : this).querySelectorAll(css));
-}
+import { qsa } from "./node_modules/xtal-latx/qsa.js";
 /**
 * `templ-mount`
 * Dependency free web component that loads templates from data-src (optionally href) attribute

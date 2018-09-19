@@ -2,13 +2,11 @@
 
 <a href="https://nodei.co/npm/templ-mount/"><img src="https://nodei.co/npm/templ-mount.png"></a>
 
-<img src="http://img.badgesize.io/https://rawgit.com/bahrus/templ-mount/master/build/ES6/templ-mount.iife.js?compression=gzip">
+<img src="http://img.badgesize.io/https://unpkg.com/templ-mount@0.0.41/templ-mount.iife.js?compression=gzip">
 
 # \<templ-mount\>
 
-templ-mount is a ~1.2 KB (gzipped / minified) dependency free custom element. 
-
-It allows templates to be loaded from url's, where templates have the following syntax:
+templ-mount allows templates to be loaded from url's, where template elements have the following syntax:
 
 ```html
 <template data-src="path/to/some/fileOrStream.html"></template>

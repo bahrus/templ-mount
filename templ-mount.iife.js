@@ -1,7 +1,18 @@
 
     //@ts-check
     (function () {
-    const _cT = {}; //cachedTemplates
+    function define(custEl) {
+    let tagName = custEl.is;
+    if (customElements.get(tagName)) {
+        console.warn('Already registered ' + tagName);
+        return;
+    }
+    customElements.define(tagName, custEl);
+}
+function qsa(css, from) {
+    return [].slice.call(from.querySelectorAll(css));
+}
+const _cT = {}; //cachedTemplates
 const fip = {}; //fetch in progress
 function def(p) {
     if (p && p.tagName && p.cls) {
@@ -54,9 +65,6 @@ function loadTemplate(t, p) {
     else {
         def(p);
     }
-}
-function qsa(css, from) {
-    return [].slice.call((from ? from : this).querySelectorAll(css));
 }
 /**
 * `templ-mount`

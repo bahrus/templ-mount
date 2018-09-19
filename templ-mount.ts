@@ -1,8 +1,6 @@
 import { ICEParams, loadTemplate } from './first-templ.js';
-
-export function qsa(css, from?: HTMLElement | Document | DocumentFragment): HTMLElement[] {
-    return [].slice.call((from ? from : this).querySelectorAll(css));
-}
+import {define} from 'xtal-latx/define.js';
+import {qsa} from 'xtal-latx/qsa.js'
 /**
 * `templ-mount`
 * Dependency free web component that loads templates from data-src (optionally href) attribute
