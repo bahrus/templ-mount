@@ -118,4 +118,4 @@ export class TemplMount extends HTMLElement {
     }
     
 }
-customElements.define(TemplMount.is, TemplMount);
+define(TemplMount); 

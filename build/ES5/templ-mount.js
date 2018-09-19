@@ -1,4 +1,5 @@
 import { loadTemplate } from './first-templ.js';
+import { define } from "./node_modules/xtal-latx/define.js";
 import { qsa } from "./node_modules/xtal-latx/qsa.js";
 /**
 * `templ-mount`
@@ -167,4 +168,4 @@ function (_HTMLElement) {
 }(HTMLElement);
 TemplMount._adgc = false; //already did global check
 
-customElements.define(TemplMount.is, TemplMount); //# sourceMappingURL=templ-mount.js.map
+define(TemplMount); //# sourceMappingURL=templ-mount.js.map

@@ -1,4 +1,5 @@
 import { loadTemplate } from './first-templ.js';
+import { define } from 'xtal-latx/define.js';
 import { qsa } from 'xtal-latx/qsa.js';
 /**
 * `templ-mount`
@@ -115,5 +116,5 @@ export class TemplMount extends HTMLElement {
     }
 }
 TemplMount._adgc = false; //already did global check
-customElements.define(TemplMount.is, TemplMount);
+define(TemplMount);
 //# sourceMappingURL=templ-mount.js.map
