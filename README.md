@@ -99,7 +99,7 @@ Inside your template document itself, you may also want to load some (additional
 
 In the preceding discussion, we've suggested two (non exclusive) approaches to how you could use templ-mount to load JavaScript files:  "Preemptive script loading" vs "activating" scripts found inside the template file itself, "on demand".  
 
-The case for using the first approach -- preemptively starting downloading the JavaScript files while waiting for the template definition itself to download -- is a bit weakened by the existence of the preload / preloadmodule resource hints.  However, loading scripts in this way does allow js files needed with more urgency to load sooner, based on how templates are nested.  And of course the ability to select by user agent could be helpful, as that is not supported out of the box with browsers (the closest thing is the nomodule attribute).
+The case for using the first approach -- preemptively starting downloading the JavaScript files while waiting for the template stream itself to generated and downloaded -- is a bit weakened by the existence of the preload / preloadmodule resource hints.  However, loading scripts in this way does allow js files needed with more urgency to load sooner, based on how templates are nested.  And of course the ability to select by user agent could be helpful, as that is not supported out of the box with browsers (the closest thing is the nomodule attribute).
 
 The biggest disadvantage of using preemptive loading, is that in practice it means you will likely need to duplicate references:  Once  inside the template tag, and once inside the actual html document, assuming you want to support the ability to open the template document as a standalone web page (as discussed briefly below).
 
