@@ -1,6 +1,6 @@
 import { ICEParams, loadTemplate } from './first-templ.js';
-import {define} from 'xtal-latx/define.js';
-import {qsa} from 'xtal-latx/qsa.js'
+import {qsa} from 'xtal-latx/qsa.js';
+
 /**
 * `templ-mount`
 * Dependency free web component that loads templates from data-src (optionally href) attribute
@@ -118,4 +118,4 @@ export class TemplMount extends HTMLElement {
     }
     
 }
-define(TemplMount); 
+customElements.define(TemplMount.is, TemplMount);

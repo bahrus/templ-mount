@@ -1,1 +1,0 @@
-{"version":3,"file":"first-templ-ext.js","sourceRoot":"","sources":["first-templ-ext.ts"],"names":[],"mappings":"AAEA;IACI,YAAmB,QAAgB;QAAhB,aAAQ,GAAR,QAAQ,CAAQ;IACnC,CAAC;IACD,OAAO,CAAC,GAAW;QACf,MAAM,MAAM,GAAG,IAAI,SAAS,EAAE,CAAC;QAC/B,IAAI,OAAO,GAAG,MAAM,CAAC,eAAe,CAAC,GAAG,EAAE,WAAW,CAAC,CAAC;IAE3D,CAAC;CACJ"}

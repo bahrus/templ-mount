@@ -93,7 +93,7 @@
       var _this;
 
       babelHelpers.classCallCheck(this, TemplMount);
-      _this = babelHelpers.possibleConstructorReturn(this, (TemplMount.__proto__ || Object.getPrototypeOf(TemplMount)).call(this));
+      _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TemplMount).call(this));
 
       if (!TemplMount._adgc) {
         TemplMount._adgc = true;
@@ -239,7 +239,7 @@
       }
     }]);
     return TemplMount;
-  }(HTMLElement);
+  }(babelHelpers.wrapNativeSuper(HTMLElement));
 
   TemplMount._adgc = false; //already did global check
 

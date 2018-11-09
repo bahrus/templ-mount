@@ -4,7 +4,7 @@
   "sources": [
     "first-templ.js",
     "templ-mount.js",
-    "templ-mount.iife.js",
+    "dist/templ-mount.iife.js",
     "index.html"
   ],
   "extraDependencies": [
@@ -16,19 +16,6 @@
       "js": {
         "minify": false,
         "compile": true
-      },
-      "html": {
-        "minify": true
-      },
-      "css": {
-        "minify": true
-      }
-    },
-    {
-      "name": "ES6",
-      "js": {
-        "minify": true,
-        "compile": false
       },
       "html": {
         "minify": true
