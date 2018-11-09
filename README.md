@@ -2,7 +2,7 @@
 
 <a href="https://nodei.co/npm/templ-mount/"><img src="https://nodei.co/npm/templ-mount.png"></a>
 
-<img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/templ-mount@0.0.44/dist/templ-mount.iife.js?compression=gzip">
+<img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/templ-mount@0.0.44/dist/templ-mount.iife.min.js?compression=gzip">
 
 # \<templ-mount\>
 
