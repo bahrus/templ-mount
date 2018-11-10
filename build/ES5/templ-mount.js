@@ -1,5 +1,4 @@
 import { loadTemplate } from './first-templ.js';
-import { define } from "./node_modules/xtal-latx/define.js";
 import { qsa } from "./node_modules/xtal-latx/qsa.js";
 /**
 * `templ-mount`
@@ -62,14 +61,15 @@ function (_HTMLElement) {
     value: function cT(clonedNode, tagName, copyAttrs) {
       var _this2 = this;
 
+      var doc = this.doc;
       qsa(tagName, clonedNode).forEach(function (node) {
         //node.setAttribute('clone-me', '');
-        var clone = document.createElement(tagName);
+        var clone = doc.createElement(tagName);
 
         _this2.copyAttrs(node, clone, copyAttrs);
 
         clone.innerHTML = node.innerHTML;
-        document.head.appendChild(clone);
+        doc.head.appendChild(clone);
       });
     }
   }, {
@@ -158,6 +158,15 @@ function (_HTMLElement) {
         });
       }
     }
+  }, {
+    key: "doc",
+    get: function get() {
+      if (this.hasAttribute('target-top')) {
+        return window.top.document;
+      }
+
+      return document;
+    }
   }], [{
     key: "is",
     get: function get() {
@@ -168,4 +177,4 @@ function (_HTMLElement) {
 }(babelHelpers.wrapNativeSuper(HTMLElement));
 TemplMount._adgc = false; //already did global check
 
-define(TemplMount); //# sourceMappingURL=templ-mount.js.map
+customElements.define(TemplMount.is, TemplMount); //# sourceMappingURL=templ-mount.js.map

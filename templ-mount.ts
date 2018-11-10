@@ -44,13 +44,20 @@ export class TemplMount extends HTMLElement {
             dest.setAttribute(attr, attrVal);
         })
     }
+    get doc(){
+        if(this.hasAttribute('target-top')){
+            return window.top.document;
+        }
+        return document;
+    }
     cT(clonedNode: DocumentFragment, tagName: string, copyAttrs: string[]){ //clone Tags
+        const doc = this.doc;
         qsa(tagName, clonedNode).forEach(node =>{
             //node.setAttribute('clone-me', '');
-            const clone = document.createElement(tagName) as HTMLScriptElement;
+            const clone = doc.createElement(tagName) as HTMLScriptElement;
             this.copyAttrs(node as HTMLScriptElement, clone, copyAttrs);
             clone.innerHTML = node.innerHTML;
-            document.head.appendChild(clone);
+            doc.head.appendChild(clone);
         })    
     }
     iT(template: HTMLTemplateElement) { //init Template

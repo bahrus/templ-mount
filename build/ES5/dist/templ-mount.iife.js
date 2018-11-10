@@ -136,14 +136,15 @@
       value: function cT(clonedNode, tagName, copyAttrs) {
         var _this2 = this;
 
+        var doc = this.doc;
         qsa(tagName, clonedNode).forEach(function (node) {
           //node.setAttribute('clone-me', '');
-          var clone = document.createElement(tagName);
+          var clone = doc.createElement(tagName);
 
           _this2.copyAttrs(node, clone, copyAttrs);
 
           clone.innerHTML = node.innerHTML;
-          document.head.appendChild(clone);
+          doc.head.appendChild(clone);
         });
       }
     }, {
@@ -232,6 +233,15 @@
           });
         }
       }
+    }, {
+      key: "doc",
+      get: function get() {
+        if (this.hasAttribute('target-top')) {
+          return window.top.document;
+        }
+
+        return document;
+      }
     }], [{
       key: "is",
       get: function get() {
@@ -243,5 +253,5 @@
 
   TemplMount._adgc = false; //already did global check
 
-  define(TemplMount);
+  customElements.define(TemplMount.is, TemplMount);
 })();

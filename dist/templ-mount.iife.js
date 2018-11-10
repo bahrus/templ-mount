@@ -107,13 +107,20 @@ class TemplMount extends HTMLElement {
             dest.setAttribute(attr, attrVal);
         });
     }
+    get doc() {
+        if (this.hasAttribute('target-top')) {
+            return window.top.document;
+        }
+        return document;
+    }
     cT(clonedNode, tagName, copyAttrs) {
+        const doc = this.doc;
         qsa(tagName, clonedNode).forEach(node => {
             //node.setAttribute('clone-me', '');
-            const clone = document.createElement(tagName);
+            const clone = doc.createElement(tagName);
             this.copyAttrs(node, clone, copyAttrs);
             clone.innerHTML = node.innerHTML;
-            document.head.appendChild(clone);
+            doc.head.appendChild(clone);
         });
     }
     iT(template) {
@@ -181,6 +188,6 @@ class TemplMount extends HTMLElement {
     }
 }
 TemplMount._adgc = false; //already did global check
-define(TemplMount);
+customElements.define(TemplMount.is, TemplMount);
     })();  
         

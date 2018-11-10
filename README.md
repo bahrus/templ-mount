@@ -2,7 +2,7 @@
 
 <a href="https://nodei.co/npm/templ-mount/"><img src="https://nodei.co/npm/templ-mount.png"></a>
 
-<img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/templ-mount@0.0.44/dist/templ-mount.iife.min.js?compression=gzip">
+<img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/templ-mount@0.0.46/dist/templ-mount.iife.min.js?compression=gzip">
 
 # \<templ-mount\>
 
@@ -94,6 +94,13 @@ Inside your template document itself, you may also want to load some (additional
 </template>
 ```
 
+## Targeting window.top
+
+If you want the script tags to go into the top most window, use attribute 'target-top':
+
+```html
+<templ-mount target-top>
+```
 
 ### Rambling Comments on Script Loading
 
@@ -135,7 +142,7 @@ This will give a slight performance boost.
 
 or
 
->np install templ-mount --save
+>npm install templ-mount --save
 
 If you are using Polymer 3.0 cli server, or you are doing a build-time bundling with webpack (e.g.), you can reference templ-mount.js
 
