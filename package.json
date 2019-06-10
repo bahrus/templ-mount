@@ -15,7 +15,7 @@
     "xtal-test": "0.0.19",
     "tape": "4.10.2"
   },
-  "version": "0.0.47",
+  "version": "0.0.48",
   "scripts": {
     "test": "node createIIFE.js && tape test/*.js"
   }
