@@ -6,14 +6,14 @@
   "author": "bahrus <anderson.bruce.b@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "xtal-latx": "0.0.69"
+    "xtal-latx": "0.0.88"
   },
   "devDependencies": {
     "@types/tape": "4.2.32",
-    "@webcomponents/webcomponentsjs": "^2.0.0",
-    "jiife": "^0.0.6",
-    "xtal-test": "0.0.8",
-    "tape": "^4.9.1"
+    "@webcomponents/webcomponentsjs": "2.2.10",
+    "jiife": "0.0.12",
+    "xtal-test": "0.0.19",
+    "tape": "4.10.2"
   },
   "version": "0.0.46",
   "scripts": {

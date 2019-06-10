@@ -52,4 +52,3 @@ export function loadTemplate(t, p) {
         def(p);
     }
 }
-//# sourceMappingURL=first-templ.js.map
