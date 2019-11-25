@@ -6,7 +6,8 @@
   "author": "bahrus <anderson.bruce.b@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "xtal-latx": "0.0.88"
+    "xtal-element": "0.0.90",
+    "css-observe": "0.0.12"
   },
   "devDependencies": {
     "@types/tape": "4.2.33",

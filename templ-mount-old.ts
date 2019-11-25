@@ -1,5 +1,6 @@
-import { loadTemplate } from './first-templ.js';
-import { qsa } from 'xtal-latx/qsa.js';
+import { ICEParams, loadTemplate } from './first-templ.js';
+import {qsa} from 'xtal-latx/qsa.js';
+
 /**
 * `templ-mount`
 * Dependency free web component that loads templates from data-src (optionally href) attribute
@@ -9,8 +10,11 @@ import { qsa } from 'xtal-latx/qsa.js';
 * @demo demo/index.html
 */
 export class TemplMount extends HTMLElement {
+    static get is() { return 'templ-mount'; }
+    static _adgc = false; //already did global check
     constructor() {
         super();
+        
         if (!TemplMount._adgc) {
             TemplMount._adgc = true;
             if (document.readyState === "loading") {
@@ -18,95 +22,94 @@ export class TemplMount extends HTMLElement {
                     this.mhft();
                     this.ltosd();
                 });
-            }
-            else {
+            } else {
                 this.mhft();
             }
+
         }
+
+
     }
-    static get is() { return 'templ-mount'; }
     /**
      * Gets host from parent
      */
     getHost() {
-        return this.parentNode;
+        return this.parentNode as DocumentFragment;
     }
-    copyAttrs(src, dest, attrs) {
-        attrs.forEach(attr => {
-            if (!src.hasAttribute(attr))
-                return;
+    copyAttrs(src: HTMLScriptElement, dest: HTMLScriptElement, attrs: string[]){
+        attrs.forEach(attr =>{
+            if(!src.hasAttribute(attr)) return;
             let attrVal = src.getAttribute(attr);
-            if (attr === 'type')
-                attrVal = attrVal.replace(':', '');
+            if(attr==='type') attrVal = attrVal.replace(':','');
             dest.setAttribute(attr, attrVal);
-        });
+        })
     }
-    get doc() {
-        if (this.hasAttribute('target-top')) {
+    get doc(){
+        if(this.hasAttribute('target-top')){
             return window.top.document;
         }
         return document;
     }
-    cT(clonedNode, tagName, copyAttrs) {
+    cT(clonedNode: DocumentFragment, tagName: string, copyAttrs: string[]){ //clone Tags
         const doc = this.doc;
-        qsa(tagName, clonedNode).forEach(node => {
+        qsa(tagName, clonedNode).forEach(node =>{
             //node.setAttribute('clone-me', '');
-            const clone = doc.createElement(tagName);
-            this.copyAttrs(node, clone, copyAttrs);
+            const clone = doc.createElement(tagName) as HTMLScriptElement;
+            this.copyAttrs(node as HTMLScriptElement, clone, copyAttrs);
             clone.innerHTML = node.innerHTML;
             doc.head.appendChild(clone);
-        });
+        })    
     }
-    iT(template) {
-        const ds = template.dataset;
+    iT(template: HTMLTemplateElement) { //init Template
+        const ds = (<HTMLElement>template).dataset;
         const ua = ds.ua;
         let noMatch = false;
-        if (ua) {
+        if(ua){
             noMatch = navigator.userAgent.search(new RegExp(ua)) === -1;
         }
-        if (ua && template.hasAttribute('data-exclude'))
-            noMatch = !noMatch;
-        if (ua && noMatch)
-            return;
+        if(ua && template.hasAttribute('data-exclude')) noMatch = !noMatch;
+        if (ua && noMatch) return;
         if (!ds.dumped) {
             //This shouldn't be so hard, but Chrome (and other browsers) doesn't seem to consistently like just appending the cloned children of the template
-            const clonedNode = template.content.cloneNode(true);
+            const clonedNode = (<HTMLTemplateElement>template).content.cloneNode(true) as DocumentFragment;
             this.cT(clonedNode, 'script', ['src', 'type', 'nomodule']);
-            this.cT(clonedNode, 'template', ['id', 'data-src', 'href', 'data-activate', 'data-ua', 'data-exclude', 'data-methods']);
-            this.cT(clonedNode, 'c-c', ['from', 'noshadow', 'copy']);
+            this.cT(clonedNode, 'template', ['id', 'data-src', 'href', 'data-activate', 'data-ua', 'data-exclude', 'data-methods'])
+            this.cT(clonedNode, 'c-c', ['from', 'noshadow', 'copy'])
             ds.dumped = 'true';
         }
-        loadTemplate(template, {
+        loadTemplate(template as HTMLTemplateElement, {
             noSnip: template.hasAttribute('nosnip'),
         });
     }
+
+
     /**
-     *
+     * 
      * @param from
      */
-    lt(from) {
-        qsa('template[data-src],template[data-activate]', from).forEach((t) => {
+    lt(from: DocumentFragment) { //load templates
+        qsa('template[data-src],template[data-activate]', from).forEach((t: HTMLTemplateElement) => {
             this.iT(t);
-        });
+        })
+
     }
-    ltosd() {
+    ltosd() { //load template outside shadow dom
         this.lt(document);
     }
-    ltisd() {
+    ltisd() { //load template inside shadow dom
         const host = this.getHost();
-        if (!host)
-            return;
+        if (!host) return;
         this.lt(host);
     }
-    mhft() {
+    _observer: MutationObserver;
+    mhft() { //monitof head for templates
         const config = { childList: true };
-        this._observer = new MutationObserver((mL) => {
+        this._observer = new MutationObserver((mL: MutationRecord[]) => {
             mL.forEach(mR => {
-                mR.addedNodes.forEach((node) => {
-                    if (node.tagName === 'TEMPLATE')
-                        this.iT(node);
-                });
-            });
+                mR.addedNodes.forEach((node: HTMLElement) => {
+                    if (node.tagName === 'TEMPLATE') this.iT(node as HTMLTemplateElement);
+                })
+            })
         });
         this._observer.observe(document.head, config);
     }
@@ -120,7 +123,6 @@ export class TemplMount extends HTMLElement {
             });
         }
     }
+    
 }
-TemplMount._adgc = false; //already did global check
 customElements.define(TemplMount.is, TemplMount);
-//# sourceMappingURL=templ-mount.js.map
