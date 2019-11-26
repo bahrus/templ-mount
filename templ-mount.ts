@@ -1,4 +1,3 @@
-//import {CssObserve} from 'css-observe/css-observe.js';
 const href = 'href';
 export class TemplMount extends HTMLElement{
     static get observedAttributes(){
@@ -28,7 +27,7 @@ export class TemplMount extends HTMLElement{
                 templ.id = this.id + '-mt';
             }
             templ.innerHTML = txt;
-            this.appendChild(templ);
+            this.insertAdjacentElement('afterend', templ);
         }
 
     }
