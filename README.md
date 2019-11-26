@@ -8,7 +8,7 @@
 
 templ-mount helps create templates from url's which point to HTML files or streams.
 
-It seems that HTML Templates, in particular node cloning [often](https://jsperf.com/clonenode-vs-createelement-performance/32) [provides](https://jsperf.com/innerhtml-vs-importnode/6) [the](https://github.com/sophiebits/innerhtml-vs-createelement-vs-clonenode) [best](https://stackoverflow.com/questions/676249/deep-cloning-vs-setting-of-innerhtml-whats-faster) performing way to generate HTML repeatedly.  They also provide lazy loading due to their innertness, and a low memory blueprint for restoring content that was temporarily shelved.
+It seems that HTML Templates, in particular node cloning [often](https://jsperf.com/clonenode-vs-createelement-performance/32) [provides](https://jsperf.com/innerhtml-vs-importnode/6) [the](https://github.com/sophiebits/innerhtml-vs-createelement-vs-clonenode) [best](https://stackoverflow.com/questions/676249/deep-cloning-vs-setting-of-innerhtml-whats-faster) performing way to generate HTML repeatedly.  They also provide the ability to download content ahead of time, but only lazy load into memory when needed, thanks to the inertness, and a low memory blueprint for restoring content that was temporarily hibernating.
 
 One of the driving forces behind this component is it allows applications to follow the [rule of least power](https://en.wikipedia.org/wiki/Rule_of_least_power) and to send data to the browser in the format that the browser needs to ultimately consume, without (expensive) translations from one format into another.  It can work well with server-side-centric frameworks, like PHP, asp.net MVC, or Java EE MVC.
 
@@ -16,7 +16,7 @@ One of the driving forces behind this component is it allows applications to fol
 
 <templ-mount href=include1.html></templ-mount>
 
-appends an adjacent template containing the contents of the html file / stream.  If the templ_mount element has an id, a derived id for the template is used:
+appends an adjacent template containing the contents of the html file / stream.  If the templ-mount element has an id, a derived id for the template is used:
 
 ```html
 <body>
@@ -25,6 +25,8 @@ appends an adjacent template containing the contents of the html file / stream. 
     <script type="module" src="../templ-mount.js"></script>
 </body>
 ```
+
+
 
 
 ```html
