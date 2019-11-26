@@ -17,6 +17,12 @@ export class TemplMount extends HTMLElement {
         this._href = nv;
     }
     async connectedCallback() {
+        this.style.display = 'none';
+        this.load();
+        const { SecondTempl } = await import('./second-templ.js');
+        const sec = new SecondTempl(this);
+    }
+    async load() {
         if (this._href) {
             const resp = await fetch(this._href);
             const txt = await resp.text();
