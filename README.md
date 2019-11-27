@@ -13,7 +13,7 @@ templ-mount takes some ideas from [html-include-element](https://www.npmjs.com/p
 templ-mount has been rather neglected for a while, but my interest in it has been rekindled due to my [impatience with the standards process](https://www.youtube.com/watch?v=0-Yl6FmV6EE), and includes some breaking changes from before.
 
 <details>
-    <summary>templ-mount's philosophical stance</summary>
+    <summary>templ-mount's origin story</summary>
 templ-mount remembers the day its creator first installed a PWA (Flipkart), and was blown away by the liberating effect this could have on web development, allowing developers to cross significant barriers to native functionality.
 
 templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  The ability to import HTML from the ~~heavens~~ server down to ~~Earth~~ would, in templ-mount's opinion, help with this effort significantly.  Such functionality would best be served by native api's, due to the complexities involved.  In the meantime, templ-mount is wandering the dessert, in search of a substitute api.
@@ -26,7 +26,7 @@ It seems that HTML Templates, in particular node cloning [often](https://jsperf.
 
 One of the driving forces behind this component is it allows applications to follow the [rule of least power](https://en.wikipedia.org/wiki/Rule_of_least_power) and to send data to the browser in the format that the browser needs to ultimately consume, without (expensive) translations from one format into another.  It can work well with server-side-centric frameworks, like PHP, asp.net MVC, or Java EE MVC.
 
-## Bootstrapping
+## Bootstrapping Template 
 
 <templ-mount href=include1.html></templ-mount>
 
@@ -42,9 +42,11 @@ appends an adjacent template containing the contents of the html file / stream. 
 </body>
 ```
 
+
+
 ### Retrieving template tags [TODO]
 
-If, in the same Shadow DOM realm as the templ-mount instance, a template tag with attribute href is encountered, templ-mount will retrieve the html from the url, and populate the inert template.
+If, in the same Shadow DOM realm as the templ-mount instance, a template tag with attribute "href" is encountered, templ-mount will retrieve the html from the url, and populate the inert template.
 
 ```html
 <template href=myContent.html></template>
