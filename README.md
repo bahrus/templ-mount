@@ -26,6 +26,10 @@ It seems that HTML Templates, in particular node cloning [often](https://jsperf.
 
 One of the driving forces behind this component is it allows applications to follow the [rule of least power](https://en.wikipedia.org/wiki/Rule_of_least_power) and to send data to the browser in the format that the browser needs to ultimately consume, without (expensive) translations from one format into another.  It can work well with server-side-centric frameworks, like PHP, asp.net MVC, or Java EE MVC.
 
+## Out of Scope
+
+Reference resolution (e.g. script tags).
+
 ## Bootstrapping Template [TODO]
 
 <templ-mount href=include1.html></templ-mount>
@@ -68,31 +72,54 @@ If, in the same Shadow DOM realm as the templ-mount instance, a template tag wit
 
 After loading, the href attribute gets replaced with data-href, and event "load" is fired.
 
-### Lazy Loading Content [TODO]
+### Preemptive downloading, lazy loading into memory [TODO]
 
-If, in the same Shadow DOM realm as the templ-mount instance, any tag is found with pseudo attribute -imp, templ-mount waits for that tag to become visible, and when it does, it searches for a template with id matching the value of -imp, and "imports" the template into the ShadowDOM of the tag.  The original children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
+If, in the same Shadow DOM realm as the templ-mount instance, any tag is found with pseudo attribute -imp, templ-mount waits for that tag to become visible, and when it does, it searches for a template with href (or data-href) matching the value of -imp, and "imports" the template into the ShadowDOM of the tag.  The original children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
 
 ```html
 <templ-mount></templ-mount>
 ...
-<template href=myContent.html id=myTemplate></template>
+<template href=myContent.html></template>
 ...
 <details>
     <summary></summary>
-    <article -imp=myTemplate></article>
+    <article -imp=myContent.html>
+        <span slot="mySlot">
+    </article>
 </details>
 ```
 
 **NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515/4).
 
-If Shadow DOM is not needed / desired
+### If Shadow DOM is not needed / desired, use -imp-light:
+
+```html
+<templ-mount></templ-mount>
+...
+<template href=myContent.html></template>
+...
+<details>
+    <summary></summary>
+    <article -imp-light=myContent.html></article>
+</details>
+```
+
+### Lazy downloading, lazy loading into memory [TODO], no shadow DOM
+
+```html
+<templ-mount></templ-mount>
+<details>
+    <summary></summary>
+    <article -imp-light=myContent.html></article>
+</details>
+```
 
 
 ### Activating content [TODO]
 
-If a template has the -activate pseudo attribute, then script, style and link tags insiide will be added to the gllobal head tag.  Due to strange Firefox behavior, it is recommended that js references be added via dynamic import:
+If a template has the -activate pseudo attribute, then script, style and link tags inside will be added to the global head tag.  Due to strange Firefox behavior, it is recommended that js references be added via dynamic import:
 
-<template -activate>
+<template -activate id=guid>
     <script type=module>
         import('./blah.js');
     </script>
@@ -100,6 +127,12 @@ If a template has the -activate pseudo attribute, then script, style and link ta
         @import url(https://fonts.googleapis.com/css?family=Indie+Flower);
     </style>
 </template>
+
+Note that there is no href, so this will do nothing more than activating the content.  If the href attribute is present, it will also download the content, and replace the activating content (which should already be added to the global head tag by now).
+
+I would not expect this kind of template to be present in the opening index.html (else why not just add the tags directly to the head), but rather, from imported templates, which have dependencies.
+
+The id is optional, but if the template will appear in multiple downloads (despite templ-mounts efforts at de-dup)
 
 ### Disallowing activating content [TODO]
 
