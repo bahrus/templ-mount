@@ -16,7 +16,7 @@ templ-mount has been rather neglected for a while, but my interest in it has bee
     <summary>templ-mount's origin story</summary>
 templ-mount remembers the day its creator first installed a PWA (Flipkart), and was blown away by the liberating effect this could have on web development, allowing developers to cross significant barriers to native functionality.
 
-templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  The ability to import HTML from the ~~heavens~~ server down to ~~Earth~~ would, in templ-mount's opinion, help with this effort significantly.  Such functionality would best be served by native api's, due to the complexities involved.  In the meantime, templ-mount is wandering the dessert, in search of a substitute api.
+templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift is needed in our thinking about the relationship between the client and the server.  The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ would, in templ-mount's opinion, help with this effort significantly.  Such functionality would best be served by native api's, due to the complexities involved.  In the meantime, templ-mount is wandering the dessert, in search of a surrogate api.
 
 </details>
 
