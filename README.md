@@ -10,13 +10,13 @@ templ-mount helps create templates from url's which point to HTML files or strea
 
 templ-mount takes some ideas from [html-include-element](https://www.npmjs.com/package/html-include-element).
 
-templ-mount has been rather neglected for a while, but my interest in it has been rekindled due to my [impatience with the standards process](https://www.youtube.com/watch?v=0-Yl6FmV6EE), and includes some breaking changes from before.
+templ-mount has been rather neglected for a while, but my interest in it has been rekindled due to my relapsing into my usual [impatience with the standards process](https://www.youtube.com/watch?v=0-Yl6FmV6EE), and includes some breaking changes from before.
 
 <details>
     <summary>templ-mount's origin story</summary>
 templ-mount remembers the day its creator first installed a PWA (Flipkart), and was blown away by the liberating effect this could have on web development, allowing developers to cross significant barriers to native functionality.
 
-templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/?)  is needed in our thinking about the relationship between the client and the server (and, in fairness, is the focus of many creative ideas at the cutting edges of the developer community).  The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ would, in templ-mount's opinion, help with this effort significantly.  Such functionality would best be served by native api's, due to the complexities involved.  In the meantime, templ-mount is wandering the dessert, in search of a surrogate api, (as are many compatriots).
+templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/?)  is needed in our thinking about the relationship between the client and the server (and, in fairness, is the focus of many creative ideas at the cutting edges of the developer community).  The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ would, in templ-mount's opinion, would help with this effort significantly.  Such functionality would best be served by native api's, due to the complexities involved.  In the meantime, templ-mount is wandering the dessert, in search of a surrogate api, (as are many compatriots).
 
 </details>
 
@@ -114,6 +114,8 @@ If, in the same Shadow DOM realm as the templ-mount instance, any tag is found w
 </details>
 ```
 
+This eliminates one tag, so the mechanics of downloading the file are reduced from three tags to two.  But this will not allow some of the "import" finessing described below. 
+
 
 ### Activating content [TODO]
 
@@ -130,13 +132,13 @@ If a template has the -activate pseudo attribute, then script, style and link ta
 
 Note that there is no href, so this will do nothing more than activating the content.  If the href attribute is present, it will also download the content, and replace the activating content (which should already be added to the global head tag by now).
 
-I would not expect this kind of template to be present in the opening index.html (else why not just add the tags directly to the head), but rather, from imported templates, which have dependencies.
+I would not expect this kind of template to be present in the opening index.html (else why not just add the tags directly to the head tag?), but rather, from imported templates, which have dependencies.
 
-The id is optional, but if the template will appear in multiple downloads (despite templ-mounts efforts at de-dup)
+The id is optional, but, because there's no href, if the template will appear in multiple downloads (despite templ-mount's efforts at de-dup), then providing the id will help templ-mount also to unnecessarily clutter the head tag with duplicate script / style / link tags.
 
 ### Disallowing activating content [TODO]
 
-Allowing HTML references to load JS dependencies could be considered dangerous if the site it is coming from is not very trustworthy, and/or appropriate CSP rules are not in place.
+Allowing HTML references to load JS dependencies could be considered dangerous if the site the HTML is coming from is not very trustworthy, and/or appropriate CSP rules are not in place.
 
 To prevent "activating" templates, use attribute / property "passive" [=true]
 
@@ -145,13 +147,46 @@ To prevent "activating" templates, use attribute / property "passive" [=true]
 If the html file / html stream being imported contains at least two instances of the following "magic string":
 
 <!---->
-then it will only import the content between the first two such strings. This helps allow an html file / stream to serve both as a standalone web page, but also as a template that could be used as web component.
 
-At the top of this document, we mentioned the desire to allow servers to send content down in the native format that the browser will consume it. This snipping solution goes against that strategy a bit, in the sense that here we are suggesting doing some string manipulation of the content. But most server-side solutions can easily snip out content in a similar way to what we are doing above. If the developer takes the time to implement this, they won't reap much reward if templ-mount searches for these magic comment strings anyway.
+then it will only import the content between the first two such strings. This helps allow an html file / stream to serve both as a standalone web page, but also as a template that could be used as a web component.
+
+At the top of this document, we mentioned the desire to allow servers to send content down in the native format that the browser will consume. This snipping solution goes against that strategy a bit, in the sense that here we are suggesting doing some string manipulation of the content. But most server-side solutions can easily snip out content in a similar way to what we are doing above. If the developer takes the time to implement this, they won't reap much reward if templ-mount searches for these magic comment strings anyway.
 
 To tell templ-mount not to do any kind of snipping, add -nosnip:
 
 <template href="path/to/some/fileOrStream.html" -nosnip></template>
 
 This will give a slight performance boost.
+
+### Defining a custom element
+
+```html
+<!-- Contents of my-component.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <!---->
+    <template -activate>
+        <script type=module>
+            import('./my-custom-element-definition.js#[templateUrl]');  //does import.meta give hash value in all browsers?
+        </script>
+        <style>
+            @import url(https://fonts.googleapis.com/css?family=Indie+Flower);
+        </style>
+    </template>
+    <h1>MyComponentContent</h1>
+    <!---->
+</body>
+</html>
+
+```
+
+templ-mount will/can display the contents outside any templates.   
 
