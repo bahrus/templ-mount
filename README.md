@@ -6,11 +6,11 @@
 
 # \<templ-mount\>
 
-templ-mount helps create templates from url's which point to HTML files or streams.
+templ-mount helps create templates from url's, which point to HTML files or streams.
 
 templ-mount takes some ideas from [html-include-element](https://www.npmjs.com/package/html-include-element).
 
-templ-mount has been rather neglected for a while, but my interest in it has been rekindled due to my relapsing into my usual [impatience with the standards process](https://www.youtube.com/watch?v=0-Yl6FmV6EE), and includes some breaking changes from before.
+templ-mount has been rather neglected for a while, but my interest in it has been rekindled due to me relapsing into my usual [impatience with the standards process stance](https://www.youtube.com/watch?v=0-Yl6FmV6EE), and includes some breaking changes from before.
 
 <details>
     <summary>templ-mount's origin story</summary>
@@ -22,19 +22,19 @@ templ-mount thinks, though, that in order to satisfactorily reach the promised l
 
 ## Purpose
 
-It seems that HTML Templates, in particular node cloning [often](https://jsperf.com/clonenode-vs-createelement-performance/32) [provides](https://jsperf.com/innerhtml-vs-importnode/6) [the](https://github.com/sophiebits/innerhtml-vs-createelement-vs-clonenode) [best](https://stackoverflow.com/questions/676249/deep-cloning-vs-setting-of-innerhtml-whats-faster) performing way to generate HTML repeatedly.  They also provide the ability to download content ahead of time, but only lazy load into memory when needed, thanks to the inertness, and providing content that isn't applicable yet, or helping to restore content that was temporarily hibernating out of memory on a low memory device, due to going out of view.
+It seems that HTML Templates, in particular node cloning [often](https://jsperf.com/clonenode-vs-createelement-performance/32) [provides](https://jsperf.com/innerhtml-vs-importnode/6) [the](https://github.com/sophiebits/innerhtml-vs-createelement-vs-clonenode) [best](https://stackoverflow.com/questions/676249/deep-cloning-vs-setting-of-innerhtml-whats-faster) performing way to generate HTML repeatedly.  They also provide the ability to download content ahead of time, before it is scrolled into view, and stored in a low memory object, thanks to the inertness.  Then, when needed, the content can materialize.  If the content moves out of view, it could, if it is helpful, be temporarily placed into a deep hibernation mode.  This behavior might be beneficial on a low memory device.
 
 One of the driving forces behind this component is it allows applications to follow the [rule of least power](https://en.wikipedia.org/wiki/Rule_of_least_power) and to send data to the browser in the format that the browser needs to ultimately consume, without (expensive) translations from one format into another.  It can work well with server-side-centric frameworks, like PHP, asp.net MVC, or Java EE MVC.
 
 ## Out of Scope
 
-Reference resolution (e.g. script tags).
+Reference resolution (e.g. nested script tags with relative paths).
 
-## Bootstrapping Template [TODO]
+## Hello world -- Bootstrapping Template [TODO]
 
 <templ-mount href=include1.html></templ-mount>
 
-appends an adjacent template containing the contents of the html file / stream.  If the templ-mount element has an id, a derived id for the template is used:
+loads the template containing the contents of the html file / stream into memory (keyed off of the href).  
 
 ```html
 
@@ -50,11 +50,11 @@ To be precise, the template is not actually added to the DOM.  If access to the 
 TemplMount.templ[href]
 ```
 
-That's kind of an unsatisfying "Hello world" experience.  For a more satisfying experience, add an attribute mt, which will be explained in more detail later:
+That's kind of an unsatisfying "Hello world" experience.  For a more satisfying experience, add an attribute -imp, which will be explained in more detail later:
 
 ```html
 <body>
-    <templ-mount href=embalmedChinesePrisoner.html -imp=embalmedChinesePrisoner.html>
+    <templ-mount href=embalmedChinesePrisoner.html -imp>
        <fungal-treatment slot="anatomicalSnuffbox"></fungal-treatment>
     </templ-mount>
     <script type="module" src="../templ-mount.js"></script>
@@ -64,7 +64,7 @@ That's kind of an unsatisfying "Hello world" experience.  For a more satisfying 
 
 ### Retrieving template tags [TODO]
 
-If, in the same Shadow DOM realm as the templ-mount instance, a template tag with attribute "href" is encountered, templ-mount will retrieve the html from the url, and populate the inert template.
+If, in the same Shadow DOM realm where the templ-mount instance resides, a template tag with attribute "href" is encountered, templ-mount will retrieve the html from the url, and populate the inert template.
 
 ```html
 <template href=myContent.html></template>
