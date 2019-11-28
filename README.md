@@ -37,7 +37,7 @@ Reference resolution (e.g. nested script tags with relative paths).
 
 loads the template containing the contents of the html file / stream into memory (keyed off of the href). 
 
-the href attribute / property can also be an array of URL's (using JSON notation in the case of the attribute):
+The href attribute / property can also be an array of URL's (using JSON notation in the case of the attribute):
 
 <templ-mount href='["include1.html", "include2.html"]'></templ-mount>
 
@@ -48,7 +48,7 @@ the href attribute / property can also be an array of URL's (using JSON notation
 </body>
 ```
 
-To be precise, the template is not actually added to the DOM.  If programmatic access to the template is needed, it can be obtained via
+In contrasr to what we will see below, templ-mount's href templates are not actually added to the DOM.  If programmatic access to the template is needed, it can be obtained via
 
 ```JavaScript
 const {TemplMount} = await import('templ-mount/TemplMount.js');
@@ -76,7 +76,7 @@ If, in the same Shadow DOM realm where the templ-mount instance resides, a templ
 
 After loading, an attribute "loaded" is added, and event "load" is fired.
 
-### Preemptive downloading, lazy loading into memory [TODO]
+### Preemptive downloading, lazy loading into the DOM tree [TODO]
 
 If, in the same Shadow DOM realm as the templ-mount instance (including the realm outside any Shadow DOM), any tag is found with pseudo attribute -imp, templ-mount waits for that tag to become visible, and when it does, it searches for a template with href matching the value of -imp, and "imports" the template into the ShadowDOM of the tag.  The original children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
 
@@ -93,13 +93,14 @@ If, in the same Shadow DOM realm as the templ-mount instance (including the real
 </details>
 ```
 
-In the example above, the template tag, and the article tag with -imp attribute do not need to be in the same Shadow DOM realm.  All that is needed is for a templ-mount tag to be present in the shadow DOM realm of each individual tag, for the functionality to take hold.  This allows templates to be shared across Shadow DOM realms.
+**NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515/4).
+
+In the example above, the template tag, and the article tag with -imp attribute do not need to be in the same Shadow DOM realm.  All that is needed is for a templ-mount tag to be present in the Shadow DOM realm of each individual tag, for the functionality to take hold.  This allows templates to be shared across Shadow DOM realms.
 
 There should only be one templ-mount per shadow DOM realm, or work will be duplicated.
 
 In the future examples, we will assume there's an ever present \<templ-mount\> present in the relevant place.
 
-**NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515/4).
 
 ### If Shadow DOM is not needed / desired, use -imp-light:
 
