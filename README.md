@@ -48,7 +48,7 @@ The href attribute / property can also be an array of URL's (using JSON notation
 </body>
 ```
 
-In contrasr to what we will see below, templ-mount's href templates are not actually added to the DOM.  If programmatic access to the template is needed, it can be obtained via
+In contrast to what we will see a bit later, templ-mount's href templates are not actually added to the DOM.  If programmatic access to the template is needed, it can be obtained via
 
 ```JavaScript
 const {TemplMount} = await import('templ-mount/TemplMount.js');
