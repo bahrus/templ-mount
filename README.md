@@ -13,11 +13,11 @@ templ-mount has been rather neglected for a while, but my interest in it has bee
 <details>
     <summary>templ-mount's origin story</summary>
 
-templ-mount remembers the day its creator first installed a PWA (Flipkart), and was blown away by the liberating effect this could have on web development.  PWA's swept aside significant barriers to the web, in terms of its competitiveness with native apps.
+templ-mount remembers the day its creator first installed a PWA (Flipkart), and was blown away by the liberating effect this could have on web development.  PWA's swept aside significant barriers to the web, in terms of achieving parity with native apps.
 
-templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server. In fairness, it has been the focus of many creative ideas at the cutting edges of the developer community these past few years.  
+templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server. And, in fact, this has been the focus of many talented and creative developers at the cutting edges.  
 
-The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier to get Lighthouse's blessing.  Such functionality would best be served by native api's, due to the complexities involved.  In the meantime, templ-mount is wandering the desert, in search of a surrogate api (as are many of templ-mount's compatriots).
+The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier to get Lighthouse's blessing.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g the ability to truly stream in HTML as it renders, resolving and preemptively downloading relative references, provide sand-boxing when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api (as are many of templ-mount's compatriots).
 
 </details>
 
