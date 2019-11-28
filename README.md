@@ -6,23 +6,24 @@
 
 # \<templ-mount\>
 
-templ-mount helps create templates from url's, which point to HTML files or streams.
-
-templ-mount takes some ideas from [html-include-element](https://www.npmjs.com/package/html-include-element).
+templ-mount helps create templates from url's, which point to HTML files or streams.  It takes some ideas from [html-include-element](https://www.npmjs.com/package/html-include-element).
 
 templ-mount has been rather neglected for a while, but my interest in it has been rekindled due to me relapsing into my usual [impatience with the standards process stance](https://www.youtube.com/watch?v=0-Yl6FmV6EE), and includes some breaking changes from before.
 
 <details>
     <summary>templ-mount's origin story</summary>
-templ-mount remembers the day its creator first installed a PWA (Flipkart), and was blown away by the liberating effect this could have on web development, allowing developers to cross significant barriers to native functionality.
 
-templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/?)  is needed in our thinking about the relationship between the client and the server (and, in fairness, is the focus of many creative ideas at the cutting edges of the developer community).  The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ would, in templ-mount's opinion, would help with this effort significantly.  Such functionality would best be served by native api's, due to the complexities involved.  In the meantime, templ-mount is wandering the dessert, in search of a surrogate api, (as are many compatriots).
+templ-mount remembers the day its creator first installed a PWA (Flipkart), and was blown away by the liberating effect this could have on web development.  PWA's swept aside significant barriers to the web, in terms of its competitiveness with native apps.
+
+templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server. In fairness, it has been the focus of many creative ideas at the cutting edges of the developer community these past few years.  
+
+The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier to get Lighthouse's blessing.  Such functionality would best be served by native api's, due to the complexities involved.  In the meantime, templ-mount is wandering the desert, in search of a surrogate api (as are many of temple-mount's compatriots).
 
 </details>
 
 ## Purpose
 
-It seems that HTML Templates, in particular node cloning [often](https://jsperf.com/clonenode-vs-createelement-performance/32) [provides](https://jsperf.com/innerhtml-vs-importnode/6) [the](https://github.com/sophiebits/innerhtml-vs-createelement-vs-clonenode) [best](https://stackoverflow.com/questions/676249/deep-cloning-vs-setting-of-innerhtml-whats-faster) performing way to generate HTML repeatedly.  They also provide the ability to download content ahead of time, before it is scrolled into view, and stored in a low memory object, thanks to the inertness.  Then, when needed, the content can materialize.  If the content moves out of view, it could, if it is helpful, be temporarily placed into a deep hibernation mode.  This behavior might be beneficial on a low memory device.
+It seems that HTML Templates, in particular node cloning [often](https://jsperf.com/clonenode-vs-createelement-performance/32) [provides](https://jsperf.com/innerhtml-vs-importnode/6) [the](https://github.com/sophiebits/innerhtml-vs-createelement-vs-clonenode) [best](https://stackoverflow.com/questions/676249/deep-cloning-vs-setting-of-innerhtml-whats-faster) performing way to generate HTML repeatedly.  They also provide the ability to download content ahead of time, before it is scrolled into view, and stored in a low memory object, thanks to the inertness of HTML templates.  Then, when needed, the content can materialize.  If the content moves out of view, it could, if it is helpful, be temporarily placed into a deep hibernation mode.  In other words, delete the materialized content, while holding on to the low-memory template from which it derived.  This approach might be most beneficial on a low memory device.
 
 One of the driving forces behind this component is it allows applications to follow the [rule of least power](https://en.wikipedia.org/wiki/Rule_of_least_power) and to send data to the browser in the format that the browser needs to ultimately consume, without (expensive) translations from one format into another.  It can work well with server-side-centric frameworks, like PHP, asp.net MVC, or Java EE MVC.
 
@@ -30,27 +31,31 @@ One of the driving forces behind this component is it allows applications to fol
 
 Reference resolution (e.g. nested script tags with relative paths).
 
-## Hello world -- Bootstrapping Template [TODO]
+## Hello world -- Bootstrapping Template
 
 <templ-mount href=include1.html></templ-mount>
 
-loads the template containing the contents of the html file / stream into memory (keyed off of the href).  
+loads the template containing the contents of the html file / stream into memory (keyed off of the href). 
+
+the href attribute / property can also be an array of URL's (using JSON notation in the case of the attribute):
+
+<templ-mount href='["include1.html", "include2.html"]'></templ-mount>
 
 ```html
-
 <body>
     <templ-mount href="include1.html"></templ-mount>
     <script type="module" src="../templ-mount.js"></script>
 </body>
 ```
 
-To be precise, the template is not actually added to the DOM.  If access to the template is needed, it can be obtained via
+To be precise, the template is not actually added to the DOM.  If programmatic access to the template is needed, it can be obtained via
 
 ```JavaScript
-TemplMount.templ[href]
+const {TemplMount} = await import('templ-mount/TemplMount.js');
+const template = await TemplMount.template(myURL);
 ```
 
-That's kind of an unsatisfying "Hello world" experience.  For a more satisfying experience, add an attribute -imp, which will be explained in more detail later:
+Retrieving HTML, but not displaying anything is a rather unsatisfying "Hello world" experience.  For a more satisfying experience, add an attribute -imp, which will be explained in more detail later:
 
 ```html
 <body>
@@ -70,11 +75,11 @@ If, in the same Shadow DOM realm where the templ-mount instance resides, a templ
 <template href=myContent.html></template>
 ```
 
-After loading, the href attribute gets replaced with data-href, and event "load" is fired.
+After loading, an attribute "loaded" is added, and event "load" is fired.
 
 ### Preemptive downloading, lazy loading into memory [TODO]
 
-If, in the same Shadow DOM realm as the templ-mount instance, any tag is found with pseudo attribute -imp, templ-mount waits for that tag to become visible, and when it does, it searches for a template with href (or data-href) matching the value of -imp, and "imports" the template into the ShadowDOM of the tag.  The original children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
+If, in the same Shadow DOM realm as the templ-mount instance (including the realm outside any Shadow DOM), any tag is found with pseudo attribute -imp, templ-mount waits for that tag to become visible, and when it does, it searches for a template with href matching the value of -imp, and "imports" the template into the ShadowDOM of the tag.  The original children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
 
 ```html
 <templ-mount></templ-mount>
@@ -88,6 +93,12 @@ If, in the same Shadow DOM realm as the templ-mount instance, any tag is found w
     </article>
 </details>
 ```
+
+In the example above, the template tag, and the article tag with -imp attriubte do not need to be in the same shadow DOM realm.  All that is needed is for a templ-mount tag to be present in the shadow DOM realm of each invidual tag, for the functionality to take hold.  This allows templates to be shared across Shadow DOM realms.
+
+There should only be one templ-mount per shadow DOM realm, or work will be duplicated.
+
+In the future examples, we will assume there's an ever present <templ-mount> present in the relevant place, and not 
 
 **NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515/4).
 
