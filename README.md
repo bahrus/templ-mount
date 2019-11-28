@@ -68,7 +68,6 @@ Retrieving HTML, but not displaying anything, is a rather unsatisfying "Hello wo
     <templ-mount href=embalmedChinesePrisoner.html imp-t>
        <fungal-treatment slot="anatomicalSnuffbox"></fungal-treatment>
     </templ-mount>
-    <script type="module" src="../templ-mount.js"></script>
 </body>
 ```
 
@@ -112,11 +111,11 @@ In the future examples, we will assume there's an \<templ-mount\> in the relevan
 
 ```html
 
-<template href=myContent.html></template>
+<template href=https://link.springer.com/article/10.1007/s00300-003-0563-3></template>
 ...
 <details>
-    <summary></summary>
-    <article imp-t-light=myContent.html></article>
+    <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
+    <article imp-t-light=https://link.springer.com/article/10.1007/s00300-003-0563-3></article>
 </details>
 ```
 
@@ -124,8 +123,8 @@ In the future examples, we will assume there's an \<templ-mount\> in the relevan
 
 ```html
 <details>
-    <summary></summary>
-    <article imp-t-light=myContent.html></article>
+    <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
+    <article imp-t-light=https://link.springer.com/article/10.1007/s00300-003-0563-3></article>
 </details>
 ```
 
@@ -166,7 +165,7 @@ My preference on this would be to indicate something like this:
 <template href="https://myCDN.com/blah-blah.html" passive></template>
 ```
 
-but that seems really difficult to do outside the browser, in a foolproof way, without parsing and processing the content.
+but that seems really difficult to do outside the browser internals, in a foolproof way, without parsing and processing the content.
 
 
 ### Snipping [TODO]
