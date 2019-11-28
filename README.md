@@ -17,7 +17,7 @@ templ-mount remembers the day its creator first installed a PWA (Flipkart), and 
 
 templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server. In fairness, it has been the focus of many creative ideas at the cutting edges of the developer community these past few years.  
 
-The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier to get Lighthouse's blessing.  Such functionality would best be served by native api's, due to the complexities involved.  In the meantime, templ-mount is wandering the desert, in search of a surrogate api (as are many of temple-mount's compatriots).
+The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier to get Lighthouse's blessing.  Such functionality would best be served by native api's, due to the complexities involved.  In the meantime, templ-mount is wandering the desert, in search of a surrogate api (as are many of templ-mount's compatriots).
 
 </details>
 
@@ -93,7 +93,7 @@ If, in the same Shadow DOM realm as the templ-mount instance (including the real
 </details>
 ```
 
-In the example above, the template tag, and the article tag with -imp attribute do not need to be in the same shadow DOM realm.  All that is needed is for a templ-mount tag to be present in the shadow DOM realm of each individual tag, for the functionality to take hold.  This allows templates to be shared across Shadow DOM realms.
+In the example above, the template tag, and the article tag with -imp attribute do not need to be in the same Shadow DOM realm.  All that is needed is for a templ-mount tag to be present in the shadow DOM realm of each individual tag, for the functionality to take hold.  This allows templates to be shared across Shadow DOM realms.
 
 There should only be one templ-mount per shadow DOM realm, or work will be duplicated.
 
@@ -131,6 +131,7 @@ This also eliminates one tag, so the mechanics of downloading the file are reduc
 
 If a template has the -activate pseudo attribute, then script, style and link tags inside will be added to the global head tag.  Due to strange Firefox behavior, it is recommended that js references be added via dynamic import:
 
+```html
 <template -activate id=guid>
     <script type=module>
         import('./blah.js');
@@ -139,18 +140,27 @@ If a template has the -activate pseudo attribute, then script, style and link ta
         @import url(https://fonts.googleapis.com/css?family=Indie+Flower);
     </style>
 </template>
+```
 
-Note that there is no href, so this will do nothing more than activating the content.  If the href attribute is present, it will also download the content, and replace the activating content (which should already be added to the global head tag by now).
+Note that there is no href, so this will do nothing more than activate the content.  If the href attribute *is* present, it will also download the content, and replace the activating content (which should already be added to the global head tag by now).
 
 I would not expect this kind of template to be present in the opening index.html (else why not just add the tags directly to the head tag?), but rather, from imported templates, which have dependencies.
 
-The id is optional, but, because there's no href, if the template will appear in multiple downloads (despite templ-mount's efforts at de-dup), then providing the id will help templ-mount also to unnecessarily clutter the head tag with duplicate script / style / link tags.
+The id is optional, but, because there's no href, if the template will appear in multiple downloads (despite templ-mount's efforts at de-dup), then providing the id will help templ-mount to avoid unnecessarily cluttering the head tag with duplicate script / style / link tags.
 
-### Disallowing activating content [TODO]
+
+### Disallowing activating content - out of scope
 
 Allowing HTML references to load JS dependencies could be considered dangerous if the site the HTML is coming from is not very trustworthy, and/or appropriate CSP rules are not in place.
 
-To prevent "activating" templates, use attribute / property "passive" [=true]
+My preference on this would be to indicate something like this:
+
+```html
+<template href="https://myCDN.com/blah-blah.html" passive></template>
+```
+
+but that seems really difficult to do outside the browser, in a foolproof way, without parsing and processing the content.
+
 
 ### Snipping [TODO]
 
@@ -160,15 +170,13 @@ If the html file / html stream being imported contains at least two instances of
 <!---->
 ```
 
-then it will only import the content between the first two such strings. This helps allow an html file / stream to serve both as a standalone web page, but also as a template that could be used as a web component.
+then templ-mount can be made to only import the content between the first two such strings. This helps allow an html file / stream to serve both as a standalone web page, but also as a template that could be used as a web component.
 
 At the top of this document, we mentioned the desire to allow servers to send content down in the native format that the browser will consume. This snipping solution goes against that strategy a bit, in the sense that here we are suggesting doing some string manipulation of the content. But most server-side solutions can easily snip out content in a similar way to what we are doing above. If the developer takes the time to implement this, they won't reap much reward if templ-mount searches for these magic comment strings anyway.
 
-To tell templ-mount not to do any kind of snipping, add -nosnip:
+To tell templ-mount to snip, add -snip:
 
-<template href="path/to/some/fileOrStream.html" -nosnip></template>
-
-This will give a slight performance boost.
+<template href="path/to/some/fileOrStream.html" -snip></template>
 
 ### Defining a custom element
 
