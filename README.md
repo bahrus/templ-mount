@@ -41,29 +41,27 @@ Reference resolution (e.g. nested script tags with relative paths).
 
 ## Hello world -- Bootstrapping Template
 
+```html
 <templ-mount href=include1.html></templ-mount>
+```
 
 loads the template containing the contents of the html file / stream into memory (keyed off of the href). 
 
 The href attribute / property can also be an array of URL's (using JSON notation in the case of the attribute):
 
-<templ-mount href='["include1.html", "include2.html"]'></templ-mount>
 
 ```html
-<body>
-    <templ-mount href="include1.html"></templ-mount>
-    <script type="module" src="../templ-mount.js"></script>
-</body>
+<templ-mount href='["include1.html", "include2.html"]'></templ-mount>
 ```
 
-In contrast to what we will see a bit later, templ-mount's href templates are not actually added to the DOM.  If programmatic access to the template is needed, it can be obtained via
+In contrast to what we will see a bit later, templ-mount's href templates are not actually added to the DOM.  If programmatic access to the template is needed, it can be obtained via the following api:
 
 ```JavaScript
 const {TemplMount} = await import('templ-mount/TemplMount.js');
 const template = await TemplMount.template(myURL);
 ```
 
-Retrieving HTML, but not displaying anything is a rather unsatisfying "Hello world" experience.  For a more satisfying experience, add an attribute imp-t, short for "import template", which will be explained in more detail later:
+Retrieving HTML, but not displaying anything, is a rather unsatisfying "Hello world" experience.  For a more satisfying experience, add an attribute imp-t, short for "import template", which will be explained in more detail later:
 
 ```html
 <body>
