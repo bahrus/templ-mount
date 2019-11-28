@@ -8,7 +8,7 @@
 
 templ-mount helps create templates from url's, which point to HTML files or streams.  It takes some ideas from [html-include-element](https://www.npmjs.com/package/html-include-element).
 
-templ-mount has been rather neglected for a while, but my interest in it has been rekindled due to me relapsing into my usual [impatience with the standards process stance](https://www.youtube.com/watch?v=0-Yl6FmV6EE), and includes some breaking changes from before.
+templ-mount has been rather neglected for a while, but my interest in it has been rekindled due to me relapsing into my resting [impatience-with-the-standards-process stance](https://www.youtube.com/watch?v=0-Yl6FmV6EE), and includes some breaking changes from before.
 
 <details>
     <summary>templ-mount's origin story</summary>
@@ -59,7 +59,7 @@ Retrieving HTML, but not displaying anything is a rather unsatisfying "Hello wor
 
 ```html
 <body>
-    <templ-mount href=embalmedChinesePrisoner.html -imp>
+    <templ-mount href=embalmedChinesePrisoner.html imp-t>
        <fungal-treatment slot="anatomicalSnuffbox"></fungal-treatment>
     </templ-mount>
     <script type="module" src="../templ-mount.js"></script>
@@ -78,7 +78,7 @@ After loading, an attribute "loaded" is added, and event "load" is fired.
 
 ### Preemptive downloading, lazy loading into the DOM tree [TODO]
 
-If, in the same Shadow DOM realm as the templ-mount instance (including the realm outside any Shadow DOM), any tag is found with pseudo attribute -imp, templ-mount waits for that tag to become visible, and when it does, it searches for a template with href matching the value of -imp, and "imports" the template into the ShadowDOM of the tag.  The original children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
+If, in the same Shadow DOM realm as the templ-mount instance (including the realm outside any Shadow DOM), any tag is found with pseudo attribute imp-t, templ-mount waits for that tag to become visible, and when it does, it searches for a template with href matching the value of imp-t, and "imports" the template into the ShadowDOM of the tag.  The original children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
 
 ```html
 <templ-mount></templ-mount>
@@ -87,7 +87,7 @@ If, in the same Shadow DOM realm as the templ-mount instance (including the real
 ...
 <details>
     <summary></summary>
-    <article -imp=myContent.html>
+    <article imp-t=myContent.html>
         <span slot="mySlot">
     </article>
 </details>
@@ -102,7 +102,7 @@ There should only be one templ-mount per shadow DOM realm, or work will be dupli
 In the future examples, we will assume there's an ever present \<templ-mount\> present in the relevant place.
 
 
-### If Shadow DOM is not needed / desired, use -imp-light:
+### If Shadow DOM is not needed / desired, use imp-t-light:
 
 ```html
 
@@ -110,7 +110,7 @@ In the future examples, we will assume there's an ever present \<templ-mount\> p
 ...
 <details>
     <summary></summary>
-    <article -imp-light=myContent.html></article>
+    <article imp-t-light=myContent.html></article>
 </details>
 ```
 
@@ -119,11 +119,11 @@ In the future examples, we will assume there's an ever present \<templ-mount\> p
 ```html
 <details>
     <summary></summary>
-    <article -imp-light=myContent.html></article>
+    <article imp-t-light=myContent.html></article>
 </details>
 ```
 
-This saves the user bandwidth, at the expense of having to wait a little bit when the content becomes visible.
+This saves the user bandwidth, especially if they never actually open the article summary, at the expense of having to wait a little bit when the content becomes visible.
 
 This also eliminates one tag, so the mechanics of downloading the file are reduced from three tags to two (counting the templ-mount tag, one in each shadow DOM realm).  But this will not allow some of the "import" finessing described below. 
 
