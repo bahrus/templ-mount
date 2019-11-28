@@ -89,23 +89,23 @@ If, in the same Shadow DOM realm as the templ-mount instance (including the real
 ```html
 <templ-mount></templ-mount>
 ...
-<template href=myContent.html></template>
+<template href=https://link.springer.com/article/10.1007/s00300-003-0563-3></template>
 ...
 <details>
-    <summary></summary>
-    <article imp-t=myContent.html>
-        <span slot="mySlot">
+    <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
+    <article imp-t=penguinPooh.html>
+        <span slot="AdInsert"><a href="https://www.target.com/b/pedialax/-/N-55lp4">Pedia-Lax</a></span>
     </article>
 </details>
 ```
 
 **NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515/4).
 
-In the example above, the template tag, and the article tag with -imp attribute do not need to be in the same Shadow DOM realm.  All that is needed is for a templ-mount tag to be present in the Shadow DOM realm of each individual tag, for the functionality to take hold.  This allows templates to be shared across Shadow DOM realms.
+In the example above, the template tag, and the article tag with imp-t attribute do not need to be in the same Shadow DOM realm.  All that is needed is for a templ-mount tag to be present in the Shadow DOM realm of each individual tag, for the functionality to take hold.  This allows templates to be shared across Shadow DOM realms.
 
 There should only be one templ-mount per shadow DOM realm, or work will be duplicated.
 
-In the future examples, we will assume there's an ever present \<templ-mount\> present in the relevant place.
+In the future examples, we will assume there's an \<templ-mount\> in the relevant place as needed.
 
 
 ### If Shadow DOM is not needed / desired, use imp-t-light:
