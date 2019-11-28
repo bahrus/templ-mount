@@ -6,9 +6,17 @@
 
 # \<templ-mount\>
 
-templ-mount helps create templates from url's, which point to HTML files or streams.  It takes some ideas from [html-include-element](https://www.npmjs.com/package/html-include-element).
+
+<details>
+<summary>Whither templ-mount?</summary>
 
 templ-mount has been rather neglected for a while, but my interest in it has been rekindled due to me relapsing into my resting [impatience-with-the-standards-process stance](https://www.youtube.com/watch?v=0-Yl6FmV6EE), and includes some breaking changes from before.
+
+[![Watch the video](https://img.youtube.com/vi/0-Yl6FmV6EE/maxresdefault.jpg)](https://www.youtube.com/watch?v=0-Yl6FmV6EE)
+
+</details>
+
+templ-mount helps create templates from url's, which point to HTML files or streams.  It takes some ideas from [html-include-element](https://www.npmjs.com/package/html-include-element).
 
 <details>
     <summary>templ-mount's origin story</summary>
@@ -55,7 +63,7 @@ const {TemplMount} = await import('templ-mount/TemplMount.js');
 const template = await TemplMount.template(myURL);
 ```
 
-Retrieving HTML, but not displaying anything is a rather unsatisfying "Hello world" experience.  For a more satisfying experience, add an attribute -imp, which will be explained in more detail later:
+Retrieving HTML, but not displaying anything is a rather unsatisfying "Hello world" experience.  For a more satisfying experience, add an attribute imp-t, short for "import template", which will be explained in more detail later:
 
 ```html
 <body>

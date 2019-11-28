@@ -106,7 +106,7 @@ export class TemplMount extends HTMLElement{
     async connectedCallback(){
         if(!this._imp_t) this.style.display = 'none';
         this.load();
-        const {SecondTempl} = await import('./second-templ.js');
+        const {SecondTempl} = await import('./first-templ.js');
         const sec = new SecondTempl(this);
     }
     _tot = -1;
