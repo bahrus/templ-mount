@@ -25,7 +25,7 @@ The ability to import HTML (and other data formats) from the ~~heavens~~ server 
 
 It seems that HTML Templates, in particular node cloning [often](https://jsperf.com/clonenode-vs-createelement-performance/32) [provides](https://jsperf.com/innerhtml-vs-importnode/6) [the](https://github.com/sophiebits/innerhtml-vs-createelement-vs-clonenode) [best](https://stackoverflow.com/questions/676249/deep-cloning-vs-setting-of-innerhtml-whats-faster) performing way to generate HTML repeatedly.  They also provide the ability to download content ahead of time, before it is scrolled into view, and stored in a low memory object, thanks to the inertness of HTML templates.  Then, when needed, the content can materialize.  If the content moves out of view, it could, if it is helpful, be temporarily placed into a deep hibernation mode.  In other words, delete the materialized content, while holding on to the low-memory template from which it derived.  This approach might be most beneficial on a low memory device.
 
-One of the driving forces behind this component is it allows applications to follow the [rule of least power](https://en.wikipedia.org/wiki/Rule_of_least_power) and to send data to the browser in the format that the browser needs to ultimately consume, without (expensive) translations from one format into another.  It can work well with server-side-centric frameworks, like PHP, asp.net MVC, or Java EE MVC.
+One of the driving forces behind this component is it allows applications to follow the [rule of least power](https://en.wikipedia.org/wiki/Rule_of_least_power) and to send data to the browser in the format that the browser needs to ultimately consume, without (expensive) translations from one format into another.  It can work well with server-side-centric frameworks, like PHP, asp.net MVC, Ruby on Rails, Django, pug, Java EE MVC, etc.
 
 ## Out of Scope
 
@@ -66,7 +66,6 @@ Retrieving HTML, but not displaying anything is a rather unsatisfying "Hello wor
 </body>
 ```
 
-
 ### Retrieving template tags [TODO]
 
 If, in the same Shadow DOM realm where the templ-mount instance resides, a template tag with attribute "href" is encountered, templ-mount will retrieve the html from the url, and populate the inert template.
@@ -94,19 +93,18 @@ If, in the same Shadow DOM realm as the templ-mount instance (including the real
 </details>
 ```
 
-In the example above, the template tag, and the article tag with -imp attriubte do not need to be in the same shadow DOM realm.  All that is needed is for a templ-mount tag to be present in the shadow DOM realm of each invidual tag, for the functionality to take hold.  This allows templates to be shared across Shadow DOM realms.
+In the example above, the template tag, and the article tag with -imp attribute do not need to be in the same shadow DOM realm.  All that is needed is for a templ-mount tag to be present in the shadow DOM realm of each individual tag, for the functionality to take hold.  This allows templates to be shared across Shadow DOM realms.
 
 There should only be one templ-mount per shadow DOM realm, or work will be duplicated.
 
-In the future examples, we will assume there's an ever present <templ-mount> present in the relevant place, and not 
+In the future examples, we will assume there's an ever present \<templ-mount\> present in the relevant place.
 
 **NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515/4).
 
 ### If Shadow DOM is not needed / desired, use -imp-light:
 
 ```html
-<templ-mount></templ-mount>
-...
+
 <template href=myContent.html></template>
 ...
 <details>
@@ -118,14 +116,15 @@ In the future examples, we will assume there's an ever present <templ-mount> pre
 ### Lazy downloading, lazy loading into memory [TODO], no shadow DOM
 
 ```html
-<templ-mount></templ-mount>
 <details>
     <summary></summary>
     <article -imp-light=myContent.html></article>
 </details>
 ```
 
-This eliminates one tag, so the mechanics of downloading the file are reduced from three tags to two.  But this will not allow some of the "import" finessing described below. 
+This saves the user bandwidth, at the expense of having to wait a little bit when the content becomes visible.
+
+This also eliminates one tag, so the mechanics of downloading the file are reduced from three tags to two (counting the templ-mount tag, one in each shadow DOM realm).  But this will not allow some of the "import" finessing described below. 
 
 
 ### Activating content [TODO]
@@ -157,7 +156,9 @@ To prevent "activating" templates, use attribute / property "passive" [=true]
 
 If the html file / html stream being imported contains at least two instances of the following "magic string":
 
+```html
 <!---->
+```
 
 then it will only import the content between the first two such strings. This helps allow an html file / stream to serve both as a standalone web page, but also as a template that could be used as a web component.
 
