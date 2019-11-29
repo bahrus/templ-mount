@@ -103,8 +103,8 @@ export class TemplMount extends HTMLElement {
         if (!this._imp_t)
             this.style.display = 'none';
         this.load();
-        const { SecondTempl } = await import('./first-templ.js');
-        const sec = new SecondTempl(this);
+        const { FirstTempl } = await import('./first-templ.js');
+        const sec = new FirstTempl(this);
     }
     async load() {
         if (this._href === undefined)

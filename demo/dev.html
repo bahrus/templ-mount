@@ -7,7 +7,24 @@
     <title>Document</title>
 </head>
 <body>
-    <templ-mount href=include1.html imp-t></templ-mount>
-    <script type=module src="../templ-mount.js"></script>
+    <!-- <templ-mount href=include1.html imp-t></templ-mount> -->
+
+    <templ-mount></templ-mount>
+    <template href=include1.html></template>
+
+        <!-- Use experimental import maps -->
+        <script defer src="../node_modules/es-module-shims/dist/es-module-shims.js"></script>
+        <script type="importmap-shim">
+        {
+            "imports": {
+                "xtal-element/": "../node_modules/xtal-element/",
+                "trans-render/": "../node_modules/trans-render/",
+                "css-observe/": "../node_modules/css-observe/"
+            }
+        }
+        </script>
+        <script type="module-shim">
+            import '../templ-mount.js';
+        </script>
 </body>
 </html>
