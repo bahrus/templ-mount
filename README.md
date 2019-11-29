@@ -103,7 +103,7 @@ If, in the same Shadow DOM realm as a templ-mount instance (including the realm 
 </details>
 ```
 
-**NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515/4).
+**NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515).
 
 In the example above, the template tag, and the article tag with imp-t attribute matching the template's href attribute, do not need to be in the same Shadow DOM realm.  All that is required is for a templ-mount tag to be present in the Shadow DOM realm of each individual tag, for the functionality to take hold.  This allows templates to be shared across Shadow DOM realms.
 
@@ -113,7 +113,7 @@ In the future examples, we will assume there's an \<templ-mount\> in the relevan
 
 ### Aliasing
 
-If the template tag *is* in the same Shadow DOM realm as the article tag, which wants to important that template tag, aliasing is supported:
+If the template tag *is* in the same Shadow DOM realm as the article tag, and that article tag wants to important that template tag's content, aliasing is supported:
 
 ```html
 <template href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
@@ -138,7 +138,7 @@ If the template tag *is* in the same Shadow DOM realm as the article tag, which 
 </details>
 ```
 
-### Lazy downloading, lazy loading into memory [TODO], no shadow DOM
+### Lazy downloading, lazy loading into memory [TODO]
 
 ```html
 <details>
@@ -153,7 +153,7 @@ This also eliminates one tag, so the mechanics of downloading the file are reduc
 
 ### Registering already loaded template [TODO]
 
-If the content of a template is embedded inside a template tag alredy (part of the server-rendered payload), but we want to be able import a clone using the same syntax, you can do the following:
+If the content of a template is embedded inside a template tag already (part of the server-rendered payload), but you want to be able import a clone using the same syntax, you can do the following:
 
 
 ```html
@@ -204,8 +204,11 @@ My preference on this would be to indicate something like this:
 <template href="https://myCDN.com/blah-blah.html" passive></template>
 ```
 
-but that seems really difficult to do outside the browser internals, in a foolproof way, without parsing and processing the content.
+This means import the document blah-blah.html, but don't allow templ-mount to activate any content inside, including content coming from recursive imports triggered by blah-blah.html
 
+but that seems really difficult to implement outside the browser internals, in a foolproof way, without parsing and processing the content, and ratcheting up the size of this component.
+
+So this is going to be kept out of scope (for now, at least).
 
 ### Snipping [TODO]
 
@@ -215,13 +218,11 @@ If the html file / html stream being imported contains at least two instances of
 <!---->
 ```
 
-then templ-mount can be made to only import the content between the first two such strings. This helps allow an html file / stream to serve both as a standalone web page, but also as a template that could be used as a web component.
+then templ-mount *can* be made to only import the content between the first two such strings. This helps allow an html file / stream to serve both as a standalone web page, but also as a template that could be used as an embedded snippet of HTML, or as a  web component (see below).
 
-At the top of this document, we mentioned the desire to allow servers to send content down in the native format that the browser will consume. This snipping solution goes against that strategy a bit, in the sense that here we are suggesting doing some string manipulation of the content. But most server-side solutions can easily snip out content in a similar way to what we are doing above. If the developer takes the time to implement this, they won't reap much reward if templ-mount searches for these magic comment strings anyway.
+At the top of this document, we mentioned the desire to allow servers to send content down in the native format that the browser will consume. This snipping solution goes against that strategy a bit, in the sense that here we are suggesting doing some string manipulation of the content. But most server-side solutions can easily snip out content in a similar way to what we are doing above. But if server-side solutions aren't available, you can snip out the main content thusly.
 
-To tell templ-mount to snip, add -snip:
-
-<template href="path/to/some/fileOrStream.html" -snip></template>
+<template href="path/to/some/fileOrStream.html" snip></template>
 
 ### Defining a custom element
 
@@ -238,9 +239,9 @@ To tell templ-mount to snip, add -snip:
 </head>
 <body>
     <!---->
-    <template -activate>
+    <template activate>
         <script type=module>
-            import('./my-custom-element-definition.js#[templateUrl]');  //does import.meta give hash value in all browsers?
+            import('./my-custom-element-definition.js#[templateUrl(s)]');  //does import.meta give hash value in all browsers?
         </script>
         <style>
             @import url(https://fonts.googleapis.com/css?family=Indie+Flower);
@@ -253,5 +254,5 @@ To tell templ-mount to snip, add -snip:
 
 ```
 
-templ-mount will/can display the contents outside any templates.   
+ 
 
