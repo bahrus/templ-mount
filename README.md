@@ -151,6 +151,26 @@ This saves the user bandwidth, especially if they never actually open the articl
 
 This also eliminates one tag, so the mechanics of downloading the file are reduced from three tags to two (counting the templ-mount tag, one in each shadow DOM realm).  But this will not allow some of the "import" finessing described below. 
 
+### Registering already loaded template [TODO]
+
+If the content of a template is embedded inside a template tag alredy (part of the server-rendered payload), but we want to be able import a clone using the same syntax, you can do the following:
+
+
+```html
+<template as=penguins-poop>
+    <p>Chinstrap and Adélie penguins generate considerable pressures to propel their faeces away from the edge of the nest.
+        ...
+    </p>
+
+    ...
+</template>
+...
+<details>
+    <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
+    <article imp-t-light=penguins-poop></article>
+</details>
+```
+
 
 ### Activating content [TODO]
 
