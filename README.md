@@ -11,7 +11,7 @@
 
 <summary>Status Summary</summary>
 
-The Committee for the Repair of templ-mount are carrying out much needed enhancements, which will include some breaking changes.
+The Committee for the Repair of templ-mount is coordinating much needed enhancements, which will include some breaking changes.
 
 Repairs were put on ice, based on the naive hope that desperately needed browser standards were just around the corner, with a far more comprehensive solution.   
 
