@@ -8,9 +8,14 @@
 
 
 <details>
-<summary>Whither templ-mount?</summary>
 
-templ-mount has been rather neglected for a while, but my interest in it has been rekindled due to me relapsing into my resting [impatience-with-the-standards-process stance](https://www.youtube.com/watch?v=0-Yl6FmV6EE), and includes some breaking changes from before.
+<summary>Status Summary</summary>
+
+The Committee for the Repair of templ-mount are carrying out much needed enhancements, which will include some breaking changes.
+
+Repairs were put on ice, based on the naive hope that desperately needed browser standards were just around the corner, with a far more comprehensive solution.   
+
+The committee has recently been reminded of how this is [not how things work](https://www.youtube.com/watch?v=0-Yl6FmV6EE).
 
 [![Watch the video](https://img.youtube.com/vi/0-Yl6FmV6EE/maxresdefault.jpg)](https://www.youtube.com/watch?v=0-Yl6FmV6EE)
 
@@ -37,7 +42,7 @@ One of the driving forces behind this component is it allows applications to fol
 
 ## Out of Scope
 
-Reference resolution (e.g. nested script tags with relative paths).
+Reference resolution (e.g. nested script tags with relative paths), support for different trust levels.
 
 ## Hello world -- Bootstrapping Template
 
