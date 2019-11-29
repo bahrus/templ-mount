@@ -1,8 +1,8 @@
 const href = 'href';
 export const imp_t = 'imp-t';
 interface templateSecondArg{
-    tm: TemplMount | undefined;
-    template: HTMLTemplateElement | undefined;
+    tm?: TemplMount | undefined;
+    template?: HTMLTemplateElement | undefined;
 }
 export class TemplMount extends HTMLElement{
 
@@ -131,7 +131,9 @@ export class TemplMount extends HTMLElement{
     }
 
     async loadh(href){
-        await TemplMount.load(href, this);
+        await TemplMount.load(href, {
+            tm: this
+        });
         this._tot--;
         if(this._tot === 0){
             if(this._imp_t){

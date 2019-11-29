@@ -124,7 +124,9 @@ export class TemplMount extends HTMLElement {
         }
     }
     async loadh(href) {
-        await TemplMount.load(href, this);
+        await TemplMount.load(href, {
+            tm: this
+        });
         this._tot--;
         if (this._tot === 0) {
             if (this._imp_t) {
