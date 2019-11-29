@@ -81,19 +81,19 @@ Retrieving HTML, but not displaying anything, is a rather unsatisfying "Hello wo
 If, in the same Shadow DOM realm where the templ-mount instance resides, a template tag with attribute "href" is encountered, templ-mount will retrieve the html from the url, and populate the inert template.
 
 ```html
-<template href=myContent.html></template>
+<template href=//link.springer.com/article/10.1007/s00300-003-0563-3></template>
 ```
 
 After loading, an attribute "loaded" is added, and event "load" is fired.
 
-### Preemptive downloading, lazy loading into the DOM tree [TODO]
+### Preemptive downloading, lazy loading into the DOM tree, potentially across Shadow DOM boundaries [TODO]
 
-If, in the same Shadow DOM realm as the templ-mount instance (including the realm outside any Shadow DOM), any tag is found with pseudo attribute imp-t, templ-mount waits for that tag to become visible, and when it does, it searches for a template with href matching the value of imp-t, and "imports" the template into the ShadowDOM of the tag.  The original children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
+If, in the same Shadow DOM realm as a templ-mount instance (including the realm outside any Shadow DOM), any tag is found with pseudo attribute imp-t, templ-mount waits for that tag to become visible, and when it does, it searches for a template with href matching the value of imp-t, and "imports" the template into the ShadowDOM of the tag.  The original light children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
 
 ```html
 <templ-mount></templ-mount>
 ...
-<template href=https://link.springer.com/article/10.1007/s00300-003-0563-3></template>
+<template href=//link.springer.com/article/10.1007/s00300-003-0563-3></template>
 ...
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
@@ -105,22 +105,36 @@ If, in the same Shadow DOM realm as the templ-mount instance (including the real
 
 **NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515/4).
 
-In the example above, the template tag, and the article tag with imp-t attribute do not need to be in the same Shadow DOM realm.  All that is needed is for a templ-mount tag to be present in the Shadow DOM realm of each individual tag, for the functionality to take hold.  This allows templates to be shared across Shadow DOM realms.
+In the example above, the template tag, and the article tag with imp-t attribute matching the template's href attribute, do not need to be in the same Shadow DOM realm.  All that is required is for a templ-mount tag to be present in the Shadow DOM realm of each individual tag, for the functionality to take hold.  This allows templates to be shared across Shadow DOM realms.
 
 There should only be one templ-mount per shadow DOM realm, or work will be duplicated.
 
 In the future examples, we will assume there's an \<templ-mount\> in the relevant place as needed.
 
+### Aliasing
+
+If the template tag *is* in the same Shadow DOM realm as the article tag, which wants to important that template tag, aliasing is supported:
+
+```html
+<template href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
+...
+<details>
+    <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
+    <article imp-t=penguins-poop>
+        <span slot="AdInsert"><a href="https://www.target.com/b/pedialax/-/N-55lp4">Pedia-Lax</a></span>
+    </article>
+</details>
+```
 
 ### If Shadow DOM is not needed / desired, use imp-t-light:
 
 ```html
 
-<template href=https://link.springer.com/article/10.1007/s00300-003-0563-3></template>
+<template href=https://link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
 ...
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-    <article imp-t-light=https://link.springer.com/article/10.1007/s00300-003-0563-3></article>
+    <article imp-t-light=penguins-poop></article>
 </details>
 ```
 
