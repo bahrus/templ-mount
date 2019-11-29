@@ -13,7 +13,7 @@
 
 The Committee for the Repair of templ-mount is coordinating much needed enhancements, which will include some breaking changes.
 
-Repairs were put on ice, based on the naive hope that desperately needed browser standards were just around the corner, with a far more comprehensive solution.   
+Repairs were put on ice, based on the naive hope that desperately needed browser standards, providing a far more comprehensive solution than templ-mount can provide, were just around the corner.   
 
 The committee has recently been reminded of how this is [not how things work](https://www.youtube.com/watch?v=0-Yl6FmV6EE).
 
@@ -30,7 +30,7 @@ templ-mount remembers the day its creator first installed a PWA (Flipkart), and 
 
 templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server. And, in fact, this has been the focus of many talented and creative developers at the cutting edges.  
 
-The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier to get Lighthouse's blessing.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g the ability to truly stream in HTML as it renders, resolving and preemptively downloading relative references, provide sand-boxing when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api (as are many of templ-mount's compatriots).
+The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier to get Lighthouse's blessing.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g the ability to truly stream in HTML as it renders, resolving and preemptively downloading relative references, centrally resolve package dependencies via import maps, provide sand-boxing support when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api (as are many of templ-mount's compatriots).
 
 </details>
 
@@ -42,7 +42,7 @@ One of the driving forces behind this component is it allows applications to fol
 
 ## Out of Scope
 
-Reference resolution (e.g. nested script tags with relative paths), support for different trust levels.
+Reference resolution (e.g. nested script tags with relative paths, import mapping), support for different trust levels.
 
 ## Hello world -- Bootstrapping Template
 
@@ -121,7 +121,7 @@ If the template tag *is* in the same Shadow DOM realm as the article tag, and th
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
     <article imp-t=penguins-poop>
-        <span slot="AdInsert"><a href="https://www.target.com/b/pedialax/-/N-55lp4">Pedia-Lax</a></span>
+        <span slot="AdInsert"><a href=//www.target.com/b/pedialax/-/N-55lp4>Pedia-Lax</a></span>
     </article>
 </details>
 ```
@@ -130,7 +130,7 @@ If the template tag *is* in the same Shadow DOM realm as the article tag, and th
 
 ```html
 
-<template href=https://link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
+<template href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
 ...
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
@@ -143,7 +143,9 @@ If the template tag *is* in the same Shadow DOM realm as the article tag, and th
 ```html
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-    <article imp-t-light=https://link.springer.com/article/10.1007/s00300-003-0563-3></article>
+    <article imp-t=//link.springer.com/article/10.1007/s00300-003-0563-3>
+        <span slot="AdInsert"><a href=//www.target.com/b/pedialax/-/N-55lp4>Pedia-Lax</a></span>
+    </article>
 </details>
 ```
 
@@ -153,7 +155,7 @@ This also eliminates one tag, so the mechanics of downloading the file are reduc
 
 ### Registering already loaded template [TODO]
 
-If the content of a template is embedded inside a template tag already (part of the server-rendered payload), but you want to be able import a clone using the same syntax, you can do the following:
+If the content of a template is embedded inside a template tag already (part of the server-rendered payload), but you want to be able to import a clone using the same syntax, you can do the following:
 
 
 ```html
@@ -167,7 +169,9 @@ If the content of a template is embedded inside a template tag already (part of 
 ...
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-    <article imp-t-light=penguins-poop></article>
+    <article imp-t=penguins-poop>
+        <span slot="AdInsert"><a href=//www.target.com/b/pedialax/-/N-55lp4>Pedia-Lax</a></span>
+    </article>
 </details>
 ```
 
@@ -201,7 +205,7 @@ Allowing HTML references to load JS dependencies could be considered dangerous i
 My preference on this would be to indicate something like this:
 
 ```html
-<template href="https://myCDN.com/blah-blah.html" passive></template>
+<template href=//myCDN.com/blah-blah.html passive></template>
 ```
 
 This means import the document blah-blah.html, but don't allow templ-mount to activate any content inside, including content coming from recursive imports triggered by blah-blah.html
