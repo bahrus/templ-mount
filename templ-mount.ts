@@ -15,7 +15,7 @@ export class TemplMount extends HTMLElement{
         return new Promise((resolve, reject) =>{
             const temp = this._templates[href];
             if(temp === true){
-                this.waitForIt(resolve, reject, options);
+                this.waitForIt(href, resolve, reject, options);
             }else if(temp !== undefined){
                 this.loadLocalTemplate(temp, options);
                 resolve(temp);
