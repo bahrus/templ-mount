@@ -15,30 +15,35 @@ export class TemplMount extends HTMLElement{
         return new Promise((resolve, reject) =>{
             const temp = this._templates[href];
             if(temp === true){
-                window.addEventListener(href + '-ready-tm', e =>{
-                    const a = e as CustomEventInit;
-                    if(a.detail && a.detail.template){
-                        this.loadLocalTemplate(a.detail.template, options);
-                        resolve(a.detail.template);
-                    }
-                    else{
-                        reject();
-                    }
-                }, {
-                    once: true
-                })
+                this.waitForIt(resolve, reject, options);
             }else if(temp !== undefined){
                 this.loadLocalTemplate(temp, options);
                 resolve(temp);
             }else{
                 this._templates[href] = true;
+                this.waitForIt(href, resolve, reject, options);
                 this.load(href, options);
             }
         });
     }
+    static waitForIt(href: string, resolve: any, reject: any, options?: templateSecondArg){
+        window.addEventListener(href + '-ready-tm', e =>{
+            const a = e as CustomEventInit;
+            if(a.detail && a.detail.template){
+                this.loadLocalTemplate(a.detail.template, options);
+                resolve(a.detail.template);
+            }
+            else{
+                reject();
+            }
+        }, {
+            once: true
+        })
+    }
     static loadLocalTemplate(temp: HTMLTemplateElement, options?: templateSecondArg){
         if(options !== undefined && options.template && !options.template.hasAttribute('loaded')){
-            options.template.innerHTML = (<any>temp).html;
+            options.template.innerHTML = (<any>temp).html; //TODO: add/override property "content" to get content from global cache?
+            //Do we really need to create innerHTML other than for debugging purposes?
         }
     }
 

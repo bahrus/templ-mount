@@ -3,10 +3,10 @@ import { TemplMount } from './templ-mount.js';
 export class FirstTempl {
     constructor(tm) {
         this.tm = tm;
-        const observer = document.createElement(CssObserve.is);
-        observer.observe = true;
-        observer.selector = "template";
-        observer.customStyles = `
+        const templateObserver = document.createElement(CssObserve.is);
+        templateObserver.observe = true;
+        templateObserver.selector = "template";
+        templateObserver.customStyles = `
             template[href],template[as]{
                 display:block;
             }
@@ -14,16 +14,24 @@ export class FirstTempl {
                 display:none;
             }
         `;
-        observer.addEventListener('latest-match-changed', e => {
+        templateObserver.addEventListener('latest-match-changed', e => {
             const t = e.detail.value;
             const href = t.getAttribute('href');
             if (href !== null) {
-                TemplMount.template(href, {
-                    tm: this.tm,
-                    template: t
+                const impTObserver = document.createElement(CssObserve.is);
+                impTObserver.observe = true;
+                impTObserver.selector = `[imp-t="${href}"],[imp-t-light="${href}"]`;
+                impTObserver.addEventListener('latest-match-changed', e => {
+                    TemplMount.template(href, {
+                        tm: this.tm,
+                        template: t
+                    }).then(val => {
+                        e.detail.value.appendChild(val.content.cloneNode(true));
+                    });
                 });
+                this.tm.appendChild(impTObserver);
             }
         });
-        this.tm.appendChild(observer);
+        this.tm.appendChild(templateObserver);
     }
 }
