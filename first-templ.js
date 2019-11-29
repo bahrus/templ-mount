@@ -1,7 +1,8 @@
 import { CssObserve } from 'css-observe/css-observe.js';
+import { TemplMount } from './templ-mount.js';
 export class FirstTempl {
-    constructor(firstTempl) {
-        this.firstTempl = firstTempl;
+    constructor(tm) {
+        this.tm = tm;
         const observer = document.createElement(CssObserve.is);
         observer.observe = true;
         observer.selector = "template";
@@ -14,10 +15,15 @@ export class FirstTempl {
             }
         `;
         observer.addEventListener('latest-match-changed', e => {
-            console.log('i am here');
-        }, {
-            once: true,
+            const t = e.detail.value;
+            const href = t.getAttribute('href');
+            if (href !== null) {
+                TemplMount.template(href, {
+                    tm: this.tm,
+                    template: t
+                });
+            }
         });
-        firstTempl.appendChild(observer);
+        this.tm.appendChild(observer);
     }
 }

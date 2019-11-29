@@ -1,20 +1,24 @@
 const href = 'href';
 export const imp_t = 'imp-t';
-
+interface templateSecondArg{
+    tm: TemplMount | undefined;
+    template: HTMLTemplateElement | undefined;
+}
 export class TemplMount extends HTMLElement{
 
     static get observedAttributes(){
         return [href, imp_t];
     }
 
-    static _templates : {[href: string]: HTMLTemplateElement | boolean} = {};
-    static template(href: string, tm?: TemplMount){
+    static _templates : {[href: string]: HTMLTemplateElement | true} = {};
+    static template(href: string, options?: templateSecondArg){
         return new Promise((resolve, reject) =>{
             const temp = this._templates[href];
             if(temp === true){
                 window.addEventListener(href + '-ready-tm', e =>{
                     const a = e as CustomEventInit;
                     if(a.detail && a.detail.template){
+                        this.loadLocalTemplate(a.detail.template, options);
                         resolve(a.detail.template);
                     }
                     else{
@@ -24,28 +28,29 @@ export class TemplMount extends HTMLElement{
                     once: true
                 })
             }else if(temp !== undefined){
+                this.loadLocalTemplate(temp, options);
                 resolve(temp);
             }else{
                 this._templates[href] = true;
-                this.load(href, tm);
+                this.load(href, options);
             }
         });
     }
+    static loadLocalTemplate(temp: HTMLTemplateElement, options?: templateSecondArg){
+        if(options !== undefined && options.template && !options.template.hasAttribute('loaded')){
+            options.template.innerHTML = (<any>temp).html;
+        }
+    }
 
-    static async load(href: string, tm?: TemplMount){
+    static async load(href: string, options?: templateSecondArg){
         try{
             const resp = await fetch(href);
-            // if(resp.type.indexOf('text/html') === -1){
-            //     console.error("wrong mime type");
-            //     window.dispatchEvent(new CustomEvent(href + '-ready-tm', {
-            //         bubbles: false,
-            //     }))
-            //     return;
-            // }
             const txt = await resp.text();
             const templ = document.createElement('template');
             templ.innerHTML = txt;
+            (<any>templ).html = txt;
             this._templates[href] = templ;
+            this.loadLocalTemplate(templ, options);
             window.dispatchEvent(new CustomEvent(href + '-ready-tm', {
                 bubbles: false,
                 detail: {

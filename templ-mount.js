@@ -9,13 +9,14 @@ export class TemplMount extends HTMLElement {
     static get observedAttributes() {
         return [href, imp_t];
     }
-    static template(href, tm) {
+    static template(href, options) {
         return new Promise((resolve, reject) => {
             const temp = this._templates[href];
             if (temp === true) {
                 window.addEventListener(href + '-ready-tm', e => {
                     const a = e;
                     if (a.detail && a.detail.template) {
+                        this.loadLocalTemplate(a.detail.template, options);
                         resolve(a.detail.template);
                     }
                     else {
@@ -26,28 +27,29 @@ export class TemplMount extends HTMLElement {
                 });
             }
             else if (temp !== undefined) {
+                this.loadLocalTemplate(temp, options);
                 resolve(temp);
             }
             else {
                 this._templates[href] = true;
-                this.load(href, tm);
+                this.load(href, options);
             }
         });
     }
-    static async load(href, tm) {
+    static loadLocalTemplate(temp, options) {
+        if (options !== undefined && options.template && !options.template.hasAttribute('loaded')) {
+            options.template.innerHTML = temp.html;
+        }
+    }
+    static async load(href, options) {
         try {
             const resp = await fetch(href);
-            // if(resp.type.indexOf('text/html') === -1){
-            //     console.error("wrong mime type");
-            //     window.dispatchEvent(new CustomEvent(href + '-ready-tm', {
-            //         bubbles: false,
-            //     }))
-            //     return;
-            // }
             const txt = await resp.text();
             const templ = document.createElement('template');
             templ.innerHTML = txt;
+            templ.html = txt;
             this._templates[href] = templ;
+            this.loadLocalTemplate(templ, options);
             window.dispatchEvent(new CustomEvent(href + '-ready-tm', {
                 bubbles: false,
                 detail: {
