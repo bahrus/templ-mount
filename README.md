@@ -128,7 +128,7 @@ If the template tag *is* in the same Shadow DOM realm as the article tag, and th
 </details>
 ```
 
-### If Shadow DOM is not needed / desired, use imp-t-light:
+### If Shadow DOM is not needed / desired, use limp-t:
 
 ```html
 
@@ -136,7 +136,7 @@ If the template tag *is* in the same Shadow DOM realm as the article tag, and th
 ...
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-    <article imp-t-light=penguins-poop></article>
+    <article limp-t=penguins-poop></article>
 </details>
 ```
 
@@ -147,7 +147,7 @@ If no template tag is present, the imp-t attribute can still cause the url to lo
 ```html
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-    <article imp-t=//link.springer.com/article/10.1007/s00300-003-0563-3>
+    <article href=//link.springer.com/article/10.1007/s00300-003-0563-3 imp-t>
         <span slot="AdInsert"><a href=//www.target.com/b/pedialax/-/N-55lp4>Pedia-Lax</a></span>
     </article>
 </details>

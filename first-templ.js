@@ -2,6 +2,7 @@ import { CssObserve } from 'css-observe/css-observe.js';
 import { TemplMount } from './templ-mount.js';
 import { getShadowContainer } from 'xtal-element/getShadowContainer.js';
 const listening = Symbol();
+const hrefSym = Symbol();
 const imp_t = 'imp-t';
 const limp_t = 'limp-t';
 export class FirstTempl {
@@ -63,7 +64,7 @@ export class FirstTempl {
         const first = entries[0];
         if (first.intersectionRatio > 0) {
             const newlyVisibleElement = first.target;
-            const templURL = newlyVisibleElement.getAttribute(imp_t) || newlyVisibleElement.getAttribute(limp_t);
+            const templURL = newlyVisibleElement[hrefSym];
             const template = await TemplMount.template(templURL, { tm: this.tm });
             const clone = template.content.cloneNode(true);
             if (newlyVisibleElement.hasAttribute(limp_t)) {
@@ -100,6 +101,8 @@ export class FirstTempl {
         impTObserver.observe = true;
         impTObserver.selector = `[${imp_t}="${as}"],[${limp_t}="${as}"]`;
         impTObserver.addEventListener('latest-match-changed', e => {
+            const elementToWatchForTurningVisible = e.detail.value;
+            elementToWatchForTurningVisible[hrefSym] = href;
             TemplMount.template(href, {
                 tm: this.tm,
             }).then(val => {
@@ -107,7 +110,7 @@ export class FirstTempl {
                     threshold: 0.01
                 };
                 const observer = new IntersectionObserver(this.callbackImpAs.bind(this), ioi);
-                observer.observe(e.detail.value);
+                observer.observe(elementToWatchForTurningVisible);
                 //(<any>e).detail.value.appendChild((<any>val).content.cloneNode(true));
             });
         });
