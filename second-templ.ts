@@ -9,9 +9,9 @@ export class SecondTempl{
         shadowContainer[listening] = true;
         const templateObserver = document.createElement(CssObserve.is) as CssObserve;
         templateObserver.observe = true;
-        templateObserver.selector = "template[activate]";
+        templateObserver.selector = "template[append-to-head]";
         templateObserver.customStyles = `
-            template[activate]{
+            template[append-to-head]{
                 display:block;
             }
         `;
@@ -28,7 +28,6 @@ export class SecondTempl{
         attrs.forEach(attr =>{
             if(!src.hasAttribute(attr)) return;
             let attrVal = src.getAttribute(attr);
-            //if(attr==='type') attrVal = attrVal.replace(':','');
             dest.setAttribute(attr, attrVal);
         })
     }
