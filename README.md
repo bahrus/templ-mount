@@ -113,7 +113,7 @@ In the future examples, we will assume there's an \<templ-mount\> in the relevan
 
 ### Aliasing
 
-If the template tag *is* in the same Shadow DOM realm as the article tag, and that article tag wants to important that template tag's content, aliasing is supported:
+If the template tag *is* in the same Shadow DOM realm as the article tag, and that article tag wants to import that template tag's content, aliasing is supported:
 
 ```html
 <template href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
@@ -139,6 +139,8 @@ If the template tag *is* in the same Shadow DOM realm as the article tag, and th
 ```
 
 ### Lazy downloading, lazy loading into memory [TODO]
+
+If no template tag is present, the imp-t attribute can still cause the url to load (into a template in memory) and cloned into the Shadow DOM, only downloading, as well as cloning will only happen when the tag becomes visible.
 
 ```html
 <details>
