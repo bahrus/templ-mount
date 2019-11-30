@@ -182,10 +182,10 @@ If the content of a template is embedded inside a template tag already (part of 
 
 ### Activating content [TODO]
 
-If a template has the -activate pseudo attribute, then script, style and link tags inside will be added to the global head tag.  Due to strange Firefox behavior, it is recommended that js references be added via dynamic import:
+If a template has the activate attribute, then script, style and link tags inside will be added to the global head tag.  Due to strange Firefox behavior, it is recommended that js references be added via dynamic import:
 
 ```html
-<template -activate id=guid>
+<template activate id=guid>
     <script type=module>
         import('./blah.js');
     </script>

@@ -121,10 +121,20 @@ export class TemplMount extends HTMLElement{
     async connectedCallback(){
         if(!this._imp_t) this.style.display = 'none';
         this.load();
-        const {FirstTempl} = await import('./first-templ.js');
-        const sec = new FirstTempl(this);
+        this.loadFirstTempl();
+        this.loadSecondTempl();
     }
-    
+
+    async loadFirstTempl(){
+        const {FirstTempl} = await import('./first-templ.js');
+        new FirstTempl(this);
+    }
+
+    async loadSecondTempl(){
+        const {SecondTempl} = await import('./second-templ.js');
+        new SecondTempl(this);
+    }
+
     _tot = -1;
     async load(){
         if(this._href === undefined) return;
