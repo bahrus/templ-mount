@@ -42,26 +42,7 @@ export class FirstTempl {
         });
         this.tm.appendChild(templateObserver);
     }
-    async callbackHref(entries, observer) {
-        const first = entries[0];
-        if (first.intersectionRatio > 0) {
-            const newlyVisibleElement = first.target;
-            const templURL = newlyVisibleElement[hrefSym];
-            const template = await TemplMount.template(templURL, { tm: this.tm });
-            const clone = template.content.cloneNode(true);
-            if (newlyVisibleElement.hasAttribute(limp_t)) {
-                newlyVisibleElement.appendChild(clone);
-            }
-            else {
-                if (newlyVisibleElement.shadowRoot === null) {
-                    newlyVisibleElement.attachShadow({ mode: 'open' });
-                }
-                newlyVisibleElement.shadowRoot.appendChild(clone);
-            }
-            observer.disconnect();
-        }
-    }
-    async callbackImpAs(entries, observer) {
+    async callback(entries, observer) {
         const first = entries[0];
         if (first.intersectionRatio > 0) {
             const newlyVisibleElement = first.target;
@@ -95,7 +76,7 @@ export class FirstTempl {
                 const ioi = {
                     threshold: 0.01
                 };
-                const observer = new IntersectionObserver(this.callbackHref.bind(this), ioi);
+                const observer = new IntersectionObserver(this.callback.bind(this), ioi);
                 observer.observe(elementToWatchForTurningVisible);
             });
         });
@@ -116,7 +97,7 @@ export class FirstTempl {
                 const ioi = {
                     threshold: 0.01
                 };
-                const observer = new IntersectionObserver(this.callbackImpAs.bind(this), ioi);
+                const observer = new IntersectionObserver(this.callback.bind(this), ioi);
                 observer.observe(elementToWatchForTurningVisible);
                 //(<any>e).detail.value.appendChild((<any>val).content.cloneNode(true));
             });

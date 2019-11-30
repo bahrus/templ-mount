@@ -140,7 +140,7 @@ If the template tag *is* in the same Shadow DOM realm as the article tag, and th
 </details>
 ```
 
-### Lazy downloading, lazy loading into memory [TODO]
+### Lazy downloading, lazy loading into memory
 
 If no template tag is present, the imp-t attribute can still cause the url to load (into a template in memory) and cloned into the Shadow DOM, only downloading, as well as cloning will only happen when the tag becomes visible.
 

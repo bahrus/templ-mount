@@ -124,6 +124,7 @@ export class TemplMount extends HTMLElement{
         const {FirstTempl} = await import('./first-templ.js');
         const sec = new FirstTempl(this);
     }
+    
     _tot = -1;
     async load(){
         if(this._href === undefined) return;
