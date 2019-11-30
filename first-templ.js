@@ -58,6 +58,7 @@ export class FirstTempl {
                 }
                 newlyVisibleElement.shadowRoot.appendChild(clone);
             }
+            observer.disconnect();
         }
     }
     async callbackImpAs(entries, observer) {
@@ -76,6 +77,7 @@ export class FirstTempl {
                 }
                 newlyVisibleElement.shadowRoot.appendChild(clone);
             }
+            observer.disconnect();
         }
     }
     subscribeToHref(href) {
@@ -91,7 +93,6 @@ export class FirstTempl {
                 };
                 const observer = new IntersectionObserver(this.callbackHref.bind(this), ioi);
                 observer.observe(e.detail.value);
-                //(<any>e).detail.value.appendChild((<any>val).content.cloneNode(true));
             });
         });
         this.tm.appendChild(impTObserver);
@@ -102,6 +103,8 @@ export class FirstTempl {
         impTObserver.selector = `[${imp_t}="${as}"],[${limp_t}="${as}"]`;
         impTObserver.addEventListener('latest-match-changed', e => {
             const elementToWatchForTurningVisible = e.detail.value;
+            if (elementToWatchForTurningVisible[hrefSym])
+                return;
             elementToWatchForTurningVisible[hrefSym] = href;
             TemplMount.template(href, {
                 tm: this.tm,
