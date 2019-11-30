@@ -42,8 +42,13 @@ export class TemplMount extends HTMLElement {
     }
     static loadLocalTemplate(temp, options) {
         if (options !== undefined && options.template && !options.template.hasAttribute('loaded')) {
-            options.template.innerHTML = temp.html; //TODO: add/override property "content" to get content from global cache?
+            const template = options.template;
+            template.innerHTML = temp.html; //TODO: add/override property "content" to get content from global cache?
             //Do we really need to create innerHTML other than for debugging purposes?
+            template.setAttribute('loaded', '');
+            template.dispatchEvent(new CustomEvent('load', {
+                bubbles: true,
+            }));
         }
     }
     static async load(href, options) {

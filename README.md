@@ -76,7 +76,7 @@ Retrieving HTML, but not displaying anything, is a rather unsatisfying "Hello wo
 </body>
 ```
 
-### Retrieving template tags [TODO]
+### Retrieving template tags
 
 If, in the same Shadow DOM realm where the templ-mount instance resides, a template tag with attribute "href" is encountered, templ-mount will retrieve the html from the url, and populate the inert template.
 
