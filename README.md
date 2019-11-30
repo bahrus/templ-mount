@@ -212,9 +212,9 @@ My preference on this would be to indicate something like this:
 <template href=//myCDN.com/blah-blah.html passive></template>
 ```
 
-This means import the document blah-blah.html, but don't allow templ-mount to activate any content inside, including content coming from recursive imports triggered by blah-blah.html
+This means import the document blah-blah.html, but don't allow templ-mount to activate any content inside, including content coming from recursive imports triggered by blah-blah.html.
 
-but that seems really difficult to implement outside the browser internals, in a foolproof way, without parsing and processing the content, and ratcheting up the size of this component.
+But that seems really difficult to implement outside the browser internals, in a foolproof way, without parsing and processing the content, and ratcheting up the size of this component.
 
 So this is going to be kept out of scope (for now, at least).
 
@@ -232,7 +232,13 @@ At the top of this document, we mentioned the desire to allow servers to send co
 
 <template href="path/to/some/fileOrStream.html" snip></template>
 
-### Defining a custom element
+### Defining a custom element [TODO]
+
+Define a reference that looks as follows:
+
+```html
+<script id=guid type=module src="templ-mount/index.js#path/to/my-component>
+```
 
 ```html
 <!-- Contents of my-component.html -->
@@ -247,7 +253,7 @@ At the top of this document, we mentioned the desire to allow servers to send co
 </head>
 <body>
     <!---->
-    <template activate>
+    <template append-to-head>
         <script type=module>
             import('./my-custom-element-definition.js#[templateUrl(s)]');  //does import.meta give hash value in all browsers?
         </script>
