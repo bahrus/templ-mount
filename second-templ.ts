@@ -19,7 +19,7 @@ export class SecondTempl{
             const t = (<any>e).detail.value as HTMLTemplateElement;
             const clonedNode = t.content.cloneNode(true) as DocumentFragment;
             this.cloneTemplate(clonedNode, 'script', ['src', 'type', 'nomodule']);
-
+            this.cloneTemplate(clonedNode, 'style', []);
         });
         tm.appendChild(templateObserver);
     }

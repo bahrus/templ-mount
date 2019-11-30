@@ -20,6 +20,7 @@ export class SecondTempl {
             const t = e.detail.value;
             const clonedNode = t.content.cloneNode(true);
             this.cloneTemplate(clonedNode, 'script', ['src', 'type', 'nomodule']);
+            this.cloneTemplate(clonedNode, 'style', []);
         });
         tm.appendChild(templateObserver);
     }
