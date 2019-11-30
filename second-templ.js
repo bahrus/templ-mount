@@ -1,6 +1,7 @@
 import { CssObserve } from 'css-observe/css-observe.js';
 import { getShadowContainer } from 'xtal-element/getShadowContainer.js';
 const listening = Symbol();
+const activatedIds = new Set();
 export class SecondTempl {
     constructor(tm) {
         this.tm = tm;
@@ -18,6 +19,11 @@ export class SecondTempl {
         `;
         templateObserver.addEventListener('latest-match-changed', e => {
             const t = e.detail.value;
+            if (t.id) {
+                if (activatedIds.has(t.id))
+                    return;
+                activatedIds.add(t.id);
+            }
             const clonedNode = t.content.cloneNode(true);
             this.cloneTemplate(clonedNode, 'script', ['src', 'type', 'nomodule']);
             this.cloneTemplate(clonedNode, 'style', []);

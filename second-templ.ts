@@ -2,6 +2,7 @@ import {CssObserve} from 'css-observe/css-observe.js';
 import {TemplMount} from './templ-mount.js'; 
 import {getShadowContainer} from 'xtal-element/getShadowContainer.js'; 
 const listening = Symbol();
+const activatedIds: Set<string> = new Set<string>();
 export class SecondTempl{
     constructor(public tm: TemplMount){
         const shadowContainer = getShadowContainer(tm);
@@ -17,6 +18,10 @@ export class SecondTempl{
         `;
         templateObserver.addEventListener('latest-match-changed', e =>{
             const t = (<any>e).detail.value as HTMLTemplateElement;
+            if(t.id){
+                if(activatedIds.has(t.id)) return;
+                activatedIds.add(t.id);
+            }
             const clonedNode = t.content.cloneNode(true) as DocumentFragment;
             this.cloneTemplate(clonedNode, 'script', ['src', 'type', 'nomodule']);
             this.cloneTemplate(clonedNode, 'style', []);
