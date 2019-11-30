@@ -5,7 +5,7 @@ export class FirstTempl {
         this.tm = tm;
         const templateObserver = document.createElement(CssObserve.is);
         templateObserver.observe = true;
-        templateObserver.selector = "template";
+        templateObserver.selector = "template[href],template[as]";
         templateObserver.customStyles = `
             template[href],template[as]{
                 display:block;
