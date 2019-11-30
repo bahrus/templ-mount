@@ -5,7 +5,7 @@ const listening = Symbol();
 const imp_t = 'imp-t';
 const limp_t = 'limp-t';
 export class FirstTempl{
-    async callback(entries: any, observer: any){
+    async callbackHref(entries: any, observer: any){
         const first = entries[0];
         if(first.intersectionRatio > 0){
             const newlyVisibleElement = first.target as HTMLElement;
@@ -23,7 +23,25 @@ export class FirstTempl{
             
         }
     }
-    subscribeToHref(href){
+    async callbackImpAs(entries: any, observer: any){
+        const first = entries[0];
+        if(first.intersectionRatio > 0){
+            const newlyVisibleElement = first.target as HTMLElement;
+            const templURL = newlyVisibleElement.getAttribute(imp_t) || newlyVisibleElement.getAttribute(limp_t);
+            const template = await TemplMount.template(templURL, {tm: this.tm}) as HTMLTemplateElement;
+            const clone = template.content.cloneNode(true);
+            if(newlyVisibleElement.hasAttribute(limp_t)){
+                newlyVisibleElement.appendChild(clone);
+            }else{
+                if(newlyVisibleElement.shadowRoot === null){
+                    newlyVisibleElement.attachShadow({mode: 'open'});
+                }
+                newlyVisibleElement.shadowRoot.appendChild(clone);
+            }
+            
+        }
+    }
+    subscribeToHref(href: string){
         const impTObserver = document.createElement(CssObserve.is) as CssObserve;
         impTObserver.observe = true;
         impTObserver.selector = `[href="${href}"][${imp_t}],[href="${href}"][${limp_t}]`;
@@ -34,13 +52,32 @@ export class FirstTempl{
                 const ioi : IntersectionObserverInit = {
                     threshold: 0.01
                 };
-                const observer = new IntersectionObserver(this.callback.bind(this), ioi);
+                const observer = new IntersectionObserver(this.callbackHref.bind(this), ioi);
                 observer.observe((<any>e).detail.value);
                 //(<any>e).detail.value.appendChild((<any>val).content.cloneNode(true));
             })
             
         });
         this.tm.appendChild(impTObserver);
+    }
+    subscribeToAs(as: string, href: string){
+        const impTObserver = document.createElement(CssObserve.is) as CssObserve;
+        impTObserver.observe = true;
+        impTObserver.selector = `[${imp_t}="${as}"],[${limp_t}="${as}"]`;
+        impTObserver.addEventListener('latest-match-changed', e =>{
+            TemplMount.template(href, {
+                tm: this.tm,
+            }).then(val =>{
+                const ioi : IntersectionObserverInit = {
+                    threshold: 0.01
+                };
+                const observer = new IntersectionObserver(this.callbackImpAs.bind(this), ioi);
+                observer.observe((<any>e).detail.value);
+                //(<any>e).detail.value.appendChild((<any>val).content.cloneNode(true));
+            })
+            
+        });
+        this.tm.appendChild(impTObserver);        
     }
     constructor(public tm: TemplMount){
         const shadowContainer = getShadowContainer(tm);
@@ -65,7 +102,13 @@ export class FirstTempl{
                     tm: this.tm,
                     template: t   
                 });
-                this.subscribeToHref(href);
+                const as = t.getAttribute('as');
+                if(as === null){
+                    this.subscribeToHref(href);
+                }else{
+                    this.subscribeToAs(as, href);
+                }
+                
             }
 
         });
