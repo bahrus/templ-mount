@@ -7,7 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "xtal-element": "0.0.96",
-    "css-observe": "0.0.15"
+    "css-observe": "0.0.16"
   },
   "devDependencies": {
     "@types/tape": "4.2.33",

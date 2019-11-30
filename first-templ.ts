@@ -1,16 +1,20 @@
 import {CssObserve} from 'css-observe/css-observe.js';
-import {TemplMount} from './templ-mount.js';  
-
+import {TemplMount} from './templ-mount.js'; 
+import {getShadowContainer} from 'xtal-element/getShadowContainer.js'; 
+const listening = Symbol();
 export class FirstTempl{
     async callback(entries: any, observer: any){
         const first = entries[0];
         if(first.intersectionRatio > 0){
-            const templURL = first.target.getAttribute('imp-t');
+            const templURL = first.target.getAttribute('href');
             const template = await TemplMount.template(templURL, {tm: this.tm}) as HTMLTemplateElement;
             first.target.appendChild(template.content.cloneNode(true));
         }
     }
     constructor(public tm: TemplMount){
+        const shadowContainer = getShadowContainer(tm);
+        if(shadowContainer[listening] === true) return;
+        shadowContainer[listening] = true;
         const templateObserver = document.createElement(CssObserve.is) as CssObserve;
         templateObserver.observe = true;
         templateObserver.selector = "template[href],template[as]";
@@ -29,7 +33,7 @@ export class FirstTempl{
   
                 const impTObserver = document.createElement(CssObserve.is) as CssObserve;
                 impTObserver.observe = true;
-                impTObserver.selector = `[imp-t="${href}"],[imp-t-light="${href}"]`;
+                impTObserver.selector = `[href="${href}"][imp-t],[href="${href}"][imp-t-light]`;
                 impTObserver.addEventListener('latest-match-changed', e =>{
                     TemplMount.template(href, {
                         tm: this.tm,
