@@ -46,7 +46,7 @@ export class FirstTempl {
         const first = entries[0];
         if (first.intersectionRatio > 0) {
             const newlyVisibleElement = first.target;
-            const templURL = newlyVisibleElement.getAttribute('href');
+            const templURL = newlyVisibleElement[hrefSym];
             const template = await TemplMount.template(templURL, { tm: this.tm });
             const clone = template.content.cloneNode(true);
             if (newlyVisibleElement.hasAttribute(limp_t)) {
@@ -85,6 +85,10 @@ export class FirstTempl {
         impTObserver.observe = true;
         impTObserver.selector = `[href="${href}"][${imp_t}],[href="${href}"][${limp_t}]`;
         impTObserver.addEventListener('latest-match-changed', e => {
+            const elementToWatchForTurningVisible = e.detail.value;
+            if (elementToWatchForTurningVisible[hrefSym])
+                return;
+            elementToWatchForTurningVisible[hrefSym] = href;
             TemplMount.template(href, {
                 tm: this.tm,
             }).then(val => {
@@ -92,7 +96,7 @@ export class FirstTempl {
                     threshold: 0.01
                 };
                 const observer = new IntersectionObserver(this.callbackHref.bind(this), ioi);
-                observer.observe(e.detail.value);
+                observer.observe(elementToWatchForTurningVisible);
             });
         });
         this.tm.appendChild(impTObserver);
