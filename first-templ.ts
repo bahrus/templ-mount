@@ -30,9 +30,7 @@ export class FirstTempl{
                     template: t   
                 });
                 const as = t.getAttribute('as');
-                if(as === null){
-                    this.subscribeToHref(href);
-                }else{
+                if(as !== null){
                     this.subscribeToAs(as, href);
                 }
                 
@@ -62,27 +60,7 @@ export class FirstTempl{
         }
     }
 
-    subscribeToHref(href: string){
-        const impTObserver = document.createElement(CssObserve.is) as CssObserve;
-        impTObserver.observe = true;
-        impTObserver.selector = `[href="${href}"][${imp_t}],[href="${href}"][${limp_t}]`;
-        impTObserver.addEventListener('latest-match-changed', e =>{
-            const elementToWatchForTurningVisible = (<any>e).detail.value;
-            if(elementToWatchForTurningVisible[hrefSym]) return;
-            elementToWatchForTurningVisible[hrefSym] = href;
-            TemplMount.template(href, {
-                tm: this.tm,
-            }).then(val =>{
-                const ioi : IntersectionObserverInit = {
-                    threshold: 0.01
-                };
-                const observer = new IntersectionObserver(this.callback.bind(this), ioi);
-                observer.observe(elementToWatchForTurningVisible);
-            })
-            
-        });
-        this.tm.appendChild(impTObserver);
-    }
+
     subscribeToAs(as: string, href: string){
         const impTObserver = document.createElement(CssObserve.is) as CssObserve;
         impTObserver.observe = true;
@@ -99,7 +77,6 @@ export class FirstTempl{
                 };
                 const observer = new IntersectionObserver(this.callback.bind(this), ioi);
                 observer.observe(elementToWatchForTurningVisible);
-                //(<any>e).detail.value.appendChild((<any>val).content.cloneNode(true));
             })
             
         });
