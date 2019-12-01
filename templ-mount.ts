@@ -66,7 +66,13 @@ export class TemplMount extends HTMLElement{
 
             const init: RequestInit = t.hasAttribute('request-init') ? JSON.parse(t.getAttribute('request-init')) : {};
             const resp = await fetch(href, init);
-            const txt = await resp.text();
+            let txt = await resp.text();
+            if(t.hasAttribute('snip')){
+                const split = txt.split('<!---->');
+                if (split.length > 1) {
+                    txt = split[1];
+                }
+            }
             this._templateStrings[href] = txt;
             this.loadLocalTemplate(txt, options);
             window.dispatchEvent(customEvent);
