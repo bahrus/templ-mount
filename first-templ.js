@@ -3,11 +3,10 @@ import { TemplMount } from './templ-mount.js';
 import { getShadowContainer } from 'xtal-element/getShadowContainer.js';
 const listening = Symbol();
 const hrefSym = Symbol();
-const imp_t = 'imp-t';
-const limp_t = 'limp-t';
 export class FirstTempl {
     constructor(tm) {
         this.tm = tm;
+        this._templateLookup = {};
         const shadowContainer = getShadowContainer(tm);
         if (shadowContainer[listening] === true)
             return;
@@ -33,7 +32,7 @@ export class FirstTempl {
                 });
                 const as = t.getAttribute('as');
                 if (as !== null) {
-                    this.subscribeToAs(as, href);
+                    this.subscribeToAs(as, href, t);
                 }
             }
         });
@@ -43,25 +42,27 @@ export class FirstTempl {
         const first = entries[0];
         if (first.intersectionRatio > 0) {
             const newlyVisibleElement = first.target;
-            const templURL = newlyVisibleElement[hrefSym];
-            const template = await TemplMount.template(templURL, { tm: this.tm });
+            // const templURL = newlyVisibleElement[hrefSym];
+            // const template = await TemplMount.template(templURL, {tm: this.tm}) as HTMLTemplateElement;
+            const alias = newlyVisibleElement.getAttribute(this.tm._importKey);
+            const template = this._templateLookup[alias];
             const clone = template.content.cloneNode(true);
-            if (newlyVisibleElement.hasAttribute(limp_t)) {
-                newlyVisibleElement.appendChild(clone);
+            // if(template.hasAttribute()){
+            //     newlyVisibleElement.appendChild(clone);
+            // }else{
+            if (newlyVisibleElement.shadowRoot === null) {
+                newlyVisibleElement.attachShadow({ mode: 'open' });
             }
-            else {
-                if (newlyVisibleElement.shadowRoot === null) {
-                    newlyVisibleElement.attachShadow({ mode: 'open' });
-                }
-                newlyVisibleElement.shadowRoot.appendChild(clone);
-            }
+            newlyVisibleElement.shadowRoot.appendChild(clone);
+            //}
             observer.disconnect();
         }
     }
-    subscribeToAs(as, href) {
+    subscribeToAs(as, href, t) {
+        this._templateLookup[as] = t;
         const impTObserver = document.createElement(CssObserve.is);
         impTObserver.observe = true;
-        impTObserver.selector = `[${imp_t}="${as}"],[${limp_t}="${as}"]`;
+        impTObserver.selector = `[${this.tm._importKey}="${as}"]`;
         impTObserver.addEventListener('latest-match-changed', e => {
             const elementToWatchForTurningVisible = e.detail.value;
             if (elementToWatchForTurningVisible[hrefSym])
@@ -69,6 +70,7 @@ export class FirstTempl {
             elementToWatchForTurningVisible[hrefSym] = href;
             TemplMount.template(href, {
                 tm: this.tm,
+                template: t,
             }).then(val => {
                 const ioi = {
                     threshold: 0.01

@@ -9,7 +9,7 @@ export class TemplMount extends HTMLElement {
     }
     static template(href, options) {
         return new Promise((resolve, reject) => {
-            const temp = this._templates[href];
+            const temp = this._templateStrings[href];
             if (temp === true) {
                 this.waitForIt(href, resolve, reject, options);
             }
@@ -18,7 +18,7 @@ export class TemplMount extends HTMLElement {
                 resolve(temp);
             }
             else {
-                this._templates[href] = true;
+                this._templateStrings[href] = true;
                 this.waitForIt(href, resolve, reject, options);
                 this.load(href, options);
             }
@@ -38,11 +38,10 @@ export class TemplMount extends HTMLElement {
             once: true
         });
     }
-    static loadLocalTemplate(temp, options) {
-        if (options !== undefined && options.template && !options.template.hasAttribute('loaded')) {
-            const template = options.template;
-            template.innerHTML = temp.html; //TODO: add/override property "content" to get content from global cache?
-            //Do we really need to create innerHTML other than for debugging purposes?
+    static loadLocalTemplate(templateString, options) {
+        const template = options.template;
+        if (!template.hasAttribute('loaded')) {
+            template.innerHTML = templateString;
             template.setAttribute('loaded', '');
             template.dispatchEvent(new CustomEvent('load', {
                 bubbles: true,
@@ -53,15 +52,12 @@ export class TemplMount extends HTMLElement {
         try {
             const resp = await fetch(href);
             const txt = await resp.text();
-            const templ = document.createElement('template');
-            templ.innerHTML = txt;
-            templ.html = txt;
-            this._templates[href] = templ;
-            this.loadLocalTemplate(templ, options);
+            this._templateStrings[href] = txt;
+            this.loadLocalTemplate(txt, options);
             window.dispatchEvent(new CustomEvent(href + '-ready-tm', {
                 bubbles: false,
                 detail: {
-                    template: templ
+                    template: options.template
                 }
             }));
         }
@@ -99,5 +95,5 @@ export class TemplMount extends HTMLElement {
         new SecondTempl(this);
     }
 }
-TemplMount._templates = {};
+TemplMount._templateStrings = {};
 customElements.define('templ-mount', TemplMount);

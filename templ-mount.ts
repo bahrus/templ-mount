@@ -1,7 +1,7 @@
 const import_key = 'import-key';
 interface templateSecondArg{
     tm?: TemplMount | undefined;
-    template?: HTMLTemplateElement | undefined;
+    template: HTMLTemplateElement | undefined;
 }
 export class TemplMount extends HTMLElement{
 
@@ -9,23 +9,23 @@ export class TemplMount extends HTMLElement{
         return [import_key];
     }
 
-    static _templates : {[href: string]: HTMLTemplateElement | true} = {};
-    static template(href: string, options?: templateSecondArg){
+    static _templateStrings : {[href: string]: string | true} = {};
+    static template(href: string, options: templateSecondArg){
         return new Promise((resolve, reject) =>{
-            const temp = this._templates[href];
+            const temp = this._templateStrings[href];
             if(temp === true){
                 this.waitForIt(href, resolve, reject, options);
             }else if(temp !== undefined){
                 this.loadLocalTemplate(temp, options);
                 resolve(temp);
             }else{
-                this._templates[href] = true;
+                this._templateStrings[href] = true;
                 this.waitForIt(href, resolve, reject, options);
                 this.load(href, options);
             }
         });
     }
-    static waitForIt(href: string, resolve: any, reject: any, options?: templateSecondArg){
+    static waitForIt(href: string, resolve: any, reject: any, options: templateSecondArg){
         window.addEventListener(href + '-ready-tm', e =>{
             const a = e as CustomEventInit;
             if(a.detail && a.detail.template){
@@ -39,11 +39,10 @@ export class TemplMount extends HTMLElement{
             once: true
         })
     }
-    static loadLocalTemplate(temp: HTMLTemplateElement, options?: templateSecondArg){
-        if(options !== undefined && options.template && !options.template.hasAttribute('loaded')){
-            const template = options.template;
-            template.innerHTML = (<any>temp).html; //TODO: add/override property "content" to get content from global cache?
-            //Do we really need to create innerHTML other than for debugging purposes?
+    static loadLocalTemplate(templateString: string, options: templateSecondArg){
+        const template = options.template;
+        if(!template.hasAttribute('loaded')){
+            template.innerHTML = templateString;
             template.setAttribute('loaded', '');
             template.dispatchEvent(new CustomEvent('load', {
                 bubbles: true,
@@ -51,19 +50,16 @@ export class TemplMount extends HTMLElement{
         }
     }
 
-    static async load(href: string, options?: templateSecondArg){
+    static async load(href: string, options: templateSecondArg){
         try{
             const resp = await fetch(href);
             const txt = await resp.text();
-            const templ = document.createElement('template');
-            templ.innerHTML = txt;
-            (<any>templ).html = txt;
-            this._templates[href] = templ;
-            this.loadLocalTemplate(templ, options);
+            this._templateStrings[href] = txt;
+            this.loadLocalTemplate(txt, options);
             window.dispatchEvent(new CustomEvent(href + '-ready-tm', {
                 bubbles: false,
                 detail: {
-                    template: templ
+                    template: options.template
                 }
             }))
         }catch(e){
@@ -78,11 +74,9 @@ export class TemplMount extends HTMLElement{
 
     attributeChangedCallback(n: string, ov: string, nv: string){
         switch(n){
-            
             case import_key:
                 this._importKey = nv;
                 break;
-            
         }
     }
 
