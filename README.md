@@ -44,41 +44,8 @@ One of the driving forces behind this component is it allows applications to fol
 
 Reference resolution (e.g. nested script tags with relative paths, import mapping), support for different trust levels.
 
-## Hello world -- Retrieving (and displaying) templates
 
-```html
-<templ-mount href=include1.html></templ-mount>
-```
-
-loads the template containing the contents of the html file / stream into memory (keyed off of the href). 
-
-The href attribute / property can also be an array of URL's (using JSON notation in the case of the attribute):
-
-
-```html
-<templ-mount href='["include1.html", "include2.html"]'></templ-mount>
-```
-
-In contrast to what we will see a bit later, templ-mount's href templates are not actually added to the DOM.  If programmatic access to the template is needed, it can be obtained via the following api:
-
-```JavaScript
-const {TemplMount} = await import('templ-mount/TemplMount.js');
-const template = await TemplMount.template(myURL);
-```
-
-Retrieving HTML, but not displaying anything, is a rather unsatisfying "Hello world" experience.  For a more satisfying experience, add an attribute imp-t, short for "import template", which will be explained in more detail later:
-
-```html
-<body>
-    <templ-mount href=embalmedChinesePrisoner.html imp-t>
-       <fungal-treatment slot="anatomicalSnuffbox"></fungal-treatment>
-    </templ-mount>
-</body>
-```
-
-### Retrieving template tags
-
-It might be more comforting, rather than using a templ-mount tag, to use a template tag, as this would allow you to see the contents of the template.  To do so:
+## Retrieving template tags
 
 If, in the same Shadow DOM realm where the templ-mount instance resides, a template tag with attribute "href" is encountered, templ-mount will retrieve the html from the url, and populate the inert template.
 
@@ -105,11 +72,13 @@ If, in the same Shadow DOM realm as a templ-mount instance (including the realm 
 </details>
 ```
 
-**NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515).
+**NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515).  You can, however, configure what attribute to use, by specifying:
+
+```html
+<templ-mount import-key=something-else>
+```
 
 In the example above, the template tag, and the article tag with imp-t attribute matching the template's href attribute, do not need to be in the same Shadow DOM realm.  All that is required is for a templ-mount tag to be present in the Shadow DOM realm of each individual tag, for the functionality to take hold.  This allows templates to be shared across Shadow DOM realms.
-
-There should only be one templ-mount per shadow DOM realm, or work will be duplicated.
 
 In the future examples, we will assume there's an \<templ-mount\> in the relevant place as needed.
 

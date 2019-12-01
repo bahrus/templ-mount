@@ -1,5 +1,4 @@
-const href = 'href';
-export const imp_t = 'imp-t';
+const import_key = 'import-key';
 interface templateSecondArg{
     tm?: TemplMount | undefined;
     template?: HTMLTemplateElement | undefined;
@@ -7,7 +6,7 @@ interface templateSecondArg{
 export class TemplMount extends HTMLElement{
 
     static get observedAttributes(){
-        return [href, imp_t];
+        return [import_key];
     }
 
     static _templates : {[href: string]: HTMLTemplateElement | true} = {};
@@ -79,48 +78,25 @@ export class TemplMount extends HTMLElement{
 
     attributeChangedCallback(n: string, ov: string, nv: string){
         switch(n){
-            case href:
-                if(nv[0] === '['){
-                    this._href = JSON.parse(nv);
-                }else{
-                    this._href = nv;
-                }
+            
+            case import_key:
+                this._importKey = nv;
                 break;
-            case imp_t:
-                this._imp_t = nv !== null;
-                break;
+            
         }
     }
 
-    _imp_t = false;
-    get impT(){
-        return this._imp_t;
+    _importKey = 'imp-t';
+    get importKey(){
+        return this._importKey;
     }
-    set impT(nv){
-        if(nv){
-            this.setAttribute(imp_t, '');
-        }else{
-            this.removeAttribute(imp_t);
-        }
-    }
-
-    _href: string | string[];
-    get href(){
-        return this._href;
-    }
-    set href(nv: string | string[]){
-        if(Array.isArray(nv)){
-            this.setAttribute(href, JSON.stringify(nv));
-        }else{
-            this.setAttribute(href, nv);
-        }
-        
+    set importKey(nv: string){
+        this.setAttribute(import_key, nv);
     }
 
 
     async connectedCallback(){
-        if(!this._imp_t) this.style.display = 'none';
-        this.load();
+        this.style.display = 'none';
         this.loadFirstTempl();
         this.loadSecondTempl();
     }
@@ -133,38 +109,6 @@ export class TemplMount extends HTMLElement{
     async loadSecondTempl(){
         const {SecondTempl} = await import('./second-templ.js');
         new SecondTempl(this);
-    }
-
-    _tot = -1;
-    async load(){
-        if(this._href === undefined) return;
-        const hrefs = Array.isArray(this._href) ? this._href : [this._href];
-        this._tot = hrefs.length;  
-        for(const href of hrefs){
-            //TemplMount.load(href, this);
-            this.loadh(href);
-        }
-    }
-
-    async loadh(href){
-        await TemplMount.load(href, {
-            tm: this
-        });
-        this._tot--;
-        if(this._tot === 0){
-            if(this._imp_t){
-                if(this.shadowRoot === null){
-                    this.attachShadow({
-                        mode: 'open'
-                    });
-                }
-                const hrefs = Array.isArray(this._href) ? this._href : [this._href];
-                hrefs.forEach(href =>{
-                    const clone = (TemplMount._templates[href] as HTMLTemplateElement).content.cloneNode(true);
-                    this.shadowRoot.appendChild(clone);
-                })
-            }
-        }
     }
 
 
