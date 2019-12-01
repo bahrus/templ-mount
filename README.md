@@ -199,45 +199,15 @@ then templ-mount *can* be made to only import the content between the first two 
 
 At the top of this document, we mentioned the desire to allow servers to send content down in the native format that the browser will consume. This snipping solution goes against that strategy a bit, in the sense that here we are suggesting doing some string manipulation of the content. But most server-side solutions can easily snip out content in a similar way to what we are doing above. But if server-side solutions aren't available, you can snip out the main content thusly.
 
+```html
 <template import href=path/to/some/fileOrStream.html as=fos snip></template>
-
-<!--
-### Defining a custom element [TODO]
-
-Define a reference that looks as follows:
-
-```html
-<script id=guid type=module src="templ-mount/index.js#path/to/my-component>
 ```
 
-```html
-<!-- Contents of my-component.html -->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <!---->
-    <template append-to-head>
-        <script type=module>
-            import('./my-custom-element-definition.js#[templateUrl(s)]');  //does import.meta give hash value in all browsers?
-        </script>
-        <style>
-            @import url(https://fonts.googleapis.com/css?family=Indie+Flower);
-        </style>
-    </template>
-    <h1>MyComponentContent</h1>
-    <!---->
-</body>
-</html>
+# Viewing Your Element
 
 ```
--->
-
+$ npm install
+$ npm run serve
+```
  
 
