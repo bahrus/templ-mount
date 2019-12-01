@@ -11,7 +11,7 @@
 
 <summary>Status Summary</summary>
 
-The Committee for the Repair of templ-mount is coordinating much needed enhancements, which will include some breaking changes.
+The Committee for the Repair of templ-mount is coordinating fundamental adjustments, which includes some breaking changes from version 0.0.48.
 
 Repairs were previously put on ice, based on the naive hope that desperately needed browser standards, providing a far more comprehensive solution than templ-mount can provide, were just around the corner.   
 
@@ -50,23 +50,23 @@ Reference resolution (e.g. nested script tags with relative paths, import mappin
 If, in the same Shadow DOM realm where the templ-mount instance resides, a template tag with attribute "href" is encountered, templ-mount will retrieve the html from the url, and populate the inert template.
 
 ```html
-<template href=//link.springer.com/article/10.1007/s00300-003-0563-3></template>
+<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
 ```
 
 After loading, an attribute "loaded" is added, and event "load" is fired.
 
-### Preemptive downloading, lazy loading into the DOM tree, potentially across Shadow DOM boundaries
+### Preemptive downloading, lazy loading into the DOM tree
 
-If, in the same Shadow DOM realm as a templ-mount instance (including the realm outside any Shadow DOM), any tag is found with pseudo attribute imp-t, templ-mount waits for that tag to become visible, and when it does, it searches for a template with href matching the value of imp-t, and "imports" the template into the ShadowDOM of the tag.  The original light children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
+If, in the same Shadow DOM realm as a templ-mount instance (including the realm outside any Shadow DOM), any tag is found with pseudo attribute imp-t, templ-mount waits for that tag to become visible, and when it does, it searches for a template with "as" attribute matching the value of imp-t, and "imports" the template into the ShadowDOM of the tag.  The original light children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
 
 ```html
 <templ-mount></templ-mount>
 ...
-<template href=//link.springer.com/article/10.1007/s00300-003-0563-3></template>
+<template href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
 ...
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-    <article href=//link.springer.com/article/10.1007/s00300-003-0563-3 imp-t>
+    <article imp-t=penguins-poop>
         <span slot="AdInsert"><a href="https://www.target.com/b/pedialax/-/N-55lp4">Pedia-Lax</a></span>
     </article>
 </details>
@@ -78,57 +78,24 @@ If, in the same Shadow DOM realm as a templ-mount instance (including the realm 
 <templ-mount import-key=something-else>
 ```
 
-In the example above, the template tag, and the article tag with imp-t attribute matching the template's href attribute, do not need to be in the same Shadow DOM realm.  All that is required is for a templ-mount tag to be present in the Shadow DOM realm of each individual tag, for the functionality to take hold.  This allows templates to be shared across Shadow DOM realms.
+In the future examples, we will assume there's an \<templ-mount\> in the relevant place (each Shadow DOM realm) as needed.
 
-In the future examples, we will assume there's an \<templ-mount\> in the relevant place as needed.
-
-### Aliasing
-
-If the template tag *is* in the same Shadow DOM realm as the article tag, and that article tag wants to import that template tag's content, aliasing is supported:
-
-```html
-<template href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
-...
-<details>
-    <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-    <article imp-t=penguins-poop>
-        <span slot="AdInsert"><a href=//www.target.com/b/pedialax/-/N-55lp4>Pedia-Lax</a></span>
-    </article>
-</details>
-```
 
 ### If Shadow DOM is not needed / desired, use limp-t:
 
 ```html
 
-<template href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
+<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop without-shadow></template>
 ...
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-    <article limp-t=penguins-poop></article>
+    <article imp-t=penguins-poop></article>
 </details>
-```
+``` 
 
-### Lazy downloading, lazy loading into memory
+### Referencing prepopulated templates
 
-If no template tag is present, the imp-t attribute can still cause the url to load (into a template in memory) and cloned into the Shadow DOM, only downloading, as well as cloning will only happen when the tag becomes visible.
-
-```html
-<details>
-    <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-    <article href=//link.springer.com/article/10.1007/s00300-003-0563-3 imp-t>
-        <span slot="AdInsert"><a href=//www.target.com/b/pedialax/-/N-55lp4>Pedia-Lax</a></span>
-    </article>
-</details>
-```
-
-This saves the user bandwidth, especially if they never actually open the article summary, at the expense of having to wait a little bit when the content becomes visible.
-
-This also eliminates one tag, so the mechanics of downloading the file are reduced from three tags to two (counting the templ-mount tag, one in each shadow DOM realm).  But this will not allow some of the "import" finessing described below. 
-
-### Registering already loaded template [TODO]
-
-If the content of a template is embedded inside a template tag already (part of the server-rendered payload), but you want to be able to import a clone using the same syntax, you can do the following:
+If the content of a template is embedded inside a template tag already (as part of the original server-rendered payload), but you want to be able to import a clone using the same syntax, you can do the following:
 
 
 ```html
@@ -164,9 +131,11 @@ If a template has the append-to-head attribute, then script and style tags insid
 </template>
 ```
 
-Note that there is no href, so this will do nothing more than activate the content.  If the href attribute *is* present, it will also download the content, and replace the activating content (which should already be added to the global head tag by now).
+Note that there is no href, so this will do nothing more than activate the content.  
 
 I would not expect this kind of template to be present in the opening index.html (else why not just add the tags directly to the head tag?), but rather, from imported templates, which have dependencies.
+
+Ok, I could see it in an standalone html file/stream also, if that file intends to be used both as a standalone web page, and as an embedded template in other web pages.
 
 The id is optional, but, because there's no href, if the template will appear in multiple downloads (despite templ-mount's efforts at de-dup), then providing the id will help templ-mount to avoid unnecessarily cluttering the head tag with duplicate script / style / link tags.
 
@@ -178,10 +147,10 @@ Allowing HTML references to load JS dependencies could be considered dangerous i
 My preference on this would be to indicate something like this:
 
 ```html
-<template href=//myCDN.com/blah-blah.html passive></template>
+<template import href=//myCDN.com/blah-blah.html as=blah without-side-effects></template>
 ```
 
-This means import the document blah-blah.html, but don't allow templ-mount to activate any content inside, including content coming from recursive imports triggered by blah-blah.html.
+This means import the document blah-blah.html, but don't allow templ-mount to activate any script / webAssembly inside, including content coming from recursive imports triggered by blah-blah.html.
 
 But that seems really difficult to implement outside the browser internals, in a foolproof way, without parsing and processing the content, and ratcheting up the size of this component.
 

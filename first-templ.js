@@ -11,32 +11,41 @@ export class FirstTempl {
         if (shadowContainer[listening] === true)
             return;
         shadowContainer[listening] = true;
-        const templateObserver = document.createElement(CssObserve.is);
-        templateObserver.observe = true;
-        templateObserver.selector = "template[import][href][as]";
-        templateObserver.customStyles = `
-            template[import][href][as]{
+        const remoteTemplateObserver = document.createElement(CssObserve.is);
+        remoteTemplateObserver.observe = true;
+        remoteTemplateObserver.selector = "template[import][href][as]";
+        remoteTemplateObserver.customStyles = /* css */ `
+            template[import][as]{
                 display:block;
             }
-            template[import][href][as][loaded]{
+            template[import][as][loaded]{
                 display:none;
             }
         `;
-        templateObserver.addEventListener('latest-match-changed', e => {
+        remoteTemplateObserver.addEventListener('latest-match-changed', e => {
             const t = e.detail.value;
             const href = t.getAttribute('href');
-            if (href !== null) {
-                TemplMount.template(href, {
-                    tm: this.tm,
-                    template: t
-                });
-                const as = t.getAttribute('as');
-                if (as !== null) {
-                    this.subscribeToAs(as, href, t);
-                }
-            }
+            TemplMount.template(href, {
+                tm: this.tm,
+                template: t
+            });
+            const as = t.getAttribute('as');
+            this.subscribeToAsHref(as, href, t);
         });
-        this.tm.appendChild(templateObserver);
+        this.tm.appendChild(remoteTemplateObserver);
+        const localTemplateObserver = document.createElement(CssObserve.is);
+        localTemplateObserver.observe = true;
+        localTemplateObserver.selector = "template[import][as]:not([href])";
+        localTemplateObserver.addEventListener('latest-match-changed', e => {
+            const t = e.detail.value;
+            if (t.hasAttribute('href')) {
+                return; //why is this necessary?
+            }
+            t.setAttribute('loaded', '');
+            const as = t.getAttribute('as');
+            this.subscribeToAs(as, t);
+        });
+        this.tm.appendChild(localTemplateObserver);
     }
     async callback(entries, observer) {
         const first = entries[0];
@@ -57,7 +66,7 @@ export class FirstTempl {
             observer.disconnect();
         }
     }
-    subscribeToAs(as, href, t) {
+    subscribeToAsHref(as, href, t) {
         this._templateLookup[as] = t;
         const impTObserver = document.createElement(CssObserve.is);
         impTObserver.observe = true;
@@ -77,6 +86,21 @@ export class FirstTempl {
                 const observer = new IntersectionObserver(this.callback.bind(this), ioi);
                 observer.observe(elementToWatchForTurningVisible);
             });
+        });
+        this.tm.appendChild(impTObserver);
+    }
+    subscribeToAs(as, t) {
+        this._templateLookup[as] = t;
+        const impTObserver = document.createElement(CssObserve.is);
+        impTObserver.observe = true;
+        impTObserver.selector = `[${this.tm._importKey}="${as}"]`;
+        impTObserver.addEventListener('latest-match-changed', e => {
+            const elementToWatchForTurningVisible = e.detail.value;
+            const ioi = {
+                threshold: 0.01
+            };
+            const observer = new IntersectionObserver(this.callback.bind(this), ioi);
+            observer.observe(elementToWatchForTurningVisible);
         });
         this.tm.appendChild(impTObserver);
     }

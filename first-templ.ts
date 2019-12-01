@@ -9,35 +9,44 @@ export class FirstTempl{
         const shadowContainer = getShadowContainer(tm);
         if(shadowContainer[listening] === true) return;
         shadowContainer[listening] = true;
-        const templateObserver = document.createElement(CssObserve.is) as CssObserve;
-        templateObserver.observe = true;
-        templateObserver.selector = "template[import][href][as]";
-        templateObserver.customStyles = `
-            template[import][href][as]{
+        const remoteTemplateObserver = document.createElement(CssObserve.is) as CssObserve;
+        remoteTemplateObserver.observe = true;
+        remoteTemplateObserver.selector = "template[import][href][as]";
+        remoteTemplateObserver.customStyles = /* css */`
+            template[import][as]{
                 display:block;
             }
-            template[import][href][as][loaded]{
+            template[import][as][loaded]{
                 display:none;
             }
         `;
-        templateObserver.addEventListener('latest-match-changed', e =>{
+        remoteTemplateObserver.addEventListener('latest-match-changed', e =>{
             const t = (<any>e).detail.value as HTMLTemplateElement;
             const href = t.getAttribute('href');
-            if(href !== null){
-                TemplMount.template(href, {
-                    tm: this.tm,
-                    template: t   
-                });
-                const as = t.getAttribute('as');
-                if(as !== null){
-                    this.subscribeToAs(as, href, t);
-                }
+            TemplMount.template(href, {
+                tm: this.tm,
+                template: t   
+            });
+            const as = t.getAttribute('as');
+            this.subscribeToAsHref(as, href, t);
                 
-            }
 
         });
-        this.tm.appendChild(templateObserver);
+        this.tm.appendChild(remoteTemplateObserver);
 
+        const localTemplateObserver = document.createElement(CssObserve.is) as CssObserve;
+        localTemplateObserver.observe = true;
+        localTemplateObserver.selector="template[import][as]:not([href])";
+        localTemplateObserver.addEventListener('latest-match-changed', e =>{
+            const t = (<any>e).detail.value as HTMLTemplateElement;
+            if(t.hasAttribute('href')){
+                return; //why is this necessary?
+            }
+            t.setAttribute('loaded', '');
+            const as = t.getAttribute('as');
+            this.subscribeToAs(as, t);
+        });
+        this.tm.appendChild(localTemplateObserver);
     }
 
     async callback(entries: any, observer: any){
@@ -60,7 +69,7 @@ export class FirstTempl{
     }
 
     _templateLookup : {[as: string]: HTMLTemplateElement} = {};
-    subscribeToAs(as: string, href: string, t: HTMLTemplateElement){
+    subscribeToAsHref(as: string, href: string, t: HTMLTemplateElement){
         this._templateLookup[as] = t;
         const impTObserver = document.createElement(CssObserve.is) as CssObserve;
         impTObserver.observe = true;
@@ -79,6 +88,23 @@ export class FirstTempl{
                 const observer = new IntersectionObserver(this.callback.bind(this), ioi);
                 observer.observe(elementToWatchForTurningVisible);
             })
+            
+        });
+        this.tm.appendChild(impTObserver);        
+    }
+
+    subscribeToAs(as: string, t: HTMLTemplateElement){
+        this._templateLookup[as] = t;
+        const impTObserver = document.createElement(CssObserve.is) as CssObserve;
+        impTObserver.observe = true;
+        impTObserver.selector = `[${this.tm._importKey}="${as}"]`;
+        impTObserver.addEventListener('latest-match-changed', e =>{
+            const elementToWatchForTurningVisible = (<any>e).detail.value;
+            const ioi : IntersectionObserverInit = {
+                threshold: 0.01
+            };
+            const observer = new IntersectionObserver(this.callback.bind(this), ioi);
+            observer.observe(elementToWatchForTurningVisible);
             
         });
         this.tm.appendChild(impTObserver);        
