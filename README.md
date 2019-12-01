@@ -65,7 +65,9 @@ Use the request-init attribute:
 
 **NB** Generally, cors issues are more easily resolved using something like cors anywhere:
 
+```html
 <template import href=https://cors-anywhere.herokuapp.com/https://link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
+```
 
 ## Preemptive downloading, lazy loading into the DOM tree
 
