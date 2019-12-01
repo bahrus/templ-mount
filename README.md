@@ -13,7 +13,7 @@
 
 The Committee for the Repair of templ-mount is coordinating fundamental adjustments, which includes some breaking changes from version 0.0.48.
 
-Repairs were previously put on ice, based on the naive hope that desperately needed browser standards, providing a far more comprehensive solution than templ-mount can provide, were just around the corner.   
+Repairs were previously put on ice, based on the naive hope that desperately needed browser standards, providing a far more comprehensive solution than templ-mount can provide, was just around the corner.   
 
 The committee has recently been reminded of how this is [not how things work](https://www.youtube.com/watch?v=0-Yl6FmV6EE).
 
@@ -28,9 +28,9 @@ templ-mount helps create templates from url's, which point to HTML files or stre
 
 templ-mount remembers the day its creator first installed a PWA (Flipkart), and was blown away by the liberating effect this could have on web development.  PWA's swept aside significant barriers to the web, in terms of achieving parity with native apps.
 
-templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server. And, in fact, this has been the focus of many talented and creative developers at the cutting edges.  
+templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server. And, in fact, this has been the focus of many talented, creative developers at the [cutting edges](https://codesandbox.io/s/floral-worker-xwbwv) (though frankly custom elements seems like the most natural fit for this, but whatever :-) ).  
 
-The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier and simpler to get Lighthouse's blessing.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g the ability to truly stream in HTML as it renders, resolving and preemptively downloading relative references, centrally resolving package dependencies via import maps, providing sand-boxing support when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api (as are many of templ-mount's compatriots).
+The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier and simpler to get Lighthouse's blessing.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g the ability to truly stream in HTML as it renders, resolving and preemptively downloading relative references, centrally resolving package dependencies via import maps, providing sand-boxing support when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api (as [are](https://www.filamentgroup.com/lab/html-includes/) [many](https://github.com/whatwg/html/issues/2791) [of](https://github.com/Juicy/imported-template/) templ-mount's [compatriots](https://www.npmjs.com/package/@vanillawc/wc-include)).
 
 </details>
 
@@ -55,9 +55,21 @@ If, in the same Shadow DOM realm where the templ-mount instance resides, a templ
 
 After loading, an attribute "loaded" is added, and event "load" is fired.
 
-### Preemptive downloading, lazy loading into the DOM tree
+## Specifying cors / other fetch options
 
-If, in the same Shadow DOM realm as a templ-mount instance (including the realm outside any Shadow DOM), any tag is found with pseudo attribute imp-t, templ-mount waits for that tag to become visible, and when it does, it searches for a template with "as" attribute matching the value of imp-t, and "imports" the template into the ShadowDOM of the tag.  The original light children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
+use the requuest-init attribute:
+
+```html
+<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 request-init='{"mode": "cors"}' as=penguins-poop ></template>
+```
+
+**NB** Generally, cors issues are more easily resolved using something like cors anywhere:
+
+<template href=https://cors-anywhere.herokuapp.com/https://link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
+
+## Preemptive downloading, lazy loading into the DOM tree
+
+If, in the same ShadowDOM realm as a templ-mount instance (including the realm outside any Shadow DOM), any tag is found with pseudo attribute imp-key, templ-mount waits for that tag to become visible, and when it does, it searches for a template with "as" attribute matching the value of imp-key in the same ShadowDOM realm, and "imports" the template into the ShadowDOM of the tag.  The original light children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
 
 ```html
 <templ-mount></templ-mount>
@@ -66,13 +78,13 @@ If, in the same Shadow DOM realm as a templ-mount instance (including the realm 
 ...
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-    <article imp-t=penguins-poop>
+    <article imp-key=penguins-poop>
         <span slot="AdInsert"><a href="https://www.target.com/b/pedialax/-/N-55lp4">Pedia-Lax</a></span>
     </article>
 </details>
 ```
 
-**NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515).  You can, however, configure what attribute to use, by specifying:
+**NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515).  You can, however, configure what attribute to use within each ShadowDOM realm, by specifying:
 
 ```html
 <templ-mount import-key=something-else>
@@ -81,7 +93,7 @@ If, in the same Shadow DOM realm as a templ-mount instance (including the realm 
 In the future examples, we will assume there's an \<templ-mount\> in the relevant place (each Shadow DOM realm) as needed.
 
 
-### If Shadow DOM is not needed / desired, use limp-t:
+### If Shadow DOM is not needed / desired, use without-shadow attribute:
 
 ```html
 
@@ -89,9 +101,11 @@ In the future examples, we will assume there's an \<templ-mount\> in the relevan
 ...
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-    <article imp-t=penguins-poop></article>
+    <article imp-key=penguins-poop></article>
 </details>
 ``` 
+
+Note that if you define multiple templates with identical href's, for example one with shadow DOM, one without, only one fetch request should be made for all of them.
 
 ### Referencing pre-populated templates
 
@@ -109,7 +123,7 @@ If the content of a template is embedded inside a template tag already (as part 
 ...
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-    <article imp-t=penguins-poop>
+    <article imp-key=penguins-poop>
         <span slot="AdInsert"><a href=//www.target.com/b/pedialax/-/N-55lp4>Pedia-Lax</a></span>
     </article>
 </details>
@@ -147,7 +161,7 @@ Allowing HTML references to load JS dependencies could be considered dangerous i
 My preference on this would be to indicate something like this:
 
 ```html
-<template import href=//myCDN.com/blah-blah.html as=blah without-side-effects></template>
+<template import href=//myCDN.com/blah-blah.html as=blah without-js without-wasm></template>
 ```
 
 This means import the document blah-blah.html, but don't allow templ-mount to activate any script / webAssembly inside, including content coming from recursive imports triggered by blah-blah.html.

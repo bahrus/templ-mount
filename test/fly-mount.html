@@ -11,20 +11,20 @@
 
         <template import href=title.html as=title-dee></template>
 
-        <div imp-t=title-dee></div>
+        <div imp-key=title-dee></div>
 
         <template import href=why.html as=why?></template>
 
         <details>
             <summary></summary>
-            <div imp-t=why?></div>
+            <div imp-key=why?></div>
         </details>
 
         <template import href="spider.html" as=spam without-shadow></template>
 
         <details>
             <summary></summary>
-            <div imp-t=spam></div>
+            <div imp-key=spam></div>
         </details>
 
         <template import as=wriggled>
@@ -33,7 +33,7 @@
 
         <details>
             <summary></summary>
-            <div imp-t=wriggled></div>
+            <div imp-key=wriggled></div>
         </details>
 
         <template append-to-head>
@@ -47,10 +47,18 @@
         <template href=https://cors-anywhere.herokuapp.com/https://link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
         <details>
             <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-            <article imp-t=penguins-poop>
+            <article imp-key=penguins-poop>
                 <span slot="AdInsert"><a href=//www.target.com/b/pedialax/-/N-55lp4>Pedia-Lax</a></span>
             </article>
         </details> -->
+
+        <template import href=https://link.springer.com/article/10.1007/s00300-003-0563-3 request-init='{"mode": "cors"}' as=penguins-poop></template>
+        <details>
+            <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
+            <article imp-key=penguins-poop>
+                <span slot="AdInsert"><a href=//www.target.com/b/pedialax/-/N-55lp4>Pedia-Lax</a></span>
+            </article>
+        </details>
 
         <!-- Use experimental import maps -->
         <script defer src="../node_modules/es-module-shims/dist/es-module-shims.js"></script>

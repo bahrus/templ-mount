@@ -2,7 +2,7 @@ const import_key = 'import-key';
 export class TemplMount extends HTMLElement {
     constructor() {
         super(...arguments);
-        this._importKey = 'imp-t';
+        this._importKey = 'imp-key';
     }
     static get observedAttributes() {
         return [import_key];
@@ -50,7 +50,8 @@ export class TemplMount extends HTMLElement {
     }
     static async load(href, options) {
         try {
-            const resp = await fetch(href);
+            const init = options.template.hasAttribute('request-init') ? JSON.parse(options.template.getAttribute('request-init')) : {};
+            const resp = await fetch(href, init);
             const txt = await resp.text();
             this._templateStrings[href] = txt;
             this.loadLocalTemplate(txt, options);

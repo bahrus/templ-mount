@@ -52,7 +52,8 @@ export class TemplMount extends HTMLElement{
 
     static async load(href: string, options: templateSecondArg){
         try{
-            const resp = await fetch(href);
+            const init: RequestInit = options.template.hasAttribute('request-init') ? JSON.parse(options.template.getAttribute('request-init')) : {};
+            const resp = await fetch(href, init);
             const txt = await resp.text();
             this._templateStrings[href] = txt;
             this.loadLocalTemplate(txt, options);
@@ -80,7 +81,7 @@ export class TemplMount extends HTMLElement{
         }
     }
 
-    _importKey = 'imp-t';
+    _importKey = 'imp-key';
     get importKey(){
         return this._importKey;
     }
