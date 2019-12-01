@@ -93,7 +93,7 @@ In the future examples, we will assume there's an \<templ-mount\> in the relevan
 </details>
 ``` 
 
-### Referencing prepopulated templates
+### Referencing pre-populated templates
 
 If the content of a template is embedded inside a template tag already (as part of the original server-rendered payload), but you want to be able to import a clone using the same syntax, you can do the following:
 
