@@ -1,66 +1,114 @@
-export interface IProcessor{
-    process: (txt: string) => string;
-}
+import {CssObserve} from 'css-observe/css-observe.js';
+import {TemplMount} from './templ-mount.js'; 
+import {getShadowContainer} from 'xtal-element/getShadowContainer.js'; 
+const listening = Symbol();
+const hrefSym = Symbol();
 
-export interface ICEParams{
-    tagName?: string,
-    cls?: any,
-    sharedTemplateTagName?: string,
-    preProcessor?: IProcessor;
-    noSnip?: boolean;
-}
-const _cT : {[key:string] : string} = {}; //cachedTemplates
-const fip : {[key:string] : boolean} = {}; //fetch in progress
-
-function def(p: ICEParams){
-    if(p && p.tagName && p.cls){
-        if(customElements.get(p.tagName)){
-            console.warn(p.tagName + '!!')
-        }else{
-            customElements.define(p.tagName, p.cls);
-        }
-    }
-}
-export function loadTemplate(t: HTMLTemplateElement, p?: ICEParams){
-    const src = t.dataset.src || t.getAttribute('href');
-    if(src){
-        if(_cT[src]){
-            t.innerHTML = _cT[src];
-            def(p);
-        }else{
-            if(fip[src]){
-                if(p){
-                    setTimeout(() =>{
-                        loadTemplate(t, p);
-                    }, 100);
-                }
-                return;
+export class FirstTempl{
+    constructor(public tm: TemplMount){
+        const shadowContainer = getShadowContainer(tm);
+        if(shadowContainer[listening] === true) return;
+        shadowContainer[listening] = true;
+        const remoteTemplateObserver = document.createElement(CssObserve.is) as CssObserve;
+        remoteTemplateObserver.observe = true;
+        remoteTemplateObserver.selector = "template[import][href][as]";
+        remoteTemplateObserver.customStyles = /* css */`
+            template[import][as]{
+                display:block;
             }
-            fip[src] = true;
-            fetch(src, {
-                credentials: 'same-origin'
-            }).then(resp =>{
-                resp.text().then(txt =>{
-                    fip[src] = false;
-                    if(p && p.preProcessor) txt = p.preProcessor.process(txt);
-                    if(!p || !p.noSnip){
-                        const split = txt.split('<!---->');
-                        if(split.length > 1){
-                            txt = split[1];
-                        }
-                    }
-                    _cT[src] = txt;
-                    t.innerHTML = txt;
-                    t.setAttribute('loaded', '');
-                    def(p);
-                })
-            })
-        }
+            template[import][as][loaded]{
+                display:none;
+            }
+        `;
+        remoteTemplateObserver.addEventListener('latest-match-changed', e =>{
+            const t = (<any>e).detail.value as HTMLTemplateElement;
+            const href = t.getAttribute('href');
+            TemplMount.template(href, {
+                tm: this.tm,
+                template: t   
+            });
+            const as = t.getAttribute('as');
+            this.subscribeToAsHref(as, href, t);
+                
 
-    }else{
-        def(p)
+        });
+        this.tm.appendChild(remoteTemplateObserver);
+
+        const localTemplateObserver = document.createElement(CssObserve.is) as CssObserve;
+        localTemplateObserver.observe = true;
+        localTemplateObserver.selector="template[import][as]:not([href])";
+        localTemplateObserver.addEventListener('latest-match-changed', e =>{
+            const t = (<any>e).detail.value as HTMLTemplateElement;
+            if(t.hasAttribute('href')){
+                return; //why is this necessary?
+            }
+            t.setAttribute('loaded', '');
+            const as = t.getAttribute('as');
+            this.subscribeToAs(as, t);
+        });
+        this.tm.appendChild(localTemplateObserver);
     }
+
+    async callback(entries: any, observer: any){
+        const first = entries[0];
+        if(first.intersectionRatio > 0){
+            const newlyVisibleElement = first.target as HTMLElement;
+            const alias = newlyVisibleElement.getAttribute(this.tm._importKey);
+            const template = this._templateLookup[alias];
+            const clone = template.content.cloneNode(true);
+            if(template.hasAttribute('without-shadow')){
+                newlyVisibleElement.appendChild(clone);
+            }else{
+                if(newlyVisibleElement.shadowRoot === null){
+                    newlyVisibleElement.attachShadow({mode: 'open'});
+                }
+                newlyVisibleElement.shadowRoot.appendChild(clone);
+            }
+            observer.disconnect();
+        }
+    }
+
+    _templateLookup : {[as: string]: HTMLTemplateElement} = {};
+    subscribeToAsHref(as: string, href: string, t: HTMLTemplateElement){
+        this._templateLookup[as] = t;
+        const impTObserver = document.createElement(CssObserve.is) as CssObserve;
+        impTObserver.observe = true;
+        impTObserver.selector = `[${this.tm._importKey}="${as}"]`;
+        impTObserver.addEventListener('latest-match-changed', e =>{
+            const elementToWatchForTurningVisible = (<any>e).detail.value;
+            if(elementToWatchForTurningVisible[hrefSym]) return;
+            elementToWatchForTurningVisible[hrefSym] = href;
+            TemplMount.template(href, {
+                tm: this.tm,
+                template: t,
+            }).then(val =>{
+                const ioi : IntersectionObserverInit = {
+                    threshold: 0.01
+                };
+                const observer = new IntersectionObserver(this.callback.bind(this), ioi);
+                observer.observe(elementToWatchForTurningVisible);
+            })
+            
+        });
+        this.tm.appendChild(impTObserver);        
+    }
+
+    subscribeToAs(as: string, t: HTMLTemplateElement){
+        this._templateLookup[as] = t;
+        const impTObserver = document.createElement(CssObserve.is) as CssObserve;
+        impTObserver.observe = true;
+        impTObserver.selector = `[${this.tm._importKey}="${as}"]`;
+        impTObserver.addEventListener('latest-match-changed', e =>{
+            const elementToWatchForTurningVisible = (<any>e).detail.value;
+            const ioi : IntersectionObserverInit = {
+                threshold: 0.01
+            };
+            const observer = new IntersectionObserver(this.callback.bind(this), ioi);
+            observer.observe(elementToWatchForTurningVisible);
+            
+        });
+        this.tm.appendChild(impTObserver);        
+    }
+
+
 }
-
-
-

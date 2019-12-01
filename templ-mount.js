@@ -1,126 +1,100 @@
-import { loadTemplate } from './first-templ.js';
-import { qsa } from 'xtal-latx/qsa.js';
-/**
-* `templ-mount`
-* Dependency free web component that loads templates from data-src (optionally href) attribute
-*
-* @customElement
-* @polymer
-* @demo demo/index.html
-*/
+const import_key = 'import-key';
 export class TemplMount extends HTMLElement {
     constructor() {
-        super();
-        if (!TemplMount._adgc) {
-            TemplMount._adgc = true;
-            if (document.readyState === "loading") {
-                document.addEventListener("DOMContentLoaded", e => {
-                    this.mhft();
-                    this.ltosd();
-                });
+        super(...arguments);
+        this._importKey = 'imp-key';
+    }
+    static get observedAttributes() {
+        return [import_key];
+    }
+    static template(href, options) {
+        return new Promise((resolve, reject) => {
+            const temp = this._templateStrings[href];
+            if (temp === true) {
+                this.waitForIt(href, resolve, reject, options);
+            }
+            else if (temp !== undefined) {
+                this.loadLocalTemplate(temp, options);
+                resolve(temp);
             }
             else {
-                this.mhft();
+                this._templateStrings[href] = true;
+                this.waitForIt(href, resolve, reject, options);
+                this.load(href, options);
             }
+        });
+    }
+    static waitForIt(href, resolve, reject, options) {
+        window.addEventListener(href + '-ready-tm', e => {
+            const a = e;
+            if (a.detail && a.detail.template) {
+                this.loadLocalTemplate(a.detail.template, options);
+                resolve(a.detail.template);
+            }
+            else {
+                reject();
+            }
+        }, {
+            once: true
+        });
+    }
+    static loadLocalTemplate(templateString, options) {
+        const template = options.template;
+        if (!template.hasAttribute('loaded')) {
+            template.innerHTML = templateString;
+            template.setAttribute('loaded', '');
+            template.dispatchEvent(new CustomEvent('load', {
+                bubbles: true,
+            }));
         }
     }
-    static get is() { return 'templ-mount'; }
-    /**
-     * Gets host from parent
-     */
-    getHost() {
-        return this.parentNode;
-    }
-    copyAttrs(src, dest, attrs) {
-        attrs.forEach(attr => {
-            if (!src.hasAttribute(attr))
-                return;
-            let attrVal = src.getAttribute(attr);
-            if (attr === 'type')
-                attrVal = attrVal.replace(':', '');
-            dest.setAttribute(attr, attrVal);
-        });
-    }
-    get doc() {
-        if (this.hasAttribute('target-top')) {
-            return window.top.document;
+    static async load(href, options) {
+        try {
+            const init = options.template.hasAttribute('request-init') ? JSON.parse(options.template.getAttribute('request-init')) : {};
+            const resp = await fetch(href, init);
+            const txt = await resp.text();
+            this._templateStrings[href] = txt;
+            this.loadLocalTemplate(txt, options);
+            window.dispatchEvent(new CustomEvent(href + '-ready-tm', {
+                bubbles: false,
+                detail: {
+                    template: options.template
+                }
+            }));
         }
-        return document;
-    }
-    cT(clonedNode, tagName, copyAttrs) {
-        const doc = this.doc;
-        qsa(tagName, clonedNode).forEach(node => {
-            //node.setAttribute('clone-me', '');
-            const clone = doc.createElement(tagName);
-            this.copyAttrs(node, clone, copyAttrs);
-            clone.innerHTML = node.innerHTML;
-            doc.head.appendChild(clone);
-        });
-    }
-    iT(template) {
-        const ds = template.dataset;
-        const ua = ds.ua;
-        let noMatch = false;
-        if (ua) {
-            noMatch = navigator.userAgent.search(new RegExp(ua)) === -1;
+        catch (e) {
+            console.error(e);
+            window.dispatchEvent(new CustomEvent(href + '-ready-tm', {
+                bubbles: false,
+            }));
         }
-        if (ua && template.hasAttribute('data-exclude'))
-            noMatch = !noMatch;
-        if (ua && noMatch)
-            return;
-        if (!ds.dumped) {
-            //This shouldn't be so hard, but Chrome (and other browsers) doesn't seem to consistently like just appending the cloned children of the template
-            const clonedNode = template.content.cloneNode(true);
-            this.cT(clonedNode, 'script', ['src', 'type', 'nomodule']);
-            this.cT(clonedNode, 'template', ['id', 'data-src', 'href', 'data-activate', 'data-ua', 'data-exclude', 'data-methods']);
-            this.cT(clonedNode, 'c-c', ['from', 'noshadow', 'copy']);
-            ds.dumped = 'true';
+    }
+    attributeChangedCallback(n, ov, nv) {
+        switch (n) {
+            case import_key:
+                this._importKey = nv;
+                break;
         }
-        loadTemplate(template, {
-            noSnip: template.hasAttribute('nosnip'),
-        });
     }
-    /**
-     *
-     * @param from
-     */
-    lt(from) {
-        qsa('template[data-src],template[data-activate]', from).forEach((t) => {
-            this.iT(t);
-        });
+    get importKey() {
+        return this._importKey;
     }
-    ltosd() {
-        this.lt(document);
+    set importKey(nv) {
+        this.setAttribute(import_key, nv);
     }
-    ltisd() {
-        const host = this.getHost();
-        if (!host)
-            return;
-        this.lt(host);
-    }
-    mhft() {
-        const config = { childList: true };
-        this._observer = new MutationObserver((mL) => {
-            mL.forEach(mR => {
-                mR.addedNodes.forEach((node) => {
-                    if (node.tagName === 'TEMPLATE')
-                        this.iT(node);
-                });
-            });
-        });
-        this._observer.observe(document.head, config);
-    }
-    connectedCallback() {
+    async connectedCallback() {
         this.style.display = 'none';
-        this.ltisd();
-        this.ltosd();
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", e => {
-                this.ltisd();
-            });
-        }
+        this.loadFirstTempl();
+        this.loadSecondTempl();
+    }
+    async loadFirstTempl() {
+        const { FirstTempl } = await import('./first-templ.js');
+        new FirstTempl(this);
+    }
+    async loadSecondTempl() {
+        const { SecondTempl } = await import('./second-templ.js');
+        new SecondTempl(this);
     }
 }
-TemplMount._adgc = false; //already did global check
-customElements.define(TemplMount.is, TemplMount);
-//# sourceMappingURL=templ-mount.js.map
+TemplMount._templateStrings = {};
+customElements.define('templ-mount', TemplMount);
