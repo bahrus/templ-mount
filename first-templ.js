@@ -13,12 +13,12 @@ export class FirstTempl {
         shadowContainer[listening] = true;
         const templateObserver = document.createElement(CssObserve.is);
         templateObserver.observe = true;
-        templateObserver.selector = "template[href],template[as]";
+        templateObserver.selector = "template[import][href][as]";
         templateObserver.customStyles = `
-            template[href],template[as]{
+            template[import][href][as]{
                 display:block;
             }
-            template[href][loaded],template[as][loaded]{
+            template[import][href][as][loaded]{
                 display:none;
             }
         `;
@@ -42,19 +42,18 @@ export class FirstTempl {
         const first = entries[0];
         if (first.intersectionRatio > 0) {
             const newlyVisibleElement = first.target;
-            // const templURL = newlyVisibleElement[hrefSym];
-            // const template = await TemplMount.template(templURL, {tm: this.tm}) as HTMLTemplateElement;
             const alias = newlyVisibleElement.getAttribute(this.tm._importKey);
             const template = this._templateLookup[alias];
             const clone = template.content.cloneNode(true);
-            // if(template.hasAttribute()){
-            //     newlyVisibleElement.appendChild(clone);
-            // }else{
-            if (newlyVisibleElement.shadowRoot === null) {
-                newlyVisibleElement.attachShadow({ mode: 'open' });
+            if (template.hasAttribute('without-shadow')) {
+                newlyVisibleElement.appendChild(clone);
             }
-            newlyVisibleElement.shadowRoot.appendChild(clone);
-            //}
+            else {
+                if (newlyVisibleElement.shadowRoot === null) {
+                    newlyVisibleElement.attachShadow({ mode: 'open' });
+                }
+                newlyVisibleElement.shadowRoot.appendChild(clone);
+            }
             observer.disconnect();
         }
     }

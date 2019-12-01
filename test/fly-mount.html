@@ -9,18 +9,18 @@
 <body>
         <templ-mount></templ-mount>
 
-        <template href=title.html as=title></template>
+        <template import href=title.html as=title-dee></template>
 
-        <div imp-t=title></div>
+        <div imp-t=title-dee></div>
 
-        <template href=why.html as=why></template>
+        <template import href=why.html as=why?></template>
 
         <details>
             <summary></summary>
-            <div imp-t=why></div>
+            <div imp-t=why?></div>
         </details>
 
-        <template href="spider.html" as=spam></template>
+        <template import href="spider.html" as=spam></template>
 
         <details>
             <summary></summary>
