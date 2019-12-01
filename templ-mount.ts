@@ -12,6 +12,10 @@ export class TemplMount extends HTMLElement{
     static _templateStrings : {[href: string]: string | true} = {};
     static template(href: string, options: templateSecondArg){
         return new Promise((resolve, reject) =>{
+            if(options.template.hasAttribute('when-needed')){
+               resolve(null);
+               return;
+            }
             const temp = this._templateStrings[href];
             if(temp === true){
                 this.waitForIt(href, resolve, reject, options);
@@ -52,17 +56,20 @@ export class TemplMount extends HTMLElement{
 
     static async load(href: string, options: templateSecondArg){
         try{
-            const init: RequestInit = options.template.hasAttribute('request-init') ? JSON.parse(options.template.getAttribute('request-init')) : {};
+            const t = options.template;
+            const customEvent = new CustomEvent(href + '-ready-tm', {
+                bubbles: false,
+                detail: {
+                    template: t
+                }
+            });
+
+            const init: RequestInit = t.hasAttribute('request-init') ? JSON.parse(t.getAttribute('request-init')) : {};
             const resp = await fetch(href, init);
             const txt = await resp.text();
             this._templateStrings[href] = txt;
             this.loadLocalTemplate(txt, options);
-            window.dispatchEvent(new CustomEvent(href + '-ready-tm', {
-                bubbles: false,
-                detail: {
-                    template: options.template
-                }
-            }))
+            window.dispatchEvent(customEvent);
         }catch(e){
             console.error(e);
             window.dispatchEvent(new CustomEvent(href + '-ready-tm', {

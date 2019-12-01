@@ -53,6 +53,13 @@ export class FirstTempl {
             const newlyVisibleElement = first.target;
             const alias = newlyVisibleElement.getAttribute(this.tm._importKey);
             const template = this._templateLookup[alias];
+            if (template.hasAttribute('href')) {
+                template.removeAttribute('when-needed');
+                await TemplMount.template(template.getAttribute('href'), {
+                    tm: this.tm,
+                    template: template,
+                });
+            }
             const clone = template.content.cloneNode(true);
             if (template.hasAttribute('without-shadow')) {
                 newlyVisibleElement.appendChild(clone);

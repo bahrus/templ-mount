@@ -57,7 +57,7 @@ After loading, an attribute "loaded" is added, and event "load" is fired.
 
 ## Specifying cors / other fetch options
 
-use the requuest-init attribute:
+use the request-init attribute:
 
 ```html
 <template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 request-init='{"mode": "cors"}' as=penguins-poop ></template>
@@ -65,7 +65,7 @@ use the requuest-init attribute:
 
 **NB** Generally, cors issues are more easily resolved using something like cors anywhere:
 
-<template href=https://cors-anywhere.herokuapp.com/https://link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
+<template import href=https://cors-anywhere.herokuapp.com/https://link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
 
 ## Preemptive downloading, lazy loading into the DOM tree
 
@@ -74,7 +74,7 @@ If, in the same ShadowDOM realm as a templ-mount instance (including the realm o
 ```html
 <templ-mount></templ-mount>
 ...
-<template href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
+<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
 ...
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
@@ -92,8 +92,25 @@ If, in the same ShadowDOM realm as a templ-mount instance (including the realm o
 
 In the future examples, we will assume there's an \<templ-mount\> in the relevant place (each Shadow DOM realm) as needed.
 
+## Lazy downloading, lazy loading into the DOM tree
 
-### If Shadow DOM is not needed / desired, use without-shadow attribute:
+Maybe we would rather save user's bandwidth, because they are unlikely to load some hidden content, or they are on an expensive network.  
+
+We can lazy load the downloading as well, using the when-needed attribute:
+
+
+```html
+<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop when-needed></template>
+...
+<details>
+    <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
+    <article imp-key=penguins-poop>
+        <span slot="AdInsert"><a href="https://www.target.com/b/pedialax/-/N-55lp4">Pedia-Lax</a></span>
+    </article>
+</details>
+```
+
+## If Shadow DOM is not needed / desired, use without-shadow attribute:
 
 ```html
 
@@ -113,7 +130,7 @@ If the content of a template is embedded inside a template tag already (as part 
 
 
 ```html
-<template as=penguins-poop>
+<template import as=penguins-poop>
     <p>Chinstrap and Adélie penguins generate considerable pressures to propel their faeces away from the edge of the nest.
         ...
     </p>
