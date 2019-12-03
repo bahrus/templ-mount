@@ -11,9 +11,9 @@
 
 <summary>Status Summary</summary>
 
-The Committee for the Repair of templ-mount is coordinating fundamental adjustments, which includes some breaking changes from version 0.0.48.
+The Committee for the Repair of templ-mount is coordinating fundamental adjustments, which include some breaking changes from version 0.0.48.
 
-Repairs were previously put on ice, based on the naive hope that desperately needed browser standards, providing a far more comprehensive solution than what templ-mount can provide, was just around the corner.   
+Repairs were previously put on ice, based on the naive hope that desperately needed browser standards, providing a far more comprehensive solution than what templ-mount can provide, were just around the corner.   
 
 The committee has recently been reminded of how this is [not how things work](https://www.youtube.com/watch?v=0-Yl6FmV6EE).
 
@@ -47,7 +47,7 @@ Reference resolution (e.g. nested script tags with relative paths, import mappin
 
 ## Retrieving template tags
 
-If, in the same Shadow DOM realm where the templ-mount instance resides, a template tag with attribute "href" is encountered, templ-mount will retrieve the html from the url, and populate the inert template.
+If, in the same Shadow DOM realm where the templ-mount instance resides, a template tag with attributes "import" and "href" is encountered, templ-mount will retrieve the html from the url, and populate the inert template.
 
 ```html
 <template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
@@ -60,13 +60,15 @@ After loading, an attribute "loaded" is added, and event "load" is fired.
 Use the request-init attribute:
 
 ```html
-<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 request-init='{"mode": "cors"}' as=penguins-poop ></template>
+<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 
+    request-init='{"mode": "cors"}' as=penguins-poop ></template>
 ```
 
-**NB** Generally, cors issues are more easily resolved using something like cors anywhere:
+**NB** If working with a non cors-friendly web site (probably 99.9% of all websites), cors issues can still be resolved using something like cors anywhere:
 
 ```html
-<template import href=https://cors-anywhere.herokuapp.com/https://link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
+<template import href=https://cors-anywhere.herokuapp.com/https://link.springer.com/article/10.1007/s00300-003-0563-3 
+as=penguins-poop></template>
 ```
 
 ## Preemptive downloading, lazy loading into the DOM tree
@@ -76,7 +78,8 @@ If, in the same ShadowDOM realm as a templ-mount instance (including the realm o
 ```html
 <templ-mount></templ-mount>
 ...
-<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
+<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 
+as=penguins-poop></template>
 ...
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
@@ -92,22 +95,26 @@ If, in the same ShadowDOM realm as a templ-mount instance (including the realm o
 <templ-mount import-key=something-else>
 ```
 
-In the future examples, we will assume there's an \<templ-mount\> in the relevant place (each Shadow DOM realm) as needed.
+In the future examples, we will assume there's a \<templ-mount\> tag in the relevant place (each Shadow DOM realm) as needed.
 
 ## Lazy downloading, lazy loading into the DOM tree
 
-Maybe we would rather save user's bandwidth, because they are unlikely to load some hidden content, or they are on an expensive network.  
+Maybe we would rather save users' bandwidth, because they are unlikely to load some hidden content, or they are on an expensive network.  
 
 We can lazy load the downloading as well, using the when-needed attribute:
 
 
 ```html
-<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop when-needed></template>
+<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 
+          as=penguins-poop when-needed>
+</template>
 ...
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
     <article imp-key=penguins-poop>
-        <span slot="AdInsert"><a href="https://www.target.com/b/pedialax/-/N-55lp4">Pedia-Lax</a></span>
+        <span slot="AdInsert">
+            <a href="https://www.target.com/b/pedialax/-/N-55lp4">Pedia-Lax</a>
+        </span>
     </article>
 </details>
 ```
@@ -116,7 +123,8 @@ We can lazy load the downloading as well, using the when-needed attribute:
 
 ```html
 
-<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop without-shadow></template>
+<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 
+    as=penguins-poop without-shadow></template>
 ...
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
@@ -168,9 +176,9 @@ Note that there is no href, so this will do nothing more than activate the conte
 
 I would not expect this kind of template to be present in the opening index.html (else why not just add the tags directly to the head tag?), but rather, from imported templates, which have dependencies.
 
-Ok, I could see it in an standalone html file/stream also, if that file intends to be used both as a standalone web page, and as an embedded template in other web pages.
+Ok, I could see it in a standalone html file/stream also, if that file intends to be used both as a standalone web page, and as an embedded template in other web pages.
 
-The id is optional, but, because there's no href, if the template will appear in multiple downloads (despite templ-mount's efforts at de-dup), then providing the id will help templ-mount to avoid unnecessarily cluttering the head tag with duplicate script / style / link tags.
+The id is optional, but, because there's no href, if the template will appear in multiple downloads (despite templ-mount's minimal efforts at de-dup), then providing the id will help templ-mount to avoid unnecessarily cluttering the head tag with duplicate script / style / link tags.
 
 
 ### Disallowing activating content - out of scope
@@ -199,7 +207,7 @@ If the html file / html stream being imported contains at least two instances of
 
 then templ-mount *can* be made to only import the content between the first two such strings. This helps allow an html file / stream to serve both as a standalone web page, but also as a template that could be used as an embedded snippet of HTML, or as a  web component (see below).
 
-At the top of this document, we mentioned the desire to allow servers to send content down in the native format that the browser will consume. This snipping solution goes against that strategy a bit, in the sense that here we are suggesting doing some string manipulation of the content. But most server-side solutions can easily snip out content in a similar way to what we are doing above. But if server-side solutions aren't available, you can snip out the main content thusly.
+At the top of this document, we mentioned the desire to allow servers to send content down in the native format that the browser will consume. This snipping solution goes against that strategy a bit, in the sense that here we are suggesting doing some string manipulation of the content. But most server-side solutions can easily snip out content in a similar way to what we are doing above. But if server-side solutions aren't available, you can snip out the main content thusly:
 
 ```html
 <template import href=path/to/some/fileOrStream.html as=fos snip></template>
