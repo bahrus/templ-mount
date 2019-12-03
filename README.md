@@ -21,7 +21,7 @@ The committee has recently been reminded of how this is [not how things work](ht
 
 </details>
 
-templ-mount helps create templates from url's, which point to HTML files or streams.  It takes some ideas from [html-include-element](https://www.npmjs.com/package/html-include-element).
+templ-mount helps load templates from url's, which point to HTML files or streams.  It takes some ideas from [html-include-element](https://www.npmjs.com/package/html-include-element).
 
 <details>
     <summary>templ-mount's origin story</summary>
@@ -30,7 +30,7 @@ templ-mount remembers the day its creator first installed a PWA (Flipkart), and 
 
 templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server. And, in fact, this has been the focus of many talented, creative developers at the [cutting edges](https://codesandbox.io/s/floral-worker-xwbwv) (though frankly custom elements seems like the most natural fit for this, but whatever :-) ).  
 
-The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier and simpler to get Lighthouse's blessing.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g the ability to truly stream in HTML as it renders, resolving and preemptively downloading relative references, centrally resolving package dependencies via import maps, providing sand-boxing support when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api ([as](https://github.com/github/include-fragment-element) [are](https://www.filamentgroup.com/lab/html-includes/) [many](https://github.com/whatwg/html/issues/2791) [of](https://github.com/Juicy/imported-template/) templ-mount's [compatriots](https://www.npmjs.com/package/@vanillawc/wc-include)).
+The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier and simpler to get Lighthouse's blessing.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g the ability to truly stream in HTML as it renders, resolving and preemptively downloading relative references, centrally resolving package dependencies via import maps, providing sand-boxing support when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api ([as](https://github.com/github/include-fragment-element) [are](https://www.filamentgroup.com/lab/html-includes/) [many](https://github.com/whatwg/html/issues/2791) [of](https://github.com/Juicy/imported-template/) [templ-mount's](https://api.jquery.com/load/) [compatriots](https://www.npmjs.com/package/@vanillawc/wc-include)).
 
 </details>
 
@@ -73,7 +73,7 @@ as=penguins-poop></template>
 
 ## Preemptive downloading, lazy loading into the DOM tree
 
-If, in the same ShadowDOM realm as a templ-mount instance (including the realm outside any Shadow DOM), any tag is found with pseudo attribute imp-key, templ-mount waits for that tag to become visible, and when it does, it searches for a template with "as" attribute matching the value of imp-key in the same ShadowDOM realm, and "imports" the template into the ShadowDOM of the tag.  The original light children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
+If, in the same ShadowDOM realm as a templ-mount instance (including the realm outside any Shadow DOM), any tag is found with attribute imp-key, templ-mount waits for that tag to become visible, and when it does, it searches for a template with "as" attribute matching the value of imp-key in the same ShadowDOM realm, and "imports" the template into the ShadowDOM of the tag.  The original light children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
 
 ```html
 <templ-mount></templ-mount>
