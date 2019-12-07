@@ -4,6 +4,7 @@ import {getShadowContainer} from 'xtal-element/getShadowContainer.js';
 import { SSL_OP_TLS_BLOCK_PADDING_BUG } from 'constants';
 const listening = Symbol();
 const hrefSym = Symbol();
+const hrefSym2 = Symbol();
 
 export class FirstTempl{
     constructor(public tm: TemplMount){
@@ -56,14 +57,18 @@ export class FirstTempl{
             const newlyVisibleElement = first.target as HTMLElement;
             const alias = newlyVisibleElement.getAttribute(this.tm._importKey);
             const template = this._templateLookup[alias];
-            if(template.hasAttribute('href')){
+            let href = template.getAttribute('href');
+            if(href !== null){
                 template.removeAttribute('when-needed');
                 await TemplMount.template(template.getAttribute('href'), {
                     tm: this.tm,
                     template: template,
                 });
+            }else{
+                href='none';
             }
-
+            if(template[hrefSym2] === href) return; //why?
+            template[hrefSym2] = href; 
             const clone = template.content.cloneNode(true);
             if(template.hasAttribute('enable-filter')){
                 template.dispatchEvent(new CustomEvent('template-cloned',{

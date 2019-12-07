@@ -3,6 +3,7 @@ import { TemplMount } from './templ-mount.js';
 import { getShadowContainer } from 'xtal-element/getShadowContainer.js';
 const listening = Symbol();
 const hrefSym = Symbol();
+const hrefSym2 = Symbol();
 export class FirstTempl {
     constructor(tm) {
         this.tm = tm;
@@ -53,13 +54,20 @@ export class FirstTempl {
             const newlyVisibleElement = first.target;
             const alias = newlyVisibleElement.getAttribute(this.tm._importKey);
             const template = this._templateLookup[alias];
-            if (template.hasAttribute('href')) {
+            let href = template.getAttribute('href');
+            if (href !== null) {
                 template.removeAttribute('when-needed');
                 await TemplMount.template(template.getAttribute('href'), {
                     tm: this.tm,
                     template: template,
                 });
             }
+            else {
+                href = 'none';
+            }
+            if (template[hrefSym2] === href)
+                return; //why?
+            template[hrefSym2] = href;
             const clone = template.content.cloneNode(true);
             if (template.hasAttribute('enable-filter')) {
                 template.dispatchEvent(new CustomEvent('template-cloned', {
