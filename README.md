@@ -162,7 +162,8 @@ If the content of a template is embedded inside a template tag already (as part 
 
 ```html
 <template import as=penguins-poop>
-    <p>Chinstrap and Adélie penguins generate considerable pressures to propel their faeces away from the edge of the nest.
+    <p>Chinstrap and Adélie penguins generate considerable 
+        pressures to propel their faeces away from the edge of the nest.
         ...
     </p>
 
