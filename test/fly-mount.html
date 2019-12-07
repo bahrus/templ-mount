@@ -15,10 +15,15 @@
 
         <template import href=why.html as=why? when-needed snip></template>
 
-        <details>
+        <details id=why>
             <summary></summary>
             <div imp-key=why?></div>
         </details>
+        <script>
+            setTimeout(() =>{
+                why.open = true;
+            }, 200)
+        </script>
 
         <template import href="spider.html" as=spam without-shadow></template>
 
