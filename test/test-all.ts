@@ -6,7 +6,7 @@ const xt = require('xtal-test/index') as IXtalTestRunner;
     const passed = await xt.runTests([
         {
             path: 'test/fly-mount.html',
-            expectedNoOfSuccessMarkers: 4,
+            expectedNoOfSuccessMarkers: 5,
 
         },
     ]);
