@@ -1,58 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+
 <body>
-        <templ-mount></templ-mount>
+    <templ-mount></templ-mount>
 
-        <template import href=title.html as=title-dee></template>
+    <template import href=title.html as=title-dee></template>
 
-        <div imp-key=title-dee></div>
+    <div imp-key=title-dee></div>
 
-        <template import href=why.html as=why? when-needed snip></template>
+    <template import href=why.html as=why? when-needed snip></template>
 
-        <details id=why>
-            <summary></summary>
-            <div imp-key=why?></div>
-        </details>
-        <script>
-            setTimeout(() =>{
-                why.open = true;
-            }, 200)
-        </script>
+    <details id=why>
+        <summary></summary>
+        <div imp-key=why?></div>
+    </details>
+    <script>
+        setTimeout(() => {
+            why.open = true;
+        }, 200)
+    </script>
 
-        <template import href="spider.html" as=spam without-shadow></template>
+    <template import href="spider.html" as=spam without-shadow></template>
 
-        <details id=spider>
-            <summary></summary>
-            <div imp-key=spam></div>
-        </details>
-        <script>
-            setTimeout(() =>{
-                spider.open = true;
-            }, 200)
-        </script>
-        <template import as=wriggled>
-            <div>That wriggled and jiggled and tickled inside her!</div>
+    <details id=spider>
+        <summary></summary>
+        <div imp-key=spam></div>
+    </details>
+    <script>
+        setTimeout(() => {
+            spider.open = true;
+        }, 200)
+    </script>
+    <template import as=wriggled>
+        <div>That wriggled and jiggled and tickled inside her!</div>
+        <open-borders be-born target= />
+        <template>
+            <div mark></div>
         </template>
+        </open-borders>
+    </template>
 
-        <details>
-            <summary></summary>
-            <div imp-key=wriggled></div>
-        </details> 
+    <details id=wriggled>
+        <summary></summary>
+        <div imp-key=wriggled></div>
+    </details>
+    <script>
+        setTimeout(() => {
+            wriggled.open = true;
+        }, 200)
+    </script>
+    <template append-to-head>
+        <script type=module src=blah.js></script>
+        <style>
+            @import url(https://fonts.googleapis.com/css?family=Indie+Flower);
+        </style>
+    </template>
 
-        <template append-to-head>
-            <script type=module src=blah.js></script>
-            <style>
-                @import url(https://fonts.googleapis.com/css?family=Indie+Flower);
-            </style>
-        </template>
-
-<!--
+    <!--
         <template href=https://cors-anywhere.herokuapp.com/https://link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
         <details>
             <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
@@ -63,9 +74,9 @@
 
 
 
-        <!-- Use experimental import maps -->
-        <script defer src="../node_modules/es-module-shims/dist/es-module-shims.js"></script>
-        <script type="importmap-shim">
+    <!-- Use experimental import maps -->
+    <script defer src="../node_modules/es-module-shims/dist/es-module-shims.js"></script>
+    <script type="importmap-shim">
         {
             "imports": {
                 "xtal-element/": "../node_modules/xtal-element/",
@@ -76,9 +87,10 @@
             }
         }
         </script>
-        <script type="module-shim">
+    <script type="module-shim">
             import '../templ-mount.js';
             import 'open-borders/open-borders.js';
         </script>
 </body>
+
 </html>
