@@ -2,6 +2,8 @@
 
 <a href="https://nodei.co/npm/templ-mount/"><img src="https://nodei.co/npm/templ-mount.png"></a>
 
+[![Actions Status](https://github.com/bahrus/templ-mount/workflows/CI/badge.svg)](https://github.com/bahrus/templ-mount/actions?query=workflow%3ACI)
+
 <img src="https://badgen.net/bundlephobia/minzip/templ-mount">
 
 # \<templ-mount\>
