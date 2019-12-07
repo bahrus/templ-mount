@@ -1,4 +1,8 @@
 const import_key = 'import-key';
+/**
+ * templ-mount helps load templates from url's, which point to HTML files or streams.
+ * @element templ-mount
+ */
 export class TemplMount extends HTMLElement {
     constructor() {
         super(...arguments);
@@ -91,6 +95,10 @@ export class TemplMount extends HTMLElement {
     get importKey() {
         return this._importKey;
     }
+    /**
+     * Set the key to use to import templates.
+     * @attr import-key
+     */
     set importKey(nv) {
         this.setAttribute(import_key, nv);
     }

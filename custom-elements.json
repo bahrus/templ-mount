@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "tags": [
+    {
+      "name": "templ-mount",
+      "description": "templ-mount helps load templates from url's, which point to HTML files or streams.",
+      "jsDoc": "/**\n * templ-mount helps load templates from url's, which point to HTML files or streams.\n * @element templ-mount\n */",
+      "attributes": [
+        {
+          "name": "import-key",
+          "description": "Set the key to use to import templates.",
+          "jsDoc": "/**\n     * Set the key to use to import templates.\n     * @attr import-key\n     */",
+          "type": "string"
+        }
+      ],
+      "properties": [
+        {
+          "name": "importKey",
+          "attribute": "import-key",
+          "description": "Set the key to use to import templates.",
+          "jsDoc": "/**\n     * Set the key to use to import templates.\n     * @attr import-key\n     */",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "load"
+        }
+      ]
+    }
+  ]
+}

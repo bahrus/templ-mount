@@ -3,6 +3,10 @@ interface templateSecondArg{
     tm?: TemplMount | undefined;
     template: HTMLTemplateElement | undefined;
 }
+/**
+ * templ-mount helps load templates from url's, which point to HTML files or streams.
+ * @element templ-mount
+ */
 export class TemplMount extends HTMLElement{
 
     static get observedAttributes(){
@@ -98,6 +102,10 @@ export class TemplMount extends HTMLElement{
     get importKey(){
         return this._importKey;
     }
+    /**
+     * Set the key to use to import templates.
+     * @attr import-key
+     */
     set importKey(nv: string){
         this.setAttribute(import_key, nv);
     }

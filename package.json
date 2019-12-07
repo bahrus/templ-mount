@@ -23,6 +23,7 @@
   "version": "0.0.49",
   "scripts": {
     "test": "node test/test-all.js",
-    "serve": "node node_modules/xtal-test/serve.js"
+    "serve": "node node_modules/xtal-test/serve.js",
+    "doc": "wca analyze templ-mount.js --outFile custom-elements.json"
   }
 }
