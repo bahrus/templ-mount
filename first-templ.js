@@ -38,7 +38,7 @@ export class FirstTempl {
         localTemplateObserver.selector = "template[import][as]:not([href])";
         localTemplateObserver.addEventListener('latest-match-changed', e => {
             const t = e.detail.value;
-            if (t.hasAttribute('href')) {
+            if (t.hasAttribute('href') || t.hasAttribute('loaded')) {
                 return; //why is this necessary?
             }
             t.setAttribute('loaded', '');
