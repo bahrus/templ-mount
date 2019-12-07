@@ -27,11 +27,15 @@
 
         <template import href="spider.html" as=spam without-shadow></template>
 
-        <details>
+        <details id=spider>
             <summary></summary>
             <div imp-key=spam></div>
         </details>
-
+        <script>
+            setTimeout(() =>{
+                spider.open = true;
+            }, 200)
+        </script>
         <template import as=wriggled>
             <div>That wriggled and jiggled and tickled inside her!</div>
         </template>
