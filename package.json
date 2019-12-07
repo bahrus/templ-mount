@@ -17,7 +17,8 @@
     "jiife": "0.0.12",
     "xtal-test": "0.0.31",
     "tape": "4.10.2",
-    "es-module-shims": "0.4.6"
+    "es-module-shims": "0.4.6",
+    "open-borders": "0.0.2"
   },
   "version": "0.0.49",
   "scripts": {
