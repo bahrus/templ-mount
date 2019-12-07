@@ -13,7 +13,7 @@ export class TemplMount extends HTMLElement {
     }
     static template(href, options) {
         return new Promise((resolve, reject) => {
-            if (options.template.hasAttribute('when-needed')) {
+            if (href === null || options.template.hasAttribute('when-needed')) {
                 resolve(null);
                 return;
             }

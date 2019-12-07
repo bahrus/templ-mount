@@ -16,7 +16,7 @@ export class TemplMount extends HTMLElement{
     static _templateStrings : {[href: string]: string | true} = {}; //store in session storage?
     static template(href: string, options: templateSecondArg){
         return new Promise((resolve, reject) =>{
-            if(options.template.hasAttribute('when-needed')){
+            if(href === null || options.template.hasAttribute('when-needed')){
                resolve(null);
                return;
             }
