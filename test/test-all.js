@@ -2,8 +2,8 @@ const xt = require('xtal-test/index');
 (async () => {
     const passed = await xt.runTests([
         {
-            path: 'test/fly-observe.html',
-            expectedNoOfSuccessMarkers: 0,
+            path: 'test/fly-mount.html',
+            expectedNoOfSuccessMarkers: 1,
         },
     ]);
     if (passed) {

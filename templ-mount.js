@@ -108,5 +108,5 @@ export class TemplMount extends HTMLElement {
         new SecondTempl(this);
     }
 }
-TemplMount._templateStrings = {};
+TemplMount._templateStrings = {}; //store in session storage?
 customElements.define('templ-mount', TemplMount);
