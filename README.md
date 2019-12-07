@@ -42,6 +42,8 @@ It seems that HTML Templates, in particular node cloning [often](https://jsperf.
 
 One of the driving forces behind this component is it allows applications to follow the [rule of least power](https://en.wikipedia.org/wiki/Rule_of_least_power) and to send data to the browser in the format that the browser needs to ultimately consume, without (expensive) translations from one format into another.  It can work well with server-side-centric frameworks, like PHP, asp.net MVC, Ruby on Rails, Django, pug, Java EE MVC, etc.
 
+If this functionality (or some variation) were [built into the browser](https://discourse.wicg.io/t/add-src-attribute-to-template/2721), it would also **provide a way of injecting ShadowDOM without JS, a long sought after feature**.
+
 ## Out of Scope
 
 Reference resolution (e.g. nested script tags with relative paths, import mapping), support for different trust levels.
@@ -136,7 +138,24 @@ We can lazy load the downloading as well, using the when-needed attribute:
 
 Note that if you define multiple templates with identical href's, for example one with shadow DOM, one without, only one fetch request should be made for all of them.
 
-### Referencing pre-populated templates
+## Template Instantiating
+
+If you use ShadowDOM, there is built in support for slotting content.  But if you disable ShadowDOM, as above, but still want to insert some dynamic information, what to do?
+
+This is what the dormant [template instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) proposal is meant to address.  As that isn't built into the browser, an alternative way of finessing the template is provided by the [trans-render](https://github.com/bahrus/trans-render) library.  To invoke something like this (whether or not you allow ShadowDOM), you can enable ["filtering"](https://www.journaldev.com/1933/java-servlet-filter-example-tutorial) thusly:
+
+```html
+<template id=shadowless import href=//link.springer.com/article/10.1007/s00300-003-0563-3 
+    as=penguins-poop without-shadow enable-filter></template>
+<script>
+    shadowless.addEventListener('template-cloned', e =>{
+        const clone = e.detail.clone;
+        //manipulate the clone before it gets inserted into the DOM tree.
+    })
+</script>
+```
+
+## Referencing pre-populated templates
 
 If the content of a template is embedded inside a template tag already (as part of the original server-rendered payload), but you want to be able to import a clone using the same syntax, you can do the following:
 
@@ -157,6 +176,9 @@ If the content of a template is embedded inside a template tag already (as part 
     </article>
 </details>
 ```
+
+
+
 
 
 ### Activating content

@@ -1,6 +1,7 @@
 import {CssObserve} from 'css-observe/css-observe.js';
 import {TemplMount} from './templ-mount.js'; 
 import {getShadowContainer} from 'xtal-element/getShadowContainer.js'; 
+import { SSL_OP_TLS_BLOCK_PADDING_BUG } from 'constants';
 const listening = Symbol();
 const hrefSym = Symbol();
 
@@ -64,6 +65,14 @@ export class FirstTempl{
             }
 
             const clone = template.content.cloneNode(true);
+            if(template.hasAttribute('enable-filter')){
+                template.dispatchEvent(new CustomEvent('template-cloned',{
+                    bubbles: true,
+                    detail:{
+                        clone: clone
+                    }
+                }));
+            }
             if(template.hasAttribute('without-shadow')){
                 newlyVisibleElement.appendChild(clone);
             }else{

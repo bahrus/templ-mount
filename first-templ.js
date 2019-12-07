@@ -61,6 +61,14 @@ export class FirstTempl {
                 });
             }
             const clone = template.content.cloneNode(true);
+            if (template.hasAttribute('enable-filter')) {
+                template.dispatchEvent(new CustomEvent('template-cloned', {
+                    bubbles: true,
+                    detail: {
+                        clone: clone
+                    }
+                }));
+            }
             if (template.hasAttribute('without-shadow')) {
                 newlyVisibleElement.appendChild(clone);
             }
