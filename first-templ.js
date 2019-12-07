@@ -73,7 +73,8 @@ export class FirstTempl {
                 template.dispatchEvent(new CustomEvent('template-cloned', {
                     bubbles: true,
                     detail: {
-                        clone: clone
+                        clone: clone,
+                        target: newlyVisibleElement
                     }
                 }));
             }

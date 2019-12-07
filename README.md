@@ -149,7 +149,8 @@ This is what the dormant [template instantiation](https://github.com/w3c/webcomp
     as=penguins-poop without-shadow enable-filter></template>
 <script>
     shadowless.addEventListener('template-cloned', e =>{
-        const clone = e.detail.clone;
+        const clone = e.detail.clone; // template clone
+        const target = e.detail.target; // element clone will be appended to
         //manipulate the clone before it gets inserted into the DOM tree.
     })
 </script>
