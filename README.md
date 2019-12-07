@@ -145,12 +145,13 @@ If you use ShadowDOM, there is built in support for slotting content.  But if yo
 This is what the dormant [template instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) proposal is meant to address.  As that isn't built into the browser, an alternative way of finessing the template is provided by the [trans-render](https://github.com/bahrus/trans-render) library.  To invoke something like this (whether or not you allow ShadowDOM), you can enable ["filtering"](https://www.journaldev.com/1933/java-servlet-filter-example-tutorial) thusly:
 
 ```html
-<template id=shadowless import href=//link.springer.com/article/10.1007/s00300-003-0563-3 
+<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 
     as=penguins-poop without-shadow enable-filter></template>
+<article imp-key=penguins-poop id=myArticle>
 <script>
-    shadowless.addEventListener('template-cloned', e =>{
+    myArticle.addEventListener('template-cloned', e =>{
         const clone = e.detail.clone; // template clone
-        const target = e.detail.target; // element clone will be appended to
+        
         //manipulate the clone before it gets inserted into the DOM tree.
     })
 </script>
