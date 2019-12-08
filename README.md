@@ -184,7 +184,7 @@ If the content of a template is embedded inside a template tag already (as part 
 
 
 
-### Activating content
+## Activating content
 
 If a template has the append-to-head attribute, then script and style tags inside will be added to the global head tag.  Due to strange Firefox behavior, it is recommended that js references be added via dynamic import:
 
@@ -208,7 +208,7 @@ Ok, I could see it in a standalone html file/stream also, if that file intends t
 The id is optional, but, because there's no href, if the template will appear in multiple downloads (despite templ-mount's minimal efforts at de-dup), then providing the id will help templ-mount to avoid unnecessarily cluttering the head tag with duplicate script / style / link tags.
 
 
-### Disallowing activating content - out of scope
+## Disallowing activating content - out of scope
 
 Allowing HTML references to load JS dependencies could be considered dangerous if the site the HTML is coming from is not very trustworthy, and/or appropriate CSP rules are not in place.
 
@@ -224,7 +224,7 @@ But that seems really difficult to implement outside the browser internals, in a
 
 So this is going to be kept out of scope (for now, at least).
 
-### Snipping
+## Snipping
 
 If the html file / html stream being imported contains at least two instances of the following "magic string":
 
@@ -232,13 +232,25 @@ If the html file / html stream being imported contains at least two instances of
 <!---->
 ```
 
-then templ-mount *can* be made to only import the content between the first two such strings. This helps allow an html file / stream to serve both as a standalone web page, but also as a template that could be used as an embedded snippet of HTML, or as a  web component (see below).
+then templ-mount *can* be made to only import the content between the first two such strings. This helps allow an html file / stream to serve both as a standalone web page, but also as a template that could be used as an embedded snippet of HTML.
 
 At the top of this document, we mentioned the desire to allow servers to send content down in the native format that the browser will consume. This snipping solution goes against that strategy a bit, in the sense that here we are suggesting doing some string manipulation of the content. But most server-side solutions can easily snip out content in a similar way to what we are doing above. But if server-side solutions aren't available, you can snip out the main content thusly:
 
 ```html
 <template import href=path/to/some/fileOrStream.html as=fos snip></template>
 ```
+
+## Defining a Web Component using templ-mount [TODO]
+
+Frankly, defining a web component using templ-mount would be a forced enterprise, as far as I can see, full of hacks and inconveniences.  I *think* there would need to be additional hooks only the browser could provide, in order to make it come naturally, like allowing JS defined within the template to be aware of the context (like the template(s) associated with the JS).
+
+Of course, HTML Modules are designed specifically to allow native HTML, CSS to be part of the web component definition.  Hopefully, some of the hooks necessary to make that work could be used here?  It may be that once (or if?) HTML Modules are (ever) available, they could be used to help in this context.
+
+Anyway, The Committee for the Repair of templ-mount is still weighing the possibilities here, as the previous version (with the help of [carbon-copy](https://github.com/bahrus/carbon-copy)) provided a way to do that.
+
+## Changing parameters [TODO]
+
+An iFrame allows you to change the src attribute, and the contents inside get replaced, rather than appended to.  That is something being looked at.
 
 # Viewing Your Element
 
