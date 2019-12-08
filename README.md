@@ -151,13 +151,13 @@ This is what the dormant [template instantiation](https://github.com/w3c/webcomp
 <script>
     myArticle.addEventListener('template-cloned', e =>{
         const clone = e.detail.clone; // template clone
-        
+        const template = e.detail.template // the template tag used to produce the clone
         //manipulate the clone before it gets inserted into the DOM tree.
     })
 </script>
 ```
 
-## Referencing pre-populated templates
+## Referencing pre-populated templates, lazy loading in the DOM Tree
 
 If the content of a template is embedded inside a template tag already (as part of the original server-rendered payload), but you want to be able to import a clone using the same syntax, you can do the following:
 
