@@ -65,14 +65,15 @@ export class FirstTempl{
             }else{
                 href='none';
             }
-            if(template[hrefSym2] === href) return; //why?
-            template[hrefSym2] = href; 
+            if(newlyVisibleElement[hrefSym2] === href) return; //why?
+            newlyVisibleElement[hrefSym2] = href; 
             const clone = template.content.cloneNode(true);
             if(template.hasAttribute('enable-filter')){
-                template.dispatchEvent(new CustomEvent('template-cloned',{
+                newlyVisibleElement.dispatchEvent(new CustomEvent('template-cloned',{
                     bubbles: true,
                     detail:{
-                        clone: clone
+                        clone: clone,
+                        template: template
                     }
                 }));
             }
