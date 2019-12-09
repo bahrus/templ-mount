@@ -1,7 +1,6 @@
 import {CssObserve} from 'css-observe/css-observe.js';
 import {TemplMount} from './templ-mount.js'; 
 import {getShadowContainer} from 'xtal-element/getShadowContainer.js'; 
-import { SSL_OP_TLS_BLOCK_PADDING_BUG } from 'constants';
 const listening = Symbol();
 const hrefSym = Symbol();
 const hrefSym2 = Symbol();
@@ -30,12 +29,11 @@ export class FirstTempl{
                 template: t   
             });
             const as = t.getAttribute('as');
-            this.subscribeToAsHref(as, href, t);
+            this.watchElVisibility(as, href, t);
                 
 
         });
         this.tm.appendChild(remoteTemplateObserver);
-
         const localTemplateObserver = document.createElement(CssObserve.is) as CssObserve;
         localTemplateObserver.observe = true;
         localTemplateObserver.selector="template[import][as]:not([href])";
@@ -46,7 +44,7 @@ export class FirstTempl{
             }
             t.setAttribute('loaded', '');
             const as = t.getAttribute('as');
-            this.subscribeToAs(as, t);
+            this.watchElVisibility(as, null, t);
         });
         this.tm.appendChild(localTemplateObserver);
     }
@@ -91,46 +89,35 @@ export class FirstTempl{
     }
 
     _templateLookup : {[as: string]: HTMLTemplateElement} = {};
-    subscribeToAsHref(as: string, href: string, t: HTMLTemplateElement){
+    watchElVisibility(as: string, href: string | null, t: HTMLTemplateElement){
         this._templateLookup[as] = t;
         const impTObserver = document.createElement(CssObserve.is) as CssObserve;
         impTObserver.observe = true;
         impTObserver.selector = `[${this.tm._importKey}="${as}"]`;
         impTObserver.addEventListener('latest-match-changed', e =>{
             const elementToWatchForTurningVisible = (<any>e).detail.value;
-            if(elementToWatchForTurningVisible[hrefSym]) return;
-            elementToWatchForTurningVisible[hrefSym] = href;
-            TemplMount.template(href, {
-                tm: this.tm,
-                template: t,
-            }).then(val =>{
+            if(href === null){
                 const ioi : IntersectionObserverInit = {
                     threshold: 0.01
                 };
                 const observer = new IntersectionObserver(this.callback.bind(this), ioi);
                 observer.observe(elementToWatchForTurningVisible);
-            })
-            
+            }else{
+                if(elementToWatchForTurningVisible[hrefSym]) return;
+                elementToWatchForTurningVisible[hrefSym] = href;
+                TemplMount.template(href, {
+                    tm: this.tm,
+                    template: t,
+                }).then(val =>{
+                    const ioi : IntersectionObserverInit = {
+                        threshold: 0.01
+                    };
+                    const observer = new IntersectionObserver(this.callback.bind(this), ioi);
+                    observer.observe(elementToWatchForTurningVisible);
+                })
+            }    
         });
         this.tm.appendChild(impTObserver);        
     }
-
-    subscribeToAs(as: string, t: HTMLTemplateElement){
-        this._templateLookup[as] = t;
-        const impTObserver = document.createElement(CssObserve.is) as CssObserve;
-        impTObserver.observe = true;
-        impTObserver.selector = `[${this.tm._importKey}="${as}"]`;
-        impTObserver.addEventListener('latest-match-changed', e =>{
-            const elementToWatchForTurningVisible = (<any>e).detail.value;
-            const ioi : IntersectionObserverInit = {
-                threshold: 0.01
-            };
-            const observer = new IntersectionObserver(this.callback.bind(this), ioi);
-            observer.observe(elementToWatchForTurningVisible);
-            
-        });
-        this.tm.appendChild(impTObserver);        
-    }
-
 
 }
