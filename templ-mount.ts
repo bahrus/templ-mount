@@ -29,6 +29,7 @@ export class TemplMount extends HTMLElement{
             }else{
                 this._templateStrings[href] = true;
                 this.waitForIt(href, resolve, reject, options);
+                
                 this.load(href, options);
             }
         });
@@ -49,13 +50,13 @@ export class TemplMount extends HTMLElement{
     }
     static loadLocalTemplate(templateString: string, options: templateSecondArg){
         const template = options.template;
-        if(!template.hasAttribute('loaded')){
+//        if(!template.hasAttribute('loaded')){
             template.innerHTML = templateString;
             template.setAttribute('loaded', '');
             template.dispatchEvent(new CustomEvent('load', {
                 bubbles: true,
             }));
-        }
+//        }
     }
 
     static async load(href: string, options: templateSecondArg){
@@ -69,6 +70,8 @@ export class TemplMount extends HTMLElement{
             });
 
             const init: RequestInit = t.hasAttribute('request-init') ? JSON.parse(t.getAttribute('request-init')) : {};
+            options.template.removeAttribute('href');
+            options.template.setAttribute('last-href', href);
             const resp = await fetch(href, init);
             let txt = await resp.text();
             if(t.hasAttribute('snip')){

@@ -48,13 +48,13 @@ export class TemplMount extends HTMLElement {
     }
     static loadLocalTemplate(templateString, options) {
         const template = options.template;
-        if (!template.hasAttribute('loaded')) {
-            template.innerHTML = templateString;
-            template.setAttribute('loaded', '');
-            template.dispatchEvent(new CustomEvent('load', {
-                bubbles: true,
-            }));
-        }
+        //        if(!template.hasAttribute('loaded')){
+        template.innerHTML = templateString;
+        template.setAttribute('loaded', '');
+        template.dispatchEvent(new CustomEvent('load', {
+            bubbles: true,
+        }));
+        //        }
     }
     static async load(href, options) {
         try {
@@ -66,6 +66,8 @@ export class TemplMount extends HTMLElement {
                 }
             });
             const init = t.hasAttribute('request-init') ? JSON.parse(t.getAttribute('request-init')) : {};
+            options.template.removeAttribute('href');
+            options.template.setAttribute('last-href', href);
             const resp = await fetch(href, init);
             let txt = await resp.text();
             if (t.hasAttribute('snip')) {

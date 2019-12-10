@@ -17,7 +17,7 @@ export class FirstTempl{
             template[import][as]{
                 display:block;
             }
-            template[import][as][loaded]:not({
+            template[import][as][loaded]{
                 display:none;
             }
         `;
@@ -29,22 +29,20 @@ export class FirstTempl{
                 template: t   
             });
             const as = t.getAttribute('as');
-            this.watchElVisibility(as, href, t);
-                
-
+            this.watchElVisibility(as, t);
         });
         this.tm.appendChild(remoteTemplateObserver);
         const localTemplateObserver = document.createElement(CssObserve.is) as CssObserve;
         localTemplateObserver.observe = true;
-        localTemplateObserver.selector="template[import][as]:not([href]):not([last-href])";
+        localTemplateObserver.selector="template[import][as]:not([href])";
         localTemplateObserver.addEventListener('latest-match-changed', e =>{
             const t = (<any>e).detail.value as HTMLTemplateElement;
-            if(t.hasAttribute('href') || t.hasAttribute('last-href') || t.hasAttribute('loaded')){
+            if(t.hasAttribute('href') || t.hasAttribute('loaded')){
                 return; //why is this necessary?
             }
             t.setAttribute('loaded', '');
             const as = t.getAttribute('as');
-            this.watchElVisibility(as, null, t);
+            this.watchElVisibility(as, t);
         });
         this.tm.appendChild(localTemplateObserver);
     }
@@ -55,10 +53,10 @@ export class FirstTempl{
             const newlyVisibleElement = first.target as HTMLElement;
             const alias = newlyVisibleElement.getAttribute(this.tm._importKey);
             const template = this._templateLookup[alias];
-            let href = template.getAttribute('href') || template.getAttribute('last-href');
+            let href = template.getAttribute('href');
             if(href !== null){
                 template.removeAttribute('when-needed');
-                await TemplMount.template(href, {
+                await TemplMount.template(template.getAttribute('href'), {
                     tm: this.tm,
                     template: template,
                 });
@@ -78,35 +76,26 @@ export class FirstTempl{
                 }));
             }
             if(template.hasAttribute('without-shadow')){
-                newlyVisibleElement.innerHTML = '';
                 newlyVisibleElement.appendChild(clone);
             }else{
                 if(newlyVisibleElement.shadowRoot === null){
                     newlyVisibleElement.attachShadow({mode: 'open'});
                 }
-                newlyVisibleElement.shadowRoot.innerHTML = '';
                 newlyVisibleElement.shadowRoot.appendChild(clone);
             }
-            observer.disconnect();
+            //observer.disconnect();
         }
     }
 
     _templateLookup : {[as: string]: HTMLTemplateElement} = {};
-    watchElVisibility(as: string, href: string | null, t: HTMLTemplateElement){
+    watchElVisibility(as: string, t: HTMLTemplateElement){
         this._templateLookup[as] = t;
-        const selector = `[${this.tm._importKey}="${as}"]`;
-        const alreadyExistingImpTObserver = this.tm.querySelector(`[as-q="${as}"]`) as CssObserve;
-        if(alreadyExistingImpTObserver !== null){
-            //alreadyExistingImpTObserver[hrefSym] = href;
-            alreadyExistingImpTObserver.remove();
-        } 
         const impTObserver = document.createElement(CssObserve.is) as CssObserve;
-        impTObserver[hrefSym] = href;
-        impTObserver.setAttribute('as-q', as);
         impTObserver.observe = true;
-        impTObserver.selector = selector;
+        impTObserver.selector = `[${this.tm._importKey}="${as}"]`;
         impTObserver.addEventListener('latest-match-changed', e =>{
             const elementToWatchForTurningVisible = (<any>e).detail.value;
+            const href = t.getAttribute('href');
             if(href === null){
                 const ioi : IntersectionObserverInit = {
                     threshold: 0.01
@@ -114,7 +103,7 @@ export class FirstTempl{
                 const observer = new IntersectionObserver(this.callback.bind(this), ioi);
                 observer.observe(elementToWatchForTurningVisible);
             }else{
-                if(elementToWatchForTurningVisible[hrefSym] === e.target[hrefSym]) return;
+                if(elementToWatchForTurningVisible[hrefSym] === href) return;
                 elementToWatchForTurningVisible[hrefSym] = href;
                 TemplMount.template(href, {
                     tm: this.tm,

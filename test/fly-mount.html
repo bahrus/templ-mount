@@ -10,12 +10,12 @@
 
 <body>
     <templ-mount></templ-mount>
-
+<!-- 
     <template import href=title.html as=title-dee></template>
 
     <div imp-key=title-dee></div>
 
-    <template import href=why.html as=why? when-needed snip></template>
+    <template import href=why-fly.html as=why? when-needed snip></template>
 
     <details id=why>
         <summary></summary>
@@ -55,13 +55,23 @@
         setTimeout(() => {
             wriggled.open = true;
         }, 200)
-    </script>
+    </script> -->
+    <template id=why import href=why-spider.html as=why></template>
+
+    <div  imp-key=why></div>
+    <button onclick="switchWhy()">switch</button>
     <template append-to-head>
         <script type=module src=blah.js></script>
         <style>
             @import url(https://fonts.googleapis.com/css?family=Indie+Flower);
         </style>
     </template>
+
+    <script>
+        function switchWhy(){
+            why.setAttribute('href', 'why-fly.html');
+        }
+    </script>
 
     <!--
         <template href=https://cors-anywhere.herokuapp.com/https://link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
