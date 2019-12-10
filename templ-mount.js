@@ -36,7 +36,9 @@ export class TemplMount extends HTMLElement {
         window.addEventListener(href + '-ready-tm', e => {
             const a = e;
             if (a.detail && a.detail.template) {
-                this.loadLocalTemplate(a.detail.template, options);
+                if (!a.detail.template.hasAttribute('loaded')) {
+                    this.loadLocalTemplate(a.detail.template, options);
+                }
                 resolve(a.detail.template);
             }
             else {

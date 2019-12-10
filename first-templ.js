@@ -25,7 +25,7 @@ export class FirstTempl {
         `;
         remoteTemplateObserver.addEventListener('latest-match-changed', e => {
             const t = e.detail.value;
-            const href = t.getAttribute('href');
+            const href = t.getAttribute('href') || t.getAttribute('last-href');
             TemplMount.template(href, {
                 tm: this.tm,
                 template: t
