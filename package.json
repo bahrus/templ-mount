@@ -18,7 +18,7 @@
     "xtal-test": "0.0.31",
     "tape": "4.10.2",
     "es-module-shims": "0.4.6",
-    "open-borders": "0.0.3"
+    "open-borders": "0.0.4"
   },
   "version": "0.0.52",
   "scripts": {
