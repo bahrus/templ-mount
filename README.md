@@ -240,6 +240,12 @@ At the top of this document, we mentioned the desire to allow servers to send co
 <template import href=path/to/some/fileOrStream.html as=fos snip></template>
 ```
 
+## Changing parameters via href attribute of template.
+
+An iFrame allows you to change the src attribute, and the contents inside get replaced, rather than appended to.  That is now supported, but only if modifying the href attribute.
+
+## Changing parameters via href property of template [TODO].
+
 ## Defining a Web Component using templ-mount [TODO]
 
 Frankly, defining a web component using templ-mount would be a forced enterprise, as far as I can see, full of hacks and inconveniences.  I *think* there would need to be additional hooks only the browser could provide, in order to make it come naturally, like allowing JS defined within the template to be aware of the context (like the template(s) associated with the JS).
@@ -248,9 +254,7 @@ Of course, HTML Modules are designed specifically to allow native HTML, CSS to b
 
 Anyway, The Committee for the Repair of templ-mount is still weighing the possibilities here, as the previous version (with the help of [carbon-copy](https://github.com/bahrus/carbon-copy)) provided a way to do that.
 
-## Changing parameters [TODO]
 
-An iFrame allows you to change the src attribute, and the contents inside get replaced, rather than appended to.  That is something being looked at.
 
 # Viewing Your Element
 

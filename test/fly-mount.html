@@ -9,6 +9,11 @@
 </head>
 
 <body>
+    <style>
+        [err]{
+            color:red;
+        }
+    </style>
     <templ-mount></templ-mount>
 
     <template import href=title.html as=title-dee></template>
@@ -54,12 +59,16 @@
     <script>
         setTimeout(() => {
             wriggled.open = true;
-        }, 200)
+        }, 200);
     </script>
-    <!-- <template id=why import href=why-spider.html as=why></template>
+    <template id=why2 import href=she-died.html as=why></template>
 
     <div  imp-key=why></div>
-    <button onclick="switchWhy()">switch</button> -->
+    <script>
+        setTimeout(() =>{
+            switchWhy();
+        }, 800);
+    </script>
     <template append-to-head>
         <script type=module src=blah.js></script>
         <style>
@@ -69,7 +78,7 @@
 
     <script>
         function switchWhy(){
-            why.setAttribute('href', 'why-fly.html');
+            why2.setAttribute('href', 'why-spider.html');
         }
     </script>
 
