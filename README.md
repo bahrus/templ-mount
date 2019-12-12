@@ -241,15 +241,7 @@ An iFrame allows you to change the src attribute, and the contents inside get re
 
 ## Defining a Web Component using templ-mount [TODO]
 
-Frankly, defining a web component using templ-mount would be a forced enterprise, as far as I can see, full of hacks and inconveniences.  I *think* there would need to be additional hooks only the browser could provide, in order to make it come naturally, like allowing JS defined within the template to be aware of the context (like the template(s) associated with the JS).
-
-Of course, HTML Modules are designed specifically to allow native HTML, CSS to be part of the web component definition.  Hopefully, some of the hooks necessary to make that work could be used here?  It may be that once (or if?) HTML Modules are (ever) available, they could be used to help in this context.
-
-Anyway, The Committee for the Repair of templ-mount is still weighing the possibilities here, as the previous version (with the help of [carbon-copy](https://github.com/bahrus/carbon-copy)) provided a way to do that.
-
-
-
-# Viewing This Element locally
+# Viewing This Element Locally
 
 ```
 $ npm install
