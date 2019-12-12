@@ -23,14 +23,14 @@ The committee has recently been reminded of how this is [not how things work](ht
 
 </details>
 
-templ-mount helps load templates from url's, which point to HTML files or streams.  It takes some ideas from [html-include-element](https://www.npmjs.com/package/html-include-element).
+templ-mount helps load templates from url's, which point to HTML files or streams.  It takes some ideas from [JQuery's](https://w3techs.com/technologies/overview/javascript_library) [load](https://api.jquery.com/load/)  function, and also [html-include-element](https://www.npmjs.com/package/html-include-element).
 
 <details>
     <summary>templ-mount's origin story</summary>
 
 templ-mount remembers the day its creator first installed a PWA (Flipkart), and was blown away by the liberating effect this could have on web development.  PWA's swept aside significant barriers to the web, in terms of achieving parity with native apps.
 
-templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find a way of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server. And, in fact, this has been the focus of many talented, creative developers at the [cutting edges](https://codesandbox.io/s/floral-worker-xwbwv) (though frankly custom elements seems like the most natural fit for this, but whatever :-) ).  
+templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find ways of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server. And, in fact, this has been the focus of many talented, creative developers at the [cutting edges](https://codesandbox.io/s/floral-worker-xwbwv), who are using their engineering prowess to overcome the significant hurdles to good performance imposed by browser vendor lethargy.  
 
 The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier and simpler to get Lighthouse's blessing.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g the ability to truly stream in HTML as it renders, resolving and preemptively downloading relative references, centrally resolving package dependencies via import maps, providing sand-boxing support when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api ([as](https://github.com/github/include-fragment-element) [are](https://www.filamentgroup.com/lab/html-includes/) [many](https://github.com/whatwg/html/issues/2791) [of](https://github.com/Juicy/imported-template/) [templ-mount's](https://api.jquery.com/load/) [compatriots](https://www.npmjs.com/package/@vanillawc/wc-include)).
 
@@ -50,7 +50,7 @@ Reference resolution (e.g. nested script tags with relative paths, import mappin
 
 ## Retrieving template tags
 
-If the templ-mount/templ-mount.js library is loaded (which we will assume going forward), and if a template tag with attributes "import" and "href" is encountered, templ-mount will retrieve the html from the url, and populate the inert template.
+If the templ-mount/templ-mount.js library is loaded (which we will assume going forward), then anywhere there's a template tag with attributes "import" and "href", templ-mount will retrieve the html from the specified url, and populate the inert template (with one exception which we will note later).
 
 ```html
 <template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
@@ -60,7 +60,7 @@ After loading, an attribute "loaded" is added, and event "load" is fired.
 
 ## Specifying cors / other fetch options
 
-Use the request-init attribute:
+Use the request-init attribute to fine tune the fetch request:
 
 ```html
 <template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 
@@ -94,9 +94,9 @@ as=penguins-poop></template>
 
 ## Lazy downloading, lazy loading into the DOM tree
 
-Maybe we would rather save users' bandwidth, because they are unlikely to load some hidden content, or they are on an expensive network.  
+Maybe we would rather save users' bandwidth, because they are unlikely to load some hidden content, and/or they are on an expensive network.  
 
-We can lazy load the downloading as well, only beginning the download when the content is loaded (requested) into view.  We specify this using the when-needed attribute:
+We can lazy load the downloading as well, only beginning the download when the content is opened / scrolled into view.  We specify this using the when-needed attribute:
 
 
 ```html
@@ -114,7 +114,17 @@ We can lazy load the downloading as well, only beginning the download when the c
 </details>
 ```
 
-**Speculation:**  If this were implemented natively in the browser, it seems likely it would be possible to engineer this so that the content would pipe directly to the target element (article), rendering content as it streams in, and then store the final document in the template for repeated use.
+**Speculation:**  If this were implemented natively in the browser, it seems likely it would be possible to engineer this so that the content would pipe directly to the target element (article), rendering content as it streams in, and then store the final document in the template for repeated or later use.
+
+Browser standard bearers seem to consider providing a solution that
+
+1.  Saves people from wasting bandwidth needlessly
+2.  Avoids premature loading into memory, 
+3.  Supports streaming on demand 
+
+to be promoting an inferior user experience.  
+
+Consequently, templ-mount, which has experienced a less affluent lifestyle,  disagrees with this assessment, and is contemplating ways to shoulder this difficult functionality.
 
 ## If Shadow DOM is not needed / desired, use without-shadow attribute:
 
@@ -174,7 +184,7 @@ If the content of a template is embedded inside a template tag already (as part 
 ```
 
 
-
+This, of course, would also provide JS-free, declarative Shadow DOM support if implemented natively (and similar ideas to this have previously been floated by others).
 
 
 ## Activating content
@@ -201,21 +211,11 @@ Ok, I could see it in a standalone html file/stream also, if that file intends t
 The id is optional, but, because there's no href, if the template will appear in multiple downloads (despite templ-mount's minimal efforts at de-dup), then providing the id will help templ-mount to avoid unnecessarily cluttering the head tag with duplicate script / style / link tags.
 
 
-## Disallowing activating content - out of scope
+## Disallowing activating content [TODO]
 
 Allowing HTML references to load JS dependencies could be considered dangerous if the site the HTML is coming from is not very trustworthy, and/or appropriate CSP rules are not in place.
 
-My preference on this would be to indicate something like this:
-
-```html
-<template import href=//myCDN.com/blah-blah.html as=blah without-js without-wasm></template>
-```
-
-This means import the document blah-blah.html, but don't allow templ-mount to activate any script / webAssembly inside, including content coming from recursive imports triggered by blah-blah.html.
-
-But that seems really difficult to implement outside the browser internals, in a foolproof way, without parsing and processing the content, and ratcheting up the size of this component.
-
-So this is going to be kept out of scope (for now, at least).
+Investigations are underway to support the same kind of sandboxing [supported natively by iFrames](https://www.w3schools.com/tags/att_iframe_sandbox.asp).
 
 ## Snipping
 
@@ -225,7 +225,7 @@ If the html file / html stream being imported contains at least two instances of
 <!---->
 ```
 
-then templ-mount *can* be made to only import the content between the first two such strings. This helps allow an html file / stream to serve both as a standalone web page, but also as a template that could be used as an embedded snippet of HTML.
+then templ-mount *can* be made to only import the content between the first two such strings. This helps allow an html file / stream to serve both as a standalone web page, but also as a template that could be used as an embedded snippet of HTML. (JQuery's load function supports something similar).
 
 At the top of this document, we mentioned the desire to allow servers to send content down in the native format that the browser will consume. This snipping solution goes against that strategy a bit, in the sense that here we are suggesting doing some string manipulation of the content. But most server-side solutions can easily snip out content in a similar way to what we are doing above. But if server-side solutions aren't available, you can snip out the main content thusly:
 
@@ -249,11 +249,17 @@ Anyway, The Committee for the Repair of templ-mount is still weighing the possib
 
 
 
-# Viewing Your Element
+# Viewing This Element locally
 
 ```
 $ npm install
 $ npm run serve
+```
+
+#  Testing 
+
+```
+$ npm run test
 ```
  
 
