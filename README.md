@@ -42,12 +42,11 @@ It seems that HTML Templates, in particular node cloning [often](https://jsperf.
 
 One of the driving forces behind this component is it allows applications to follow the [rule of least power](https://en.wikipedia.org/wiki/Rule_of_least_power) and to send data to the browser in the format that the browser needs to ultimately consume, without (expensive) translations from one format into another.  It can work well with server-side-centric frameworks, like PHP, asp.net MVC, Ruby on Rails, Django, pug, Java EE MVC, etc.
 
-If this functionality (or some variation) were [built into the browser](https://discourse.wicg.io/t/add-src-attribute-to-template/2721), it would also **provide a way of injecting ShadowDOM without JS, a long sought after feature**.
+If this functionality (or some variation) were [built into the browser](https://discourse.wicg.io/t/add-src-attribute-to-template/2721), it would also **provide a way of injecting ShadowDOM without JS, a [long](https://discourse.wicg.io/t/declarative-shadow-dom/1904/15) [sought](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Declarative-Shadow-DOM.md) after [feature](https://github.com/whatwg/dom/issues/510)**.
 
-## Out of Scope
+## Significant to do items.
 
-Reference resolution (e.g. nested script tags with relative paths, import mapping), support for different trust levels.
-
+Reference resolution (e.g. nested script tags with relative paths, import mapping), support for different trust levels, streaming support.
 
 ## Retrieving template tags
 
@@ -97,7 +96,7 @@ as=penguins-poop></template>
 
 Maybe we would rather save users' bandwidth, because they are unlikely to load some hidden content, or they are on an expensive network.  
 
-We can lazy load the downloading as well, using the when-needed attribute:
+We can lazy load the downloading as well, only beginning the download when the content is loaded (requested) into view.  We specify this using the when-needed attribute:
 
 
 ```html
@@ -114,6 +113,8 @@ We can lazy load the downloading as well, using the when-needed attribute:
     </article>
 </details>
 ```
+
+**Speculation:**  If this were implemented natively in the browser, it seems likely it would be possible to engineer this so that the content would pipe directly to the target element (article), rendering content as it streams in, and then store the final document in the template for repeated use.
 
 ## If Shadow DOM is not needed / desired, use without-shadow attribute:
 
