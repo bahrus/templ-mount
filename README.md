@@ -92,7 +92,7 @@ as=penguins-poop></template>
 
 **NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515).  
 
-## Lazy downloading, lazy loading into the DOM tree
+## Lazy downloading, lazy loading into the DOM tree (Stream support to be investigated)
 
 Maybe we would rather save users' bandwidth, because they are unlikely to load some hidden content, and/or they are on an expensive network.  
 
@@ -124,7 +124,7 @@ Browser standard bearers seem to consider providing a solution that
 
 to be promoting an inferior user experience.  
 
-Consequently, templ-mount, which has experienced a less affluent lifestyle,  disagrees with this assessment, and is contemplating ways to shoulder this difficult functionality.
+templ-mount, which has experienced a far less affluent lifestyle,  disagrees with this assessment, and feels the moral duty to at least investigate whether this difficult functionality could be achieved with existing api's (to be determined).
 
 ## If Shadow DOM is not needed / desired, use without-shadow attribute:
 
