@@ -1,15 +1,22 @@
-const import_key = 'import-key';
+const root = Symbol();
 /**
  * templ-mount helps load templates from url's, which point to HTML files or streams.
  * @element templ-mount
  */
 export class TemplMount extends HTMLElement {
     constructor() {
+        // static get observedAttributes(){
+        //     return [import_key];
+        // }
         super(...arguments);
+        // attributeChangedCallback(n: string, ov: string, nv: string){
+        //     switch(n){
+        //         case import_key:
+        //             this._importKey = nv;
+        //             break;
+        //     }
+        // }
         this._importKey = 'imp-key';
-    }
-    static get observedAttributes() {
-        return [import_key];
     }
     static template(href, options) {
         return new Promise((resolve, reject) => {
@@ -89,27 +96,31 @@ export class TemplMount extends HTMLElement {
             }));
         }
     }
-    attributeChangedCallback(n, ov, nv) {
-        switch (n) {
-            case import_key:
-                this._importKey = nv;
-                break;
-        }
-    }
-    get importKey() {
-        return this._importKey;
-    }
-    /**
-     * Set the key to use to import templates.
-     * @attr import-key
-     */
-    set importKey(nv) {
-        this.setAttribute(import_key, nv);
-    }
+    // get importKey(){
+    //     return this._importKey;
+    // }
+    // /**
+    //  * Set the key to use to import templates.
+    //  * @attr import-key
+    //  */
+    // set importKey(nv: string){
+    //     this.setAttribute(import_key, nv);
+    // }
     async connectedCallback() {
         this.style.display = 'none';
         this.loadFirstTempl();
         this.loadSecondTempl();
+        if (self[root] === undefined) {
+            self[root] = true;
+            Array.from(document.querySelectorAll('import[import][href]')).forEach(el => {
+                const templ = el;
+                const options = {
+                    template: templ,
+                    tm: this
+                };
+                TemplMount.template(templ.getAttribute('href'), options);
+            });
+        }
     }
     async loadFirstTempl() {
         const { FirstTempl } = await import('./first-templ.js');

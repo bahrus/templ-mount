@@ -1,17 +1,18 @@
-const import_key = 'import-key';
+//const import_key = 'import-key';
 interface templateSecondArg{
     tm?: TemplMount | undefined;
     template: HTMLTemplateElement | undefined;
 }
+const root = Symbol();
 /**
  * templ-mount helps load templates from url's, which point to HTML files or streams.
  * @element templ-mount
  */
 export class TemplMount extends HTMLElement{
 
-    static get observedAttributes(){
-        return [import_key];
-    }
+    // static get observedAttributes(){
+    //     return [import_key];
+    // }
 
     static _templateStrings : {[href: string]: string | true} = {}; //store in session storage?
     static template(href: string, options: templateSecondArg){
@@ -96,31 +97,42 @@ export class TemplMount extends HTMLElement{
         
     }
 
-    attributeChangedCallback(n: string, ov: string, nv: string){
-        switch(n){
-            case import_key:
-                this._importKey = nv;
-                break;
-        }
-    }
+    // attributeChangedCallback(n: string, ov: string, nv: string){
+    //     switch(n){
+    //         case import_key:
+    //             this._importKey = nv;
+    //             break;
+    //     }
+    // }
 
     _importKey = 'imp-key';
-    get importKey(){
-        return this._importKey;
-    }
-    /**
-     * Set the key to use to import templates.
-     * @attr import-key
-     */
-    set importKey(nv: string){
-        this.setAttribute(import_key, nv);
-    }
+    // get importKey(){
+    //     return this._importKey;
+    // }
+    // /**
+    //  * Set the key to use to import templates.
+    //  * @attr import-key
+    //  */
+    // set importKey(nv: string){
+    //     this.setAttribute(import_key, nv);
+    // }
 
 
     async connectedCallback(){
         this.style.display = 'none';
         this.loadFirstTempl();
         this.loadSecondTempl();
+        if(self[root] === undefined){
+            self[root] = true;
+            Array.from(document.querySelectorAll('import[import][href]')).forEach(el =>{
+                const templ = el as HTMLTemplateElement;
+                const options : templateSecondArg = {
+                    template: templ,
+                    tm: this
+                };
+                TemplMount.template(templ.getAttribute('href'), options);
+            })
+        }
     }
 
     async loadFirstTempl(){
