@@ -86,6 +86,9 @@ export class FirstTempl{
                 }
                 newlyVisibleElement.shadowRoot.innerHTML = '';
                 newlyVisibleElement.shadowRoot.appendChild(clone);
+                const templMt = document.createElement('templ-mount') as TemplMount;
+                //TODO:  Populate recursive stuff 
+                newlyVisibleElement.shadowRoot.appendChild(templMt);
             }
             observer.disconnect();
         }
