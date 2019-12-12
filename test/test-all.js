@@ -3,7 +3,7 @@ const xt = require('xtal-test/index');
     const passed = await xt.runTests([
         {
             path: 'test/fly-mount.html',
-            expectedNoOfSuccessMarkers: 6,
+            expectedNoOfSuccessMarkers: 7,
         },
     ]);
     if (passed) {

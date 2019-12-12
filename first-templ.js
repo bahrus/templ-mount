@@ -1,6 +1,5 @@
 import { CssObserve } from 'css-observe/css-observe.js';
 import { TemplMount } from './templ-mount.js';
-import { getShadowContainer } from 'xtal-element/getShadowContainer.js';
 const listening = Symbol();
 const hrefSym = Symbol();
 const hrefSym2 = Symbol();
@@ -8,10 +7,14 @@ export class FirstTempl {
     constructor(tm) {
         this.tm = tm;
         this._templateLookup = {};
-        const shadowContainer = getShadowContainer(tm);
-        if (shadowContainer[listening] === true)
+        //const shadowContainer = getShadowContainer(tm);
+        //console.log(shadowContainer[listening]);
+        //if(shadowContainer[listening] === true) return;
+        //shadowContainer[listening] = true;
+        console.log(tm[listening]);
+        if (tm[listening] === true)
             return;
-        shadowContainer[listening] = true;
+        tm[listening] = true;
         const remoteTemplateObserver = document.createElement(CssObserve.is);
         remoteTemplateObserver.observe = true;
         remoteTemplateObserver.selector = "template[import][href][as]";
