@@ -122,3 +122,5 @@ export class TemplMount extends HTMLElement {
 }
 TemplMount._templateStrings = {}; //store in session storage?
 customElements.define('templ-mount', TemplMount);
+const tm = document.createElement('templ-mount');
+document.head.appendChild(tm);

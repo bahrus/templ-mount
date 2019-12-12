@@ -51,7 +51,7 @@ Reference resolution (e.g. nested script tags with relative paths, import mappin
 
 ## Retrieving template tags
 
-If, in the same Shadow DOM realm where the templ-mount instance resides, a template tag with attributes "import" and "href" is encountered, templ-mount will retrieve the html from the url, and populate the inert template.
+If the templ-mount/templ-mount.js library is loaded (which we will assume going forward), and if a template tag with attributes "import" and "href" is encountered, templ-mount will retrieve the html from the url, and populate the inert template.
 
 ```html
 <template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
@@ -77,11 +77,9 @@ as=penguins-poop></template>
 
 ## Preemptive downloading, lazy loading into the DOM tree
 
-If, in the same ShadowDOM realm as a templ-mount instance (including the realm outside any Shadow DOM), any tag is found with attribute imp-key, templ-mount waits for that tag to become visible, and when it does, it searches for a template with "as" attribute matching the value of imp-key in the same ShadowDOM realm, and "imports" the template into the ShadowDOM of the tag.  The original light children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
+If any DOM tag is found with attribute imp-key, templ-mount waits for that tag to become visible, and when it does, it searches for a template with "as" attribute matching the value of imp-key in the same ShadowDOM realm, and "imports" the template into the ShadowDOM of the tag.  The original light children of the tag, if they specify slot attributes, will become slotted into the ShadowDOM.
 
 ```html
-<templ-mount></templ-mount>
-...
 <template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 
 as=penguins-poop></template>
 ...
@@ -93,13 +91,7 @@ as=penguins-poop></template>
 </details>
 ```
 
-**NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515).  You can, however, configure what attribute to use within each ShadowDOM realm, by specifying:
-
-```html
-<templ-mount import-key=something-else>
-```
-
-In the future examples, we will assume there's a \<templ-mount\> tag in the relevant place (each Shadow DOM realm) as needed.
+**NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515).  
 
 ## Lazy downloading, lazy loading into the DOM tree
 

@@ -136,3 +136,5 @@ export class TemplMount extends HTMLElement{
 
 }
 customElements.define('templ-mount', TemplMount);
+const tm = document.createElement('templ-mount');
+document.head.appendChild(tm);
