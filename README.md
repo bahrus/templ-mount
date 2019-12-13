@@ -138,7 +138,7 @@ Browser standard bearers seem to consider providing a solution that
 
 to be promoting an inferior user experience.  
 
-Sure, if you are a high-flying financier, who needs your web browser to be open at all times to your stock portfolio, and which needs to update with every stock fluctuation, of course lazy loading isn't the best user experience. Time is Money!
+Sure, if you are a high-flying financier, and you need your web browser to be open at all times to your stock portfolio, which needs to update with every stock fluctuation, of course lazy loading isn't the best user experience. Time is Money!
 
 But what about Tiny Tim, your assistant's little brother, suffering from renal tubular acidosis, an easily curable disease?  He toils away, shining people's shoes (shoes -- if only he could afford such a luxury).  One of his customers forgot to bring cash, and paid him instead with a disposable feature phone he was about to throw away.  This is Tiny Tim's opportunity to look up a community hospital that will treat him for free, but the phone only has 3 minutes of battery life left, and is down to the last 580KB of data, struggling with 1x speed at best.  Is it that important that the waiting list form to purchase Maurizio Cattelan’s masterpiece "Comedian, Fourth Edition" be preemptively downloaded as part of the original payload, ready to be perused immediately at a single click, in order for Tiny Tim to get the results of his search?
 
