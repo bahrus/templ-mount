@@ -124,7 +124,11 @@ Browser standard bearers seem to consider providing a solution that
 
 to be promoting an inferior user experience.  
 
-templ-mount is experiencing a far less affluent lifestyle, trying not to drown in the nearby fire-lake, with only half a bar on its mobile tablet. It disagrees with the previous assessment, and feels a moral duty to at least investigate whether this difficult functionality could be achieved with existing browser api's (to be determined).
+Sure, if you are a high-flying financier, who needs your web site's stock portfolio to update with every stock fluctuation, of course lazy loading isn't the best user experience. Time is Money!
+
+But what about Tiny Tim, your assistant's little brother, suffering from renal tubular acidosis, an easily curable disease, who found a disposable feature phone while rummaging through garbage?  This is Tiny Tim's opportunity to look up a community hospital that will treat him for free, but the phone only has 3 minutes of battery life left, and is down to the last 580KB of data.  Is it that important that the advertisement for Gucci-Grograin-trimmed Quilted Leather Ankle Boots but preemptively downloaded, ready to perused immediately at a single click, while conducting his search?
+
+templ-mount isn't so sure, and feels a pang of guilt not at least investigating whether lazy downloading / streaming  could be achieved with existing browser api's (to be determined).
 
 ## If Shadow DOM is not needed / desired, use without-shadow attribute:
 
