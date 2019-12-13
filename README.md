@@ -140,7 +140,7 @@ to be promoting an inferior user experience.
 
 Sure, if you are a high-flying financier, who needs your web browser to be open at all times to your stock portfolio, and which needs to update with every stock fluctuation, of course lazy loading isn't the best user experience. Time is Money!
 
-But what about Tiny Tim, your assistant's little brother, suffering from renal tubular acidosis, an easily curable disease, who found a disposable feature phone while rummaging through garbage?  This is Tiny Tim's opportunity to look up a community hospital that will treat him for free, but the phone only has 3 minutes of battery life left, and is down to the last 580KB of data.  Is it that important that the advertisement for Gucci-Grograin-trimmed Quilted Leather Ankle Boots but preemptively downloaded, ready to be perused immediately at a single click, while conducting his search?
+But what about Tiny Tim, your assistant's little brother, suffering from renal tubular acidosis, an easily curable disease, who found a disposable feature phone while rummaging through garbage?  This is Tiny Tim's opportunity to look up a community hospital that will treat him for free, but the phone only has 3 minutes of battery life left, and is down to the last 580KB of data.  Is it that important that the advertisement for Gucci-Grograin-trimmed Quilted Leather Ankle Boots be preemptively downloaded as part of the original payload, ready to be perused immediately at a single click, while conducting his search?
 
 templ-mount isn't so sure, and feels a pang of guilt not at least investigating whether lazy downloading / streaming  could be achieved with existing browser api's (to be determined).
 
@@ -258,6 +258,34 @@ An iFrame allows you to change the src attribute, and the contents inside get re
 ## Changing parameters via href property of template [TODO].
 
 ## Defining a Web Component using templ-mount [TODO]
+
+Suppose you are developing a web component used to help illustrate the sequence of moves behind a chess match between Kasparov and Deep Blue.
+
+You first create a [template](https://codepen.io/sybiljas/pen/zYOyjjN) [for](https://codepen.io/anon/pen/JQRwxa) [a](https://codepen.io/anon/pen/YoPXyJ) [chess](https://codepen.io/SampathParavasthu/pen/WmNwGQ) [board](https://codepen.io/rawright-the-sans/pen/BvBrYG).  
+
+I've taken an average of the number of lines of custom JavaScript needed to create these boards: 0.  (The first example does use a js-based web-component, css-doodle, for fancier effects, though.)
+
+We know exactly where the chess pieces will be when the game starts, so we don't really need fancy JS in our web component for that, just the html for the board, as shown in the code-pens.  
+
+The web component's JS will only be used to transform the html of the original board into different variations, depending on what moves are made.  The JS is used only for the subsequent boards, in other words.
+
+Unfortunately, the browser vendors have not been very kind to HTML-first solutions, which this screams for  (as do many of the award-winning [code-pens](https://www.google.com/search?q=best+codepens+of&rlz=1C1CHBF_enUS875US875&oq=best+codepens+of+&aqs=chrome..69i57j0l5.3835j0j7&sourceid=chrome&ie=UTF-8)).
+
+Suppose we stipulate that referencing a web component must consist of a single reference.  The most natural thing for a web component like this would be for that initial  definition to be in an HTML file, which can immediately display the original board, and when would then download the JS in preparation for the second board.  But browser vendors aren't looking out for people like Tiny Tim, so we must make the web component JS first.  At least I don't see a way to make this HTML first, as it ought to be, with existing standards.
+
+In order to provide the quickest visual, our web component, chess-board.js (say) can do the following:
+
+1.  Dynamically, asynchronously reference templ-mount/templ-mount.js, which will start downloading templates as needed, if they contain the import href attributes.
+2.  Append (and hold on to a reference for) a template tag to document.body which points to the HTML for the original board via import href="chessboard.html".  templ-mount will begin the download for this template as soon as it is downloaded (~886 Bytes gzipped/compressed).  The url for the HTML file can be relative to chess-board.js, based on import.meta.url.
+
+```html
+<body>
+    <template import href="..." as chessboard></template>
+</body>
+```
+3)  Dynamically, asynchronously download JS needed to create non-original boards.  Call it chess-board-heavy-lifting.js.
+4)  If no moves are specified in the \<chess-board\>\</chess-board\/>, append attribute imp-key=chessboard, which will then be able to display the original chessboard, even without loading chess-board-heavy-lifting.js.
+5)  Subsequent boards could initally display the original board, maybe greyed out, then replaced by th actual board after  chess-board-heavy-lifting.js is retrieved.   
 
 # Viewing This Element Locally
 
