@@ -62,7 +62,7 @@ After loading, an attribute "loaded" is added, and event "load" is fired.
 
 If you use templ-mount to handle all your template loading, there's no need to be aware that templ-mount is in fact a custom element.
 
-If you want to use templ-mount to load templates within your Shadow DOM Realm, but want to use templ-mount to handle loading of templates within your isolated content, you will need to plop a templ-mount instance inside your DOM:
+But if you want to use templ-mount to load templates within your Shadow DOM Realm only, without using templ-mount to manage all template loading globally, you will need to expose templ-mount the web component:
 
 ```html
  ⏵ #shadow-root (open)
