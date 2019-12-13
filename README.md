@@ -140,7 +140,7 @@ to be promoting an inferior user experience.
 
 Sure, if you are a high-flying financier, who needs your web browser to be open at all times to your stock portfolio, and which needs to update with every stock fluctuation, of course lazy loading isn't the best user experience. Time is Money!
 
-But what about Tiny Tim, your assistant's little brother, suffering from renal tubular acidosis, an easily curable disease, who found a disposable feature phone while rummaging through garbage?  This is Tiny Tim's opportunity to look up a community hospital that will treat him for free, but the phone only has 3 minutes of battery life left, and is down to the last 580KB of data.  Is it that important that the advertisement for Gucci-Grograin-trimmed Quilted Leather Ankle Boots be preemptively downloaded as part of the original payload, ready to be perused immediately at a single click, while conducting his search?
+But what about Tiny Tim, your assistant's little brother, suffering from renal tubular acidosis, an easily curable disease, who found a disposable feature phone while rummaging through garbage?  This is Tiny Tim's opportunity to look up a community hospital that will treat him for free, but the phone only has 3 minutes of battery life left, and is down to the last 580KB of data.  Is it that important that the advertisement for purchasing the masterpiece "Comedian, fourth edition" be preemptively downloaded as part of the original payload, ready to be perused immediately at a single click, while conducting his search?
 
 templ-mount isn't so sure, and feels a pang of guilt not at least investigating whether lazy downloading / streaming  could be achieved with existing browser api's (to be determined).
 
