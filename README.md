@@ -154,7 +154,7 @@ It also seems likely that the same streaming effect could be put to good use in 
 </article>
 ```
 
-... is immediately visible.  Now we need too retrieve the content immediately upon loading the page, and appending that to the visible article tag.  Streaming as rendering could also help here.
+... is immediately visible.  Now we need to retrieve the content immediately upon loading the page, and appending that to the visible article tag.  Rendering while the html streams in could also help here.
 
 Why would we want to not include the content of article in the original payload, even though it will be in an immediately viewable area?  The advantage of breaking up the loading page into these pieces, is that each sub section may depend on live back-end data coming from different sources.  Requiring that the server cannot send down any HTML until all such back end queries have completed, would mean performance would be driven by the slowest query.
 
