@@ -44,7 +44,7 @@ One of the driving forces behind this component is it allows applications to fol
 
 If this functionality (or some variation) were [built into the browser](https://discourse.wicg.io/t/add-src-attribute-to-template/2721), it would also **provide a way of injecting ShadowDOM without JS, a [long](https://discourse.wicg.io/t/declarative-shadow-dom/1904/15) [sought](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Declarative-Shadow-DOM.md) after [feature](https://github.com/whatwg/dom/issues/510)**.
 
-## Significant to do items.
+## Significant to-do items.
 
 Reference resolution (e.g. nested script tags with relative paths, import mapping), support for different trust levels, streaming support.
 
