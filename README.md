@@ -119,12 +119,12 @@ We can lazy load the downloading as well, only beginning the download when the c
 Browser standard bearers seem to consider providing a solution that
 
 1.  Saves people from wasting bandwidth needlessly
-2.  Avoids premature loading into memory, 
+2.  Avoids premature loading into memory on a [low memory device](https://www.kaiostech.com/meet-the-devices-that-are-powered-by-kaios/), 
 3.  Supports streaming on demand 
 
 to be promoting an inferior user experience.  
 
-templ-mount, which has experienced a far less affluent lifestyle,  disagrees with this assessment, and feels the moral duty to at least investigate whether this difficult functionality could be achieved with existing api's (to be determined).
+templ-mount is experiencing a far less affluent lifestyle, trying not to drown in the nearby fire-lake, with only half a bar on its mobile tablet. It disagrees with the previous assessment, and feels a moral duty to at least investigate whether this difficult functionality could be achieved with existing browser api's (to be determined).
 
 ## If Shadow DOM is not needed / desired, use without-shadow attribute:
 
