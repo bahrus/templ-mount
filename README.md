@@ -144,6 +144,22 @@ But what about Tiny Tim, your assistant's little brother, suffering from renal t
 
 templ-mount isn't so sure, and feels a pang of guilt not at least investigating whether lazy downloading / streaming  could be achieved with existing browser api's (to be determined).
 
+It also seems likely that the same streaming effect could be put to good use in the case that:
+
+```html
+<article imp-key=penguins-poop>
+    <span slot="AdInsert">
+        <a href="https://www.target.com/b/pedialax/-/N-55lp4">Pedia-Lax</a>
+    </span>
+</article>
+```
+
+... is immediately visible.  Now we need too retrieve the content immediately upon loading the page, and appending that to the visible article tag.  Streaming as rendering could also help here.
+
+Why would we want to not include the content of article in the original payload, even though it will be in an immediately viewable area?  The advantage of breaking up the loading page into these pieces, is that each sub section may depend on live back-end data coming from different sources.  Requiring that the server cannot send down any HTML until all such back end queries have completed, would mean performance would be driven by the slowest query.
+
+If using this approach to load the page, progressively in pieces, care should be taken to apply css tricks to avoid unnecessary page reflows.
+
 ## If Shadow DOM is not needed / desired, use without-shadow attribute:
 
 ```html
@@ -271,7 +287,7 @@ The web component's JS will only be used to transform the html of the original b
 
 Unfortunately, the browser vendors have not been very kind to HTML-first solutions, which this screams for  (as do many of the award-winning [code-pens](https://www.google.com/search?q=best+codepens+of&rlz=1C1CHBF_enUS875US875&oq=best+codepens+of+&aqs=chrome..69i57j0l5.3835j0j7&sourceid=chrome&ie=UTF-8)).
 
-Suppose we stipulate that referencing a web component must consist of a single reference.  The most natural thing for a web component like this would be for that initial  definition to be in an HTML file, which can immediately display the original board, and when would then download the JS in preparation for the second board.  But browser vendors aren't looking out for people like Tiny Tim, so we must make the web component JS first.  At least I don't see a way to make this HTML first, as it ought to be, with existing standards.
+Suppose we stipulate that referencing a web component must consist of a single reference.  The most natural thing for a web component like this would be for that initial  definition to be in an HTML file, which can immediately display the original board, and which would then download the JS in preparation for the second board.  But browser vendors aren't looking out for people like Tiny Tim, so we must make the web component JS first.  At least I don't see a way to make this HTML first, as it ought to be, with existing standards.
 
 In order to provide the quickest visual, our web component, chess-board.js (say) can do the following:
 
