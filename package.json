@@ -20,7 +20,7 @@
     "es-module-shims": "0.4.6",
     "open-borders": "0.0.4"
   },
-  "version": "0.0.52",
+  "version": "0.0.53",
   "scripts": {
     "test": "node test/test-all.js",
     "serve": "node node_modules/xtal-test/serve.js",
