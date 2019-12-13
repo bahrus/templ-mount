@@ -67,7 +67,7 @@ If you want to use templ-mount to load templates within your Shadow DOM Realm, b
 ```html
  ⏵ #shadow-root (open)
     ...
-    <templ-mount>
+    <templ-mount></templ-mount>
     ...
     <template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
 ```
