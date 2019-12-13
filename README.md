@@ -58,6 +58,20 @@ If the templ-mount/templ-mount.js library is loaded (which we will assume going 
 
 After loading, an attribute "loaded" is added, and event "load" is fired.
 
+## Using the web component
+
+If you use templ-mount to handle all your template loading, there's no need to be aware that templ-mount is in fact a custom element.
+
+If you want to use templ-mount to load templates within your Shadow DOM Realm, but want to use templ-mount to handle loading of templates within your isolated content, you will need to plop a templ-mount instance inside your DOM:
+
+```html
+ ⏵ #shadow-root (open)
+    ...
+    <templ-mount></templ-mount>
+    ...
+    <template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
+```
+
 ## Specifying cors / other fetch options
 
 Use the request-init attribute to fine tune the fetch request:
@@ -124,7 +138,11 @@ Browser standard bearers seem to consider providing a solution that
 
 to be promoting an inferior user experience.  
 
-templ-mount is experiencing a far less affluent lifestyle, trying not to drown in the nearby fire-lake, with only half a bar on its mobile tablet. It disagrees with the previous assessment, and feels a moral duty to at least investigate whether this difficult functionality could be achieved with existing browser api's (to be determined).
+Sure, if you are a high-flying financier, who needs your web browser to be open at all times to your stock portfolio, and which needs to update with every stock fluctuation, of course lazy loading isn't the best user experience. Time is Money!
+
+But what about Tiny Tim, your assistant's little brother, suffering from renal tubular acidosis, an easily curable disease, who found a disposable feature phone while rummaging through garbage?  This is Tiny Tim's opportunity to look up a community hospital that will treat him for free, but the phone only has 3 minutes of battery life left, and is down to the last 580KB of data.  Is it that important that the advertisement for Gucci-Grograin-trimmed Quilted Leather Ankle Boots but preemptively downloaded, ready to be perused immediately at a single click, while conducting his search?
+
+templ-mount isn't so sure, and feels a pang of guilt not at least investigating whether lazy downloading / streaming  could be achieved with existing browser api's (to be determined).
 
 ## If Shadow DOM is not needed / desired, use without-shadow attribute:
 
