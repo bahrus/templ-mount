@@ -140,9 +140,17 @@ to be promoting an inferior user experience.
 
 Sure, if you are a high-flying financier, and you need your web browser to be open at all times to your stock portfolio, which needs to update with every stock fluctuation, of course lazy loading isn't the best user experience. Time is Money!
 
-But what about Tiny Tim, your assistant's little brother, suffering from renal tubular acidosis, an easily curable disease?  He toils away, shining people's shoes (shoes -- if only he could afford such a luxury).  One of his customers forgot to bring cash, and paid Tiny Tim instead with a disposable feature phone the customer was about to throw away.  This is Tiny Tim's opportunity to look up a community hospital that will treat him for free, but the phone only has 3 minutes of battery life left, and is down to the last 580KB of data, struggling with 1x speed at best.  Is it that important that the waiting list form to purchase Maurizio Cattelan’s masterpiece "Comedian, Fourth Edition" which is sponsoring the search, be preemptively downloaded as part of the original payload, ready to be perused immediately at a single click, in order for Tiny Tim to get the results of his search?
+But what about Tiny Tim, your assistant's little brother, suffering from renal tubular acidosis, an easily curable disease?  He toils away, shining people's shoes (shoes -- if only he could afford such a luxury).  One of his customers forgot to bring cash, and paid Tiny Tim instead with a disposable feature phone the customer was about to throw away.  This is Tiny Tim's opportunity to look up a community hospital that will treat him for free, but the phone only has 3 minutes of battery life left, and is down to the last 580KB of data, struggling with 1x speed at best.  
 
-templ-mount isn't so sure, and feels a pang of guilt for not at least *investigating* whether lazy downloading / streaming  could be achieved with existing browser api's (to be determined).
+Tim searches for "community hospitals near me", and watches his remaining data disappear while downloading, as part of the original payload, an ad that sponsoring the search.
+
+The ad allows Tiny Tim to join a waiting list to purchase Maurizio Cattelan’s next installment of his masterpiece series "Comedian, Nth Edition." But hey, at least it wasn't an iFrame.  
+
+This is the optimal user experience, according to the experts.
+
+templ-mount isn't so sure, and feels a pang of guilt for not at least *investigating* whether streaming  could be achieved with existing browser api's (to be determined).
+
+### Breaking Up Above the Fold Content
 
 It also seems likely that the same streaming effect could be put to good use in the case that:
 
@@ -156,7 +164,12 @@ It also seems likely that the same streaming effect could be put to good use in 
 
 ... is immediately visible on page load.  Now we need to retrieve the content immediately upon loading the page, and appending that to the visible article tag.  Rendering while the html streams in could also help here.
 
-Why would we want to not include the content of article in the original payload, even though it will be in an immediately viewable area?  The advantage of breaking up the loading page into these pieces, is that each sub section may depend on live back-end data coming from different sources.  Requiring that the server cannot send down any HTML until all such back end queries have completed, would mean performance would be driven by the slowest query.
+Why would we want to not include the content of article in the original payload, even though it will be in an immediately viewable area?  
+
+
+First, the assumption that it is immediately visible should be considered.  In some cases, what is immediately visible will depend on the device, so it is a matter of guesswork.
+
+But assuming it is guaranteed to be immediately visible by everyone, why bother?  The advantage of breaking up the loading page into these pieces, is that each sub section may depend on live back-end data coming from different sources.  Requiring that the server cannot send down any HTML until all such back end queries have completed would mean performance would be driven by the slowest query.
 
 **NB:**  If using this approach to load the page, progressively in pieces, care should be taken to apply css tricks to avoid unnecessary page reflows.
 
