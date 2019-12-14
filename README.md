@@ -142,7 +142,7 @@ Sure, if you are a high-flying financier, and you need your web browser to be op
 
 But what about Tiny Tim, your assistant's little brother, suffering from renal tubular acidosis, an easily curable disease?  He toils away, shining people's shoes (shoes -- if only he could afford such a luxury).  One of his customers forgot to bring cash, and paid Tiny Tim instead with a disposable feature phone the customer was about to throw away.  This is Tiny Tim's opportunity to look up a community hospital that will treat him for free, but the phone only has 3 minutes of battery life left, and is down to the last 580KB of data, struggling with 1x speed at best.  
 
-Tim searches for "community hospitals near me", and watches his remaining data disappear while downloading, as part of the original payload, an ad that sponsoring the search.
+Tim searches for "community hospitals near me", and watches his remaining data disappear while downloading, as part of the original payload, an ad sponsoring the search.
 
 The ad allows Tiny Tim to join a waiting list to purchase Maurizio Cattelan’s next installment of his masterpiece series "Comedian, Nth Edition." But hey, at least it wasn't an iFrame.  
 
