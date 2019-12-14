@@ -280,11 +280,10 @@ At the top of this document, we mentioned the desire to allow servers to send co
 <template import href=path/to/some/fileOrStream.html as=fos snip></template>
 ```
 
-## Changing parameters via href attribute of template.
+## Changing parameters via href attribute of template or via href property
 
 An iFrame allows you to change the src attribute, and the contents inside get replaced, rather than appended to.  That is now supported, but only if modifying the href attribute.
 
-## Changing parameters via href property of template [TODO].
 
 ## Defining a Web Component using templ-mount [untested idea]
 
