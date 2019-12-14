@@ -1,16 +1,13 @@
 import { CssObserve } from 'css-observe/css-observe.js';
 import { TemplMount } from './templ-mount.js';
-import { getShadowContainer } from 'xtal-element/getShadowContainer.js';
+import {decorate} from 'trans-render/decorate.js';
 const listening = Symbol();
 const hrefSym = Symbol();
 const hrefSym2 = Symbol();
+const propAdded = Symbol();
 
 export class FirstTempl {
     constructor(public tm: TemplMount) {
-        //const shadowContainer = getShadowContainer(tm);
-        //console.log(shadowContainer[listening]);
-        //if(shadowContainer[listening] === true) return;
-        //shadowContainer[listening] = true;
         console.log(tm[listening]);
         if (tm[listening] === true) return;
         tm[listening] = true;
@@ -28,6 +25,20 @@ export class FirstTempl {
         remoteTemplateObserver.addEventListener('latest-match-changed', e => {
             const t = (<any>e).detail.value as HTMLTemplateElement;
             const href = t.getAttribute('href') || t.getAttribute('last-href');
+            if(!t[propAdded]){
+                decorate(t, {
+                    propDefs:{
+                        'href': href
+                    },
+                    methods:{
+                        onPropsChange(name, newVal){
+                            t.setAttribute('href', newVal);
+                        }
+                    }
+                });
+            }
+            t[propAdded] = true;
+            
             TemplMount.template(href, {
                 tm: this.tm,
                 template: t

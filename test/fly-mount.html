@@ -60,12 +60,12 @@
             wriggled.open = true;
         }, 200);
     </script>
-    <template id=why2 import href=she-died.html as=why></template>
+    <template id=why2 import href=she-died.html?ts=1 as=why2></template>
 
-    <div  imp-key=why></div>
+    <div  imp-key=why2></div>
     <script>
         setTimeout(() =>{
-            switchWhy();
+            why2.setAttribute('href', 'why-spider.html');
         }, 800);
     </script>
     <template append-to-head>
@@ -75,12 +75,16 @@
         </style>
     </template>
 
-    <script>
-        function switchWhy(){
-            why2.setAttribute('href', 'why-spider.html');
-        }
-    </script>
 
+    <template id=bird import href=she-died.html?ts=2 as=bird></template>
+    <div imp-key=bird></div>
+    <script>
+            setTimeout(() =>{
+                //bird.setAttribute('href', 'bird.html');
+                bird.href = 'bird.html';
+            }, 800);
+        </script>
+    
     <!--
         <template href=https://cors-anywhere.herokuapp.com/https://link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
         <details>
