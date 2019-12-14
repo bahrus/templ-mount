@@ -26,6 +26,7 @@ export class TemplMount extends HTMLElement{
                 this.waitForIt(href, resolve, reject, options);
             }else if(temp !== undefined){
                 this.loadLocalTemplate(temp, options);
+                this.swapAttr(options.template, href);
                 resolve(temp);
             }else{
                 this._templateStrings[href] = true;
@@ -74,8 +75,7 @@ export class TemplMount extends HTMLElement{
             });
 
             const init: RequestInit = t.hasAttribute('request-init') ? JSON.parse(t.getAttribute('request-init')) : {};
-            options.template.removeAttribute('href');
-            options.template.setAttribute('last-href', href);
+            this.swapAttr(t, href);
             const resp = await fetch(href, init);
             let txt = await resp.text();
             if(t.hasAttribute('snip')){
@@ -117,6 +117,10 @@ export class TemplMount extends HTMLElement{
     //     this.setAttribute(import_key, nv);
     // }
 
+    static swapAttr(templ: HTMLTemplateElement, href: string){
+        templ.removeAttribute('href');
+        templ.setAttribute('last-href', href);
+    }
 
     async connectedCallback(){
         this.style.display = 'none';

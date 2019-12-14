@@ -30,6 +30,7 @@ export class TemplMount extends HTMLElement {
             }
             else if (temp !== undefined) {
                 this.loadLocalTemplate(temp, options);
+                this.swapAttr(options.template, href);
                 resolve(temp);
             }
             else {
@@ -75,8 +76,7 @@ export class TemplMount extends HTMLElement {
                 }
             });
             const init = t.hasAttribute('request-init') ? JSON.parse(t.getAttribute('request-init')) : {};
-            options.template.removeAttribute('href');
-            options.template.setAttribute('last-href', href);
+            this.swapAttr(t, href);
             const resp = await fetch(href, init);
             let txt = await resp.text();
             if (t.hasAttribute('snip')) {
@@ -106,6 +106,10 @@ export class TemplMount extends HTMLElement {
     // set importKey(nv: string){
     //     this.setAttribute(import_key, nv);
     // }
+    static swapAttr(templ, href) {
+        templ.removeAttribute('href');
+        templ.setAttribute('last-href', href);
+    }
     async connectedCallback() {
         this.style.display = 'none';
         this.loadFirstTempl();
