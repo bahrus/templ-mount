@@ -30,7 +30,7 @@ templ-mount helps load templates from url's, which point to HTML files or stream
 
 templ-mount remembers the day its creator first installed a PWA (Flipkart), and was blown away by the liberating effect this could have on web development.  PWA's swept aside significant barriers to the web, in terms of achieving parity with native apps.
 
-templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find ways of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server. And, in fact, this has been the focus of many talented, creative developers at the [cutting edges](https://codesandbox.io/s/floral-worker-xwbwv), who are using their engineering prowess to overcome the significant hurdles to good performance imposed by browser vendor lethargy.  
+templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find ways of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server. And, in fact, this *has* been the focus of many talented, creative developers at the [cutting edges](https://codesandbox.io/s/floral-worker-xwbwv), who are using their engineering prowess to overcome the significant hurdles to good performance imposed by browser vendor lethargy.  
 
 The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier and simpler to get Lighthouse's blessing.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g the ability to truly stream in HTML as it renders, resolving and preemptively downloading relative references, centrally resolving package dependencies via import maps, providing sand-boxing support when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api ([as](https://github.com/github/include-fragment-element) [are](https://www.filamentgroup.com/lab/html-includes/) [many](https://github.com/whatwg/html/issues/2791) [of](https://github.com/Juicy/imported-template/) [templ-mount's](https://api.jquery.com/load/) [compatriots](https://www.npmjs.com/package/@vanillawc/wc-include)).
 
@@ -144,7 +144,7 @@ But what about Tiny Tim, your assistant's little brother, suffering from renal t
 
 Tim searches for "community hospitals near me", and watches his remaining data disappear while downloading, as part of the original payload, an ad sponsoring the search.
 
-The ad allows Tiny Tim to join a waiting list to purchase Maurizio Cattelan’s next installment of his masterpiece series "Comedian, Nth Edition." But hey, at least it wasn't an iFrame.  
+The ad allows Tiny Tim to join a waiting list to purchase Maurizio Cattelan’s next installment of his masterpiece series "Comedian, Nth Edition." But hey, at least the ad wasn't delivered inside an iFrame.  Progress!  
 
 This is the optimal user experience, according to the experts.
 
@@ -169,7 +169,9 @@ Why would we want to not include the content of article in the original payload,
 
 First, the assumption that it is immediately visible should be considered.  In some cases, what is immediately visible will depend on the device, so it is a matter of guesswork.
 
-But assuming it is guaranteed to be immediately visible by everyone, why bother?  The advantage of breaking up the loading page into these pieces, is that each sub section may depend on live back-end data coming from different sources.  Requiring that the server cannot send down any HTML until all such back end queries have completed would mean performance would be driven by the slowest query.
+But assuming it is guaranteed to be immediately visible by everyone, why bother?  The advantage of breaking up the loading page into these pieces, is that each sub section may depend on live back-end data coming from different sources.  Requiring that the server cannot send down any HTML until all such back-end queries have completed would mean performance would be driven by the slowest query.
+
+In addition, the surrounding content, for example, the layout shell, may be a perfect candidate for (offline) caching, whereas the HTML content containing dynamic data might not be.
 
 **NB:**  If using this approach to load the page, progressively in pieces, care should be taken to apply css tricks to avoid unnecessary page reflows.
 
@@ -282,7 +284,7 @@ At the top of this document, we mentioned the desire to allow servers to send co
 
 ## Changing parameters via href attribute of template or via href property
 
-An iFrame allows you to change the src attribute, and the contents inside get replaced, rather than appended to.  That is now supported, but only if modifying the href attribute.
+An iFrame allows you to change the src attribute, and the contents inside get replaced, rather than appended to.  That is now supported, both as an attribute and as a property.
 
 
 ## Defining a Web Component using templ-mount [untested idea]
