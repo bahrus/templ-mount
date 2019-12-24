@@ -150,6 +150,15 @@ This is the optimal user experience, according to the experts.
 
 templ-mount isn't so sure, and feels a pang of guilt for not at least *investigating* whether streaming  could be achieved with existing browser api's (to be determined).
 
+<details>
+    <summary>Notes from the confused</summary>
+    https://streams.spec.whatwg.org/demos/
+    Seems streaming effect most pronounced in lighthouse if throttling cpu (as opposed to network).
+    Less code than expected, but still relies on iframes.  Can this trick be applied to generic element, like article?
+    Firefox support not there yet, but in development, safari? https://developer.mozilla.org/en-US/docs/Web/API/WritableStream
+    https://developer.apple.com/documentation/webkitjs/writablestream https://caniuse.com/#feat=streams
+</details>
+
 ### Breaking Up Above the Fold Content
 
 It also seems likely that the same streaming effect could be put to good use in the case that:
