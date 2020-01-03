@@ -128,7 +128,7 @@ We can lazy load the downloading as well, only beginning the download when the c
 </details>
 ```
 
-**Speculation:**  If this were implemented natively in the browser, it seems likely it would be possible to engineer this so that the content would pipe directly to the target element (article), rendering content as it streams in, and then store the final document in the template for repeated or later use.
+
 
 Browser standard bearers seem to consider providing a solution that
 
@@ -150,13 +150,26 @@ This is the optimal user experience, according to the experts.
 
 templ-mount isn't so sure, and feels a pang of guilt for not at least *investigating* whether streaming  could be achieved with existing browser api's (to be determined).
 
+**TODO:**  As support for streaming is  added to templ-mount's repertoire, it will need to be engineered so that the content would pipe directly to the target element (article), rendering content as it streams in, and then store the final document in the template for repeated or later use (perhaps after "exploding" internal templates).
+
 <details>
-    <summary>Notes from the confused</summary>
-    https://streams.spec.whatwg.org/demos/
-    Seems streaming effect most pronounced in lighthouse if throttling cpu (as opposed to network).
-    Less code than expected, but still relies on iframes.  Can this trick be applied to generic element, like article?
-    Firefox support not there yet, but in development, safari? https://developer.mozilla.org/en-US/docs/Web/API/WritableStream
-    https://developer.apple.com/documentation/webkitjs/writablestream https://caniuse.com/#feat=streams
+    <summary>Stream of Obliviousness</summary>
+
+1.  Chrome seems to be quite far along in supporting streaming.
+2.  Demos are [here](https://streams.spec.whatwg.org/demos/).
+3.  Firefox support for [WritableStream](https://platform-status.mozilla.org/) is in development.
+4.  Safari has provided no indication of time-frame for stream support.
+5.  More [details](https://caniuse.com/#feat=streams)
+6.  Chrome (and the demos linked above) only supports a TextReader/Decoder, and relies on a temporary iframe to chunk the response into the target DOM element.
+7.  Significantly, what does not appear to be in any near-term roadmap is native support for an [XML/HTML Reader](https://en.wikipedia.org/wiki/Simple_API_for_XML) .
+8.  In theory, the trans-render syntax could be usable for an XML/HTML Reader, but that appears to be an irrelevant observation in the near term.
+
+Tentative proposal:
+
+1.  Use stream api if browser supports and "when-needed" attribute is present.
+2.  Support "exploding / inline templates" in event
+
+
 </details>
 
 ### Breaking Up Above the Fold Content
