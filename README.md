@@ -231,7 +231,7 @@ This is what the dormant [template instantiation](https://github.com/w3c/webcomp
 </script>
 ```
 <details>
-<summary>### Consistency in expectations when using streaming</summary>
+<summary><h3> Consistency in expectations when using streaming</h3></summary>
 
 templates with attribute "when-needed" will always be streamed [TODO], those without will not.  This has a significant impact on template instantiating, that developers need to be aware of.  If streaming is used, the event will be fired *after* the content has been added to the DOM tree.  If streaming is not used (when-needed not present), an event needs to be fired *after* the content has streamed in.  This difference could have a significant impact on how content is activated, in terms of lifecycle events.  To help avoid confusion (hopefully), a different event is fired for the when-needed/streaming scenario ([TODO]):
 
