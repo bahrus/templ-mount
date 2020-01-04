@@ -233,7 +233,13 @@ This is what the dormant [template instantiation](https://github.com/w3c/webcomp
 <details>
 <summary>Consistency in expectations when using streaming</summary>
 
-templates with attribute "when-needed" will always be streamed [TODO], those without will not.  This has a significant impact on template instantiating, that developers need to be aware of.  If streaming is used, the event will be fired *after* the content has been added to the DOM tree.  If streaming is not used (when-needed not present), an event needs to be fired *after* the content has streamed in.  This difference could have a significant impact on how content is activated, in terms of lifecycle events.  To help avoid confusion (hopefully), a different event is fired for the when-needed/streaming scenario ([TODO]):
+templates with attribute "when-needed" will always be streamed [TODO], those without will not.  This has a significant impact on template instantiating, in terms of lifecycle events, and other considerations, that developers need to be aware of.  
+
+If streaming is used, the event will be fired *after* the content has been added to the live DOM tree (i.e. becomes active content), after which DOM manipulation will tend to be more expensive. 
+
+If streaming is *not* used (when-needed not present), an event can now be fired *before* the content has been added to the tree.  Manipulation of the pre-committed DOM is now considerably cheaper.
+
+To help avoid confusion (hopefully), a different event is fired for the when-needed/streaming scenario ([TODO]):
 
 ```html
 <template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 
@@ -247,6 +253,9 @@ templates with attribute "when-needed" will always be streamed [TODO], those wit
 ```
 
 Note that only Chrome supports streaming currently.  In order to not make the more capable browser(s) suffer, browsers that don't stream will still have event "stream-complete" fired, only after the content has been added to the live DOM Tree.
+
+Note that web components embedded in the stream can (I think) do interesting things while the content is being streamed, so that appears to be a nice use case for web components, which components [like](https://github.com/bahrus/p-et-alia) [these](https://github.com/bahrus/if-diff) try to factor in.
+
 </details>
 
 ## Referencing pre-populated templates, lazy loading into the DOM Tree
