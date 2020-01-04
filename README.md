@@ -148,7 +148,7 @@ The ad allows Tiny Tim to join a waiting list to purchase Maurizio Cattelan’s 
 
 This is the optimal user experience, according to the experts.
 
-templ-mount isn't so sure, and feels a pang of guilt for not at least *investigating* whether streaming  could be achieved with existing browser api's (to be determined).
+templ-mount isn't so sure, and feels a pang of guilt for not providing streaming via existing browser api's.
 
 **TODO:**  As support for streaming is  added to templ-mount's repertoire, it will need to be engineered so that the content would pipe directly to the target element (article), rendering content as it streams in, and then store the final document in the template for repeated or later use (perhaps after "exploding" internal templates).
 
@@ -157,18 +157,17 @@ templ-mount isn't so sure, and feels a pang of guilt for not at least *investiga
 
 1.  Chrome seems to be quite far along in supporting streaming.
 2.  Demos are [here](https://streams.spec.whatwg.org/demos/).
-3.  Firefox support for [WritableStream](https://platform-status.mozilla.org/) is in development.
-4.  Safari has provided no indication of time-frame for stream support.
-5.  More [details](https://caniuse.com/#feat=streams)
-6.  Chrome (and the demos linked above) only supports a TextReader/Decoder, and relies on a temporary iframe to chunk the response into the target DOM element.
-7.  Significantly, what does not appear to be in any near-term roadmap is native support for an [XML/HTML Reader](https://en.wikipedia.org/wiki/Simple_API_for_XML) .
-8.  In theory, the trans-render syntax could be usable for an XML/HTML Reader, but that appears to be an irrelevant observation in the near term.
+3.  Demos rely on iFrame, and document.write, which is somewhat limited in what it can write -- from my experience, the iframe streaming / writing doesn't work when it encounters a strict tag, for example.
+4.  Firefox support for [WritableStream](https://platform-status.mozilla.org/) is in development.
+5.  Safari has provided no indication of time-frame for stream support.
+6.  More [details](https://caniuse.com/#feat=streams)
+7.  Chrome (and the demos linked above) only supports a TextReader/Decoder, and relies on a temporary iframe to chunk the response into the target DOM element.
+8.  Significantly, what does not appear to be in any near-term roadmap is native support for an [XML/HTML Reader](https://en.wikipedia.org/wiki/Simple_API_for_XML) .
+9.  In theory, the trans-render syntax could be usable for an XML/HTML Reader, but that appears to be an irrelevant observation in the near term.
 
 Tentative proposal:
 
-Use stream api if browser supports and "when-needed" attribute is present.  This will provide consistency in expectations (described below).
-
-
+Use stream api if browser supports and "stream" attribute is present.  This will provide consistency in expectations (described below).
 
 </details>
 
@@ -227,22 +226,27 @@ This is what the dormant [template instantiation](https://github.com/w3c/webcomp
         const clone = e.detail.clone; // template clone
         const template = e.detail.template // the template tag used to produce the clone
         //manipulate the clone before it gets inserted into the DOM tree.
+    });
+    myArticle.addEventListener('insertion-complete', e =>{
+
     })
 </script>
 ```
 <details>
-<summary>Consistency in expectations when using streaming</summary>
+<summary>Considerations when using streaming</summary>
 
-templates with attribute "when-needed" will always be streamed [TODO], those without will not.  This has a significant impact on template instantiating, in terms of lifecycle events, and other considerations, that developers need to be aware of.  
+templates with attribute "stream" will be streamed into the target element the first time it used.  This has a significant impact on template instantiating, in terms of lifecycle events, and other considerations, that developers need to be aware of.  
 
 If streaming is used, the event will be fired *after* the content has been added to the live DOM tree (i.e. becomes active content), after which DOM manipulation will tend to be more expensive. 
 
-If streaming is *not* used (when-needed not present), an event can now be fired *before* the content has been added to the tree.  Manipulation of the pre-committed DOM is now considerably cheaper.
+If streaming is *not* used (when "stream" is not present or the content is not already downloaded), an event can now be fired *before* the content has been added to the tree.  Manipulation of the pre-committed DOM is now considerably cheaper.
 
-To help avoid confusion (hopefully), a different event is fired for the when-needed/streaming scenario ([TODO]):
+Event 'insertion-complete' will always fire after adding the content to the live DOM tree.
+
+To help avoid confusion (hopefully), a different event is fired for the streaming scenario ([TODO]):
 
 ```html
-<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 
+<template import stream href=//link.springer.com/article/10.1007/s00300-003-0563-3 
     as=penguins-poop when-needed without-shadow enable-filter ></template>
 <article imp-key=penguins-poop id=myArticle>
 <script>
@@ -251,6 +255,8 @@ To help avoid confusion (hopefully), a different event is fired for the when-nee
     })
 </script>
 ```
+
+Even if the stream attribute is present, event 'template-cloned' will also be fired if the url was already downloaded
 
 Note that only Chrome supports streaming currently.  In order to not make the more capable browser(s) suffer, browsers that don't stream will still have event "stream-complete" fired, only after the content has been added to the live DOM Tree.
 
