@@ -166,8 +166,8 @@ templ-mount isn't so sure, and feels a pang of guilt for not at least *investiga
 
 Tentative proposal:
 
-1.  Use stream api if browser supports and "when-needed" attribute is present.
-2.  Support "exploding / inline templates" in event
+Use stream api if browser supports and "when-needed" attribute is present.  This will provide consistency in expectations (described below).
+
 
 
 </details>
@@ -230,8 +230,28 @@ This is what the dormant [template instantiation](https://github.com/w3c/webcomp
     })
 </script>
 ```
+<details>
+<summary>### Consistency in expectations when using streaming</summary>
 
-## Referencing pre-populated templates, lazy loading in the DOM Tree
+templates with attribute "when-needed" will always be streamed [TODO], those without will not.  This has a significant impact on template instantiating, that developers need to be aware of.  If streaming is used, the event will be fired *after* the content has been added to the DOM tree.  If streaming is not used (when-needed not present), an event needs to be fired *after* the content has streamed in.  This difference could have a significant impact on how content is activated, in terms of lifecycle events.  To help avoid confusion (hopefully), a different event is fired for the when-needed/streaming scenario ([TODO]):
+
+```html
+<template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 
+    as=penguins-poop when-needed without-shadow enable-filter ></template>
+<article imp-key=penguins-poop id=myArticle>
+<script>
+    myArticle.addEventListener('stream-complete', e =>{
+        const clone = e.detail.clone; // template clone
+        const template = e.detail.template // the template tag used to produce the clone
+        //manipulate the clone before it gets inserted into the DOM tree.
+    })
+</script>
+```
+
+Note that only Chrome supports streaming currently.  In order to not make the more capable browser(s) suffer, browsers that don't stream will still have event "stream-complete" fired, only after the content has been added to the live DOM Tree.
+</details>
+
+## Referencing pre-populated templates, lazy loading into the DOM Tree
 
 If the content of a template is embedded inside a template tag already (as part of the original server-rendered payload), but you want to be able to import a clone using the same syntax, you can do the following:
 
