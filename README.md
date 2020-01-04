@@ -241,9 +241,7 @@ templates with attribute "when-needed" will always be streamed [TODO], those wit
 <article imp-key=penguins-poop id=myArticle>
 <script>
     myArticle.addEventListener('stream-complete', e =>{
-        const clone = e.detail.clone; // template clone
-        const template = e.detail.template // the template tag used to produce the clone
-        //manipulate the clone before it gets inserted into the DOM tree.
+         // nothing to pass, really?
     })
 </script>
 ```
