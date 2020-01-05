@@ -148,9 +148,9 @@ The ad allows Tiny Tim to join a waiting list to purchase Maurizio Cattelan’s 
 
 This is the optimal user experience, according to the experts.
 
-templ-mount isn't so sure, and feels a pang of guilt for not providing streaming via existing browser api's thus far.
+templ-mount isn't so sure, and feeling pang of guilt, has begun providing support for streaming via existing browser api's thus far (Chrome has good support, Firefox is in development).
 
-**Presliminary Streaming Support:**  As support for streaming is added to templ-mount's repertoire, it is being engineered so that the content can pipe directly to the target element (article), rendering content as it streams in, and then the final document is stored in the template for repeated or later use.
+**Preliminary Streaming Support:**  As support for streaming is added to templ-mount's repertoire, it is being engineered so that the content can pipe directly to the target element (article), rendering content as it streams in, and then the final document is stored in the template for repeated or later use.
 
 <details>
     <summary>Stream of Obliviousness</summary>
