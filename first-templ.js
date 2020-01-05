@@ -74,6 +74,7 @@ export class FirstTempl {
                 await TemplMount.template(href, {
                     tm: this.tm,
                     template: template,
+                    target: newlyVisibleElement,
                 });
             }
             else {
@@ -138,6 +139,7 @@ export class FirstTempl {
                 TemplMount.template(href, {
                     tm: this.tm,
                     template: t,
+                    target: elementToWatchForTurningVisible,
                 }).then(val => {
                     const ioi = {
                         threshold: 0.01

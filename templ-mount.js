@@ -98,23 +98,31 @@ export class TemplMount extends HTMLElement {
             });
             const init = t.hasAttribute('request-init') ? JSON.parse(t.getAttribute('request-init')) : {};
             this.swapAttr(t, href);
-            const resp = await fetch(href, init);
-            let txt = await resp.text();
-            const snip = t.getAttribute('snip');
-            if (snip !== null) {
-                if (snip.startsWith('{')) {
-                    const snipInstructions = JSON.parse(snip);
-                    txt = this.extract(txt, snipInstructions.lhs, snipInstructions.rhs);
-                }
-                else {
-                    const split = txt.split('<!---->');
-                    if (split.length > 1) {
-                        txt = split[1];
+            console.log(options.target);
+            if (options.target !== undefined && t.hasAttribute('stream')) {
+                const { streamOrator } = await import('stream-orator/stream-orator.js');
+                await streamOrator(href, init, options.target);
+                this.loadLocalTemplate(options.target.innerHTML, options);
+            }
+            else {
+                const resp = await fetch(href, init);
+                let txt = await resp.text();
+                const snip = t.getAttribute('snip');
+                if (snip !== null) {
+                    if (snip.startsWith('{')) {
+                        const snipInstructions = JSON.parse(snip);
+                        txt = this.extract(txt, snipInstructions.lhs, snipInstructions.rhs);
+                    }
+                    else {
+                        const split = txt.split('<!---->');
+                        if (split.length > 1) {
+                            txt = split[1];
+                        }
                     }
                 }
+                this._templateStrings[href] = txt;
+                this.loadLocalTemplate(txt, options);
             }
-            this._templateStrings[href] = txt;
-            this.loadLocalTemplate(txt, options);
             window.dispatchEvent(customEvent);
         }
         catch (e) {
