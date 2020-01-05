@@ -10,7 +10,7 @@
   "dependencies": {
     "xtal-element": "0.0.99",
     "css-observe": "0.0.17",
-    "stream-orator": "0.0.1"
+    "stream-orator": "0.0.3"
   },
   "devDependencies": {
     "@types/tape": "4.2.33",

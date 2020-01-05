@@ -233,17 +233,11 @@ This is what the dormant [template instantiation](https://github.com/w3c/webcomp
 </script>
 ```
 <details>
-<summary>Considerations when using streaming</summary>
+<summary>Considerations when using streaming [TODO]</summary>
 
 templates with attribute "stream" will be streamed into the target element the first time it used.  This has a significant impact on template instantiating, in terms of lifecycle events, and other considerations, that developers need to be aware of.  
 
-If streaming is used, the event will be fired *after* the content has been added to the live DOM tree (i.e. becomes active content), after which DOM manipulation will tend to be more expensive. 
-
-If streaming is *not* used (when "stream" is not present or the content is not already downloaded), an event can now be fired *before* the content has been added to the tree.  Manipulation of the pre-committed DOM is now considerably cheaper.
-
-Event 'insertion-complete' will always fire after adding the content to the live DOM tree.
-
-To help avoid confusion (hopefully), a different event is fired for the streaming scenario ([TODO]):
+If streaming is used, the template-cloned event will not be fired the first time content is added to the live DOM tree (i.e. becomes active content).  Only event stream-complete will be fired, at which point DOM manipulation will tend to be more expensive. 
 
 ```html
 <template import stream href=//link.springer.com/article/10.1007/s00300-003-0563-3 
@@ -255,6 +249,11 @@ To help avoid confusion (hopefully), a different event is fired for the streamin
     })
 </script>
 ```
+
+If streaming is *not* used (when "stream" is not present or the content is already downloaded), an event can now be fired *before* the content has been added to the tree.  Manipulation of the pre-committed DOM is now considerably cheaper.
+
+
+
 
 Even if the stream attribute is present, event 'template-cloned' will also be fired if the url was already downloaded
 

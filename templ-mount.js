@@ -66,6 +66,27 @@ export class TemplMount extends HTMLElement {
         }));
         //        }
     }
+    //https://gist.github.com/GuillaumeJasmin/9119436
+    static extract(s, prefix, suffix) {
+        let i = s.indexOf(prefix);
+        if (i >= 0) {
+            return s.substring(i + prefix.length);
+        }
+        else {
+            return '';
+        }
+        if (suffix) {
+            i = s.indexOf(suffix);
+            if (i >= 0) {
+                return s.substring(0, i);
+            }
+            else {
+                return '';
+            }
+        }
+        return s;
+    }
+    ;
     static async load(href, options) {
         try {
             const t = options.template;
@@ -79,10 +100,17 @@ export class TemplMount extends HTMLElement {
             this.swapAttr(t, href);
             const resp = await fetch(href, init);
             let txt = await resp.text();
-            if (t.hasAttribute('snip')) {
-                const split = txt.split('<!---->');
-                if (split.length > 1) {
-                    txt = split[1];
+            const snip = t.getAttribute('snip');
+            if (snip !== null) {
+                if (snip.startsWith('{')) {
+                    const snipInstructions = JSON.parse(snip);
+                    txt = this.extract(txt, snipInstructions.lhs, snipInstructions.rhs);
+                }
+                else {
+                    const split = txt.split('<!---->');
+                    if (split.length > 1) {
+                        txt = split[1];
+                    }
                 }
             }
             this._templateStrings[href] = txt;
