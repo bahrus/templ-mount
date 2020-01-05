@@ -336,6 +336,14 @@ At the top of this document, we mentioned the desire to allow servers to send co
 <template import href=path/to/some/fileOrStream.html as=fos snip></template>
 ```
 
+### Lhs, Rhs snipping
+
+The left hand side and right hand side of the snipping can be specified:
+
+```html
+<template import href=path/to/some/fileOrStream.html as=fos snip='{"lhs":"<body","rhs":"</body>"}'></template>
+```
+
 ## Changing parameters via href attribute of template or via href property
 
 An iFrame allows you to change the src attribute, and the contents inside get replaced, rather than appended to.  That is now supported, both as an attribute and as a property.
