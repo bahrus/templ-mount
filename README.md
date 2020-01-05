@@ -148,26 +148,26 @@ The ad allows Tiny Tim to join a waiting list to purchase Maurizio Cattelan’s 
 
 This is the optimal user experience, according to the experts.
 
-templ-mount isn't so sure, and feels a pang of guilt for not providing streaming via existing browser api's.
+templ-mount isn't so sure, and feels a pang of guilt for not providing streaming via existing browser api's thus far.
 
-**TODO:**  As support for streaming is  added to templ-mount's repertoire, it will need to be engineered so that the content would pipe directly to the target element (article), rendering content as it streams in, and then store the final document in the template for repeated or later use (perhaps after "exploding" internal templates).
+**TODO:**  As support for streaming is added to templ-mount's repertoire, it will need to be engineered so that the content can pipe directly to the target element (article), rendering content as it streams in, and then store the final document in the template for repeated or later use.
 
 <details>
     <summary>Stream of Obliviousness</summary>
 
 1.  Chrome seems to be quite far along in supporting streaming.
 2.  Demos are [here](https://streams.spec.whatwg.org/demos/).
-3.  Demos rely on iFrame, and document.write, which is somewhat limited in what it can write -- from my experience, the iframe streaming / writing doesn't work when it encounters a strict tag, for example.
+3.  Demos rely on iFrame, and document.write, which is somewhat limited in what it can write -- from my experience, the iframe streaming / writing doesn't work when it encounters a script tag, for example (maybe if the script throws an error it fails?).
 4.  Firefox support for [WritableStream](https://platform-status.mozilla.org/) is in development.
 5.  Safari has provided no indication of time-frame for stream support.
 6.  More [details](https://caniuse.com/#feat=streams)
 7.  Chrome (and the demos linked above) only supports a TextReader/Decoder, and relies on a temporary iframe to chunk the response into the target DOM element.
 8.  Significantly, what does not appear to be in any near-term roadmap is native support for an [XML/HTML Reader](https://en.wikipedia.org/wiki/Simple_API_for_XML) .
-9.  In theory, the trans-render syntax could be usable for an XML/HTML Reader, but that appears to be an irrelevant observation in the near term.
+9.  In theory, the trans-render syntax could be usable for a streaming XML/HTML Reader, but that appears to be an irrelevant observation in the near term.  The only relevance I can see is if future support for this kind of streaming would have any impact on the current api (i.e. desire not to get boxed in).
 
 Tentative proposal:
 
-Use stream api if browser supports and "stream" attribute is present.  This will provide consistency in expectations (described below).
+Use stream api if browser supports and "stream" attribute is present.  But not for repeated templating.
 
 </details>
 
@@ -185,16 +185,15 @@ It also seems likely that the same streaming effect could be put to good use in 
 
 ... is immediately visible on page load.  Now we need to retrieve the content immediately upon loading the page, and appending that to the visible article tag.  Rendering while the html streams in could also help here.
 
-Why would we want to not include the content of article in the original payload, even though it will be in an immediately viewable area?  
-
+Why would we want to *not* include the content of article in the original payload, even though it will be in an immediately viewable area?  
 
 First, the assumption that it is immediately visible should be considered.  In some cases, what is immediately visible will depend on the device, so it is a matter of guesswork.
 
 But assuming it is guaranteed to be immediately visible by everyone, why bother?  The advantage of breaking up the loading page into these pieces, is that each sub section may depend on live back-end data coming from different sources.  Requiring that the server cannot send down any HTML until all such back-end queries have completed would mean performance would be driven by the slowest query.
 
-In addition, the surrounding content, for example, the layout shell, may be a perfect candidate for (offline) caching, whereas the HTML content containing dynamic data might not be.
+In addition, the surrounding content -- for example, the layout shell -- may be a perfect candidate for (offline) caching, whereas the HTML content containing dynamic data might not be.
 
-**NB:**  If using this approach to load the page, progressively in pieces, care should be taken to apply css tricks to avoid unnecessary page reflows.
+**NB:**  If using this approach to load the page progressively, in pieces, then care should be taken to apply css tricks to avoid unnecessary page reflows.
 
 ## If Shadow DOM is not needed / desired, use without-shadow attribute:
 
@@ -225,17 +224,19 @@ This is what the dormant [template instantiation](https://github.com/w3c/webcomp
     myArticle.addEventListener('template-cloned', e =>{
         const clone = e.detail.clone; // template clone
         const template = e.detail.template // the template tag used to produce the clone
-        //manipulate the clone before it gets inserted into the DOM tree.
+        //manipulate the clone before it gets inserted into the DOM tree, for more cost-effective manipulation.
     });
     myArticle.addEventListener('insertion-complete', e =>{
-
+        //fired after template has been appended into target.
+        //DOM manipulation will tend to be more costly now.
     })
 </script>
 ```
 <details>
+
 <summary>Considerations when using streaming [TODO]</summary>
 
-templates with attribute "stream" will be streamed into the target element the first time it used.  This has a significant impact on template instantiating, in terms of lifecycle events, and other considerations, that developers need to be aware of.  
+templates with attribute "stream" will be streamed into the target element the first time that url is used (if when-needed attribute is also present).  This has a significant impact on template instantiating, in terms of lifecycle events, and other considerations, that developers need to be aware of.  
 
 If streaming is used, the template-cloned event will not be fired the first time content is added to the live DOM tree (i.e. becomes active content).  Only event stream-complete will be fired, at which point DOM manipulation will tend to be more expensive. 
 
@@ -252,10 +253,20 @@ If streaming is used, the template-cloned event will not be fired the first time
 
 If streaming is *not* used (when "stream" is not present or the content is already downloaded), an event can now be fired *before* the content has been added to the tree.  Manipulation of the pre-committed DOM is now considerably cheaper.
 
+Even if the stream attribute is present, event 'template-cloned' will also be fired if the url was already downloaded.  
 
+But in the case that the content needs to be modified while streaming, another event is fired, which does not bubble:
 
-
-Even if the stream attribute is present, event 'template-cloned' will also be fired if the url was already downloaded
+```html
+<template id=myTemplate import stream href=//link.springer.com/article/10.1007/s00300-003-0563-3 
+    as=penguins-poop when-needed without-shadow enable-filter ></template>
+<article imp-key=penguins-poop id=myArticle>
+<script>
+    myTemplate.addEventListener('stream-chunk', e =>{
+         e.detail.text = e.detail.text.substring(100);
+    })
+</script>
+```
 
 Note that only Chrome supports streaming currently.  In order to not make the more capable browser(s) suffer, browsers that don't stream will still have event "stream-complete" fired, only after the content has been added to the live DOM Tree.
 
