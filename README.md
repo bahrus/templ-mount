@@ -150,7 +150,7 @@ This is the optimal user experience, according to the experts.
 
 templ-mount isn't so sure, and feels a pang of guilt for not providing streaming via existing browser api's thus far.
 
-**TODO:**  As support for streaming is added to templ-mount's repertoire, it will need to be engineered so that the content can pipe directly to the target element (article), rendering content as it streams in, and then store the final document in the template for repeated or later use.
+**Presliminary Streaming Support:**  As support for streaming is added to templ-mount's repertoire, it is being engineered so that the content can pipe directly to the target element (article), rendering content as it streams in, and then the final document is stored in the template for repeated or later use.
 
 <details>
     <summary>Stream of Obliviousness</summary>
