@@ -2,6 +2,7 @@
 interface templateSecondArg{
     tm?: TemplMount | undefined;
     template: HTMLTemplateElement | undefined;
+    target?: HTMLElement | undefined;
 }
 const root = Symbol();
 /**
