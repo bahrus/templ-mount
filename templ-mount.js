@@ -1,3 +1,4 @@
+//const import_key = 'import-key';
 const root = Symbol();
 /**
  * templ-mount helps load templates from url's, which point to HTML files or streams.
@@ -5,9 +6,6 @@ const root = Symbol();
  */
 export class TemplMount extends HTMLElement {
     constructor() {
-        // static get observedAttributes(){
-        //     return [import_key];
-        // }
         super(...arguments);
         // attributeChangedCallback(n: string, ov: string, nv: string){
         //     switch(n){
@@ -61,27 +59,29 @@ export class TemplMount extends HTMLElement {
         //        if(!template.hasAttribute('loaded')){
         template.innerHTML = templateString;
         template.setAttribute('loaded', '');
-        template.dispatchEvent(new CustomEvent('load', {
-            bubbles: true,
-        }));
+        options.tm.emit(template, 'load', {});
+        // template.dispatchEvent(new CustomEvent('load', {
+        //     bubbles: true,
+        // }));
         //        }
     }
     //https://gist.github.com/GuillaumeJasmin/9119436
     static extract(s, prefix, suffix) {
         let i = s.indexOf(prefix);
+        let returnStr;
         if (i >= 0) {
-            return s.substring(i + prefix.length);
+            returnStr = s.substring(i + prefix.length);
         }
         else {
             return '';
         }
         if (suffix) {
-            i = s.indexOf(suffix);
+            i = returnStr.indexOf(suffix);
             if (i >= 0) {
                 return s.substring(0, i);
             }
             else {
-                return '';
+                return returnStr;
             }
         }
         return s;
@@ -169,6 +169,12 @@ export class TemplMount extends HTMLElement {
     async loadSecondTempl() {
         const { SecondTempl } = await import('./second-templ.js');
         new SecondTempl(this);
+    }
+    emit(src, type, detail) {
+        src.dispatchEvent(new CustomEvent(type, {
+            bubbles: true,
+            detail: detail
+        }));
     }
 }
 TemplMount._templateStrings = {}; //store in session storage?

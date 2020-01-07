@@ -1,22 +1,15 @@
+import {TemplMountEventNameMap, TemplateSecondArg, ITemplMount} from './types.d.js';
 //const import_key = 'import-key';
-interface templateSecondArg{
-    tm?: TemplMount | undefined;
-    template: HTMLTemplateElement | undefined;
-    target?: HTMLElement | undefined;
-}
+
 const root = Symbol();
 /**
  * templ-mount helps load templates from url's, which point to HTML files or streams.
  * @element templ-mount
  */
-export class TemplMount extends HTMLElement{
-
-    // static get observedAttributes(){
-    //     return [import_key];
-    // }
+export class TemplMount extends HTMLElement implements ITemplMount{
 
     static _templateStrings : {[href: string]: string | true} = {}; //store in session storage?
-    static template(href: string, options: templateSecondArg){
+    static template(href: string, options: TemplateSecondArg){
         return new Promise((resolve, reject) =>{
             if(href === null || options.template.hasAttribute('when-needed')){
                resolve(null);
@@ -37,7 +30,7 @@ export class TemplMount extends HTMLElement{
             }
         });
     }
-    static waitForIt(href: string, resolve: any, reject: any, options: templateSecondArg){
+    static waitForIt(href: string, resolve: any, reject: any, options: TemplateSecondArg){
         window.addEventListener(href + '-ready-tm', e =>{
             const a = e as CustomEventInit;
             if(a.detail && a.detail.template){
@@ -54,39 +47,41 @@ export class TemplMount extends HTMLElement{
             once: true
         })
     }
-    static loadLocalTemplate(templateString: string, options: templateSecondArg){
+    static loadLocalTemplate(templateString: string, options: TemplateSecondArg){
         const template = options.template;
 //        if(!template.hasAttribute('loaded')){
             template.innerHTML = templateString;
             template.setAttribute('loaded', '');
-            template.dispatchEvent(new CustomEvent('load', {
-                bubbles: true,
-            }));
+            options.tm.emit<'load'>(template, 'load', {});
+            // template.dispatchEvent(new CustomEvent('load', {
+            //     bubbles: true,
+            // }));
 //        }
     }
 
     //https://gist.github.com/GuillaumeJasmin/9119436
     static extract(s: string, prefix: string, suffix: string) {
         let i = s.indexOf(prefix);
+        let returnStr;
         if (i >= 0) {
-            return s.substring(i + prefix.length);
+            returnStr = s.substring(i + prefix.length);
         }
         else {
             return '';
         }
         if (suffix) {
-            i = s.indexOf(suffix);
+            i = returnStr.indexOf(suffix);
             if (i >= 0) {
                 return s.substring(0, i);
             }
             else {
-              return '';
+              return returnStr;
             }
         }
         return s;
     };
 
-    static async load(href: string, options: templateSecondArg){
+    static async load(href: string, options: TemplateSecondArg){
         try{
             const t = options.template;
             const customEvent = new CustomEvent(href + '-ready-tm', {
@@ -167,7 +162,7 @@ export class TemplMount extends HTMLElement{
             self[root] = true;
             Array.from(document.querySelectorAll('import[import][href]')).forEach(el =>{
                 const templ = el as HTMLTemplateElement;
-                const options : templateSecondArg = {
+                const options : TemplateSecondArg = {
                     template: templ,
                     tm: this
                 };
@@ -186,6 +181,12 @@ export class TemplMount extends HTMLElement{
         new SecondTempl(this);
     }
 
+    emit<K extends keyof TemplMountEventNameMap>(src: HTMLElement, type: K,  detail: TemplMountEventNameMap[K]){
+        src.dispatchEvent(new CustomEvent(type, {
+            bubbles: true,
+            detail: detail
+        }));
+    }
 
 }
 customElements.define('templ-mount', TemplMount);

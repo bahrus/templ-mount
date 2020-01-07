@@ -85,13 +85,10 @@ export class FirstTempl {
             newlyVisibleElement[hrefSym2] = href;
             const clone = template.content.cloneNode(true);
             if (template.hasAttribute('enable-filter')) {
-                newlyVisibleElement.dispatchEvent(new CustomEvent('template-cloned', {
-                    bubbles: true,
-                    detail: {
-                        clone: clone,
-                        template: template
-                    }
-                }));
+                this.tm.emit(newlyVisibleElement, 'template-cloned', {
+                    clone: clone,
+                    template: template
+                });
             }
             if (template.hasAttribute('without-shadow')) {
                 newlyVisibleElement.innerHTML = '';
