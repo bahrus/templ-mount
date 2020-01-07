@@ -95,8 +95,8 @@ export class TemplMount extends HTMLElement implements ITemplMount{
             this.swapAttr(t, href);
             console.log(options.target);
             if(options.target !== undefined && t.hasAttribute('stream')){
-                const {streamOrator} = await import('stream-orator/stream-orator.js');
-                await streamOrator(href, init, options.target);
+                const {streamOrator, TemplateProcessor} = await import('stream-orator/stream-orator.js');
+                await streamOrator(href, init, options.target, new TemplateProcessor(t));
                 this.loadLocalTemplate(options.target.innerHTML, options);
             }else{
                 const resp = await fetch(href, init);
