@@ -167,7 +167,7 @@ templ-mount isn't so sure, and feeling pang of guilt, has begun providing suppor
 
 Tentative proposal:
 
-Use stream api if browser supports and "stream" attribute is present.  But not for repeated templating.
+Use stream api if browser supports and "when-needed" and "stream" attribute are present.
 
 </details>
 
@@ -193,7 +193,7 @@ But assuming it is guaranteed to be immediately visible by everyone, why bother?
 
 In addition, the surrounding content -- for example, the layout shell -- may be a perfect candidate for (offline) caching, whereas the HTML content containing dynamic data might not be.
 
-**NB:**  If using this approach to load the page progressively, in pieces, then care should be taken to apply css tricks to avoid unnecessary page reflows.
+**NB:**  If using this approach to load the page progressively and in pieces, care should be taken to apply css tricks to avoid unnecessary page reflows.
 
 ## If Shadow DOM is not needed / desired, use without-shadow attribute:
 
@@ -212,7 +212,7 @@ Note that if you define multiple templates with identical href's, for example on
 
 ## Template Instantiating
 
-If you use ShadowDOM, there is built in support for slotting content.  But if you disable ShadowDOM, as above, but still want to insert some dynamic information, what to do?
+If you use ShadowDOM, there is built-in support for slotting content.  But if you disable ShadowDOM, as above, but still want to insert some dynamic information, what to do?
 
 This is what the dormant [template instantiation](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) proposal is meant to address.  As that isn't built into the browser, an alternative way of finessing the template is provided by the [trans-render](https://github.com/bahrus/trans-render) library.  To invoke something like this (whether or not you allow ShadowDOM), you can enable ["filtering"](https://www.journaldev.com/1933/java-servlet-filter-example-tutorial) thusly:
 
@@ -234,7 +234,7 @@ This is what the dormant [template instantiation](https://github.com/w3c/webcomp
 ```
 <details>
 
-<summary>Considerations when using streaming [TODO]</summary>
+<summary>Considerations when using streaming [subject to change]</summary>
 
 templates with attribute "stream" will be streamed into the target element the first time that url is used (if when-needed attribute is also present).  This has a significant impact on template instantiating, in terms of lifecycle events, and other considerations, that developers need to be aware of.  
 

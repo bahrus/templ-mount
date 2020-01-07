@@ -9,9 +9,14 @@ export interface TemplateClonedDetail{
     template: HTMLTemplateElement
 }
 
+export interface StreamCompleteDetail{
+    template: HTMLTemplateElement
+}
+
 export interface TemplMountEventNameMap {
     'load': {},
     'template-cloned': TemplateClonedDetail,
+    'stream-complete': StreamCompleteDetail,
 }
 
 export interface ITemplMount{
