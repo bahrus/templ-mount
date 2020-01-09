@@ -46,7 +46,7 @@ If this functionality (or some variation) were [built into the browser](https://
 
 ## Significant to-do items.
 
-Reference resolution (e.g. nested script tags with relative paths, import mapping), support for different trust levels, streaming support.
+Reference resolution (e.g. nested script tags with relative paths, import mapping), support for different trust levels.
 
 ## Retrieving template tags
 
@@ -56,7 +56,7 @@ If the templ-mount/templ-mount.js library is loaded (which we will assume going 
 <template import href=//link.springer.com/article/10.1007/s00300-003-0563-3 as=penguins-poop></template>
 ```
 
-After loading, an attribute "loaded" is added, and event "load" is fired.
+After loading, an attribute "loaded" is added, property "loaded" set to true, and event "load" is fired.
 
 ## Using the web component
 
@@ -148,9 +148,7 @@ The ad allows Tiny Tim to join a waiting list to purchase Maurizio Cattelan’s 
 
 This is the optimal user experience, according to the experts.
 
-templ-mount isn't so sure, and feeling pang of guilt, has begun providing support for streaming via existing browser api's thus far (Chrome has good support, Firefox is in development).
-
-**Preliminary Streaming Support:**  As support for streaming is added to templ-mount's repertoire, it is being engineered so that the content can pipe directly to the target element (article), rendering content as it streams in, and then the final document is stored in the template for repeated or later use.
+templ-mount isn't so sure, and feeling pangs of guilt, now provides preliminary support for streaming via existing browser api's when available (Chrome has good support, Firefox is in development).  templ-mount's streaming support is engineered so that the content can pipe directly to the target element (article), rendering content as it streams in, and then the final document is stored in the template for repeated or later use.
 
 <details>
     <summary>Stream of Obliviousness</summary>
@@ -162,7 +160,7 @@ templ-mount isn't so sure, and feeling pang of guilt, has begun providing suppor
 5.  Safari has provided no indication of time-frame for stream support.
 6.  More [details](https://caniuse.com/#feat=streams)
 7.  Chrome (and the demos linked above) only supports a TextReader/Decoder, and relies on a temporary iframe to chunk the response into the target DOM element.
-8.  Significantly, what does not appear to be in any near-term roadmap is native support for an [XML/HTML Reader](https://en.wikipedia.org/wiki/Simple_API_for_XML) .
+8.  Significantly, what does not appear to be in any near-term road map is native support for an [XML/HTML Reader](https://en.wikipedia.org/wiki/Simple_API_for_XML) .
 9.  In theory, the trans-render syntax could be usable for a streaming XML/HTML Reader, but that appears to be an irrelevant observation in the near term.  The only relevance I can see is if future support for this kind of streaming would have any impact on the current api (i.e. desire not to get boxed in).
 
 Tentative proposal:
@@ -236,9 +234,9 @@ This is what the dormant [template instantiation](https://github.com/w3c/webcomp
 
 <summary>Considerations when using streaming [subject to change]</summary>
 
-templates with attribute "stream" will be streamed into the target element the first time that url is used (if when-needed attribute is also present).  This has a significant impact on template instantiating, in terms of lifecycle events, and other considerations, that developers need to be aware of.  
+templates with attribute "stream" will be streamed into the target element the first time that url is used (if "when-needed" attribute is also present).  This has a significant impact on template instantiating, in terms of lifecycle events, and other considerations, that developers need to be aware of.  
 
-If streaming is used, the template-cloned event will not be fired the first time content is added to the live DOM tree (i.e. becomes active content).  Only event stream-complete will be fired, at which point DOM manipulation will tend to be more expensive. 
+If streaming is used, the template-cloned event will not be fired the first time content is added to the live DOM tree (i.e. becomes active content).  Only event "stream-complete" will be fired, at which point DOM manipulation will tend to be more expensive. 
 
 ```html
 <template import stream href=//link.springer.com/article/10.1007/s00300-003-0563-3 
@@ -268,9 +266,11 @@ But in the case that the content needs to be modified while streaming, another e
 </script>
 ```
 
+This provides the opportunity to modify the stream before it gets added to the DOM.
+
 Note that only Chrome supports streaming currently.  In order to not make the more capable browser(s) suffer, browsers that don't stream will still have event "stream-complete" fired, only after the content has been added to the live DOM Tree.
 
-Note that web components embedded in the stream can (I think) do interesting things while the content is being streamed, so that appears to be a nice use case for web components, which components [like](https://github.com/bahrus/p-et-alia) [these](https://github.com/bahrus/if-diff) try to factor in.
+Note that web components embedded in the stream can (I think) do interesting things while the content is being streamed, so that appears to be a nice use case for web components, which components [like](https://github.com/bahrus/p-et-alia) [these](https://github.com/bahrus/if-diff) try to take advantage of.
 
 </details>
 

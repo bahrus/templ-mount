@@ -51,6 +51,7 @@ export class TemplMount extends HTMLElement implements ITemplMount{
         const template = options.template;
 //        if(!template.hasAttribute('loaded')){
             template.innerHTML = templateString;
+            (<any>template).loaded = true;
             template.setAttribute('loaded', '');
             options.tm.emit<'load'>(template, 'load', {});
             // template.dispatchEvent(new CustomEvent('load', {

@@ -58,6 +58,7 @@ export class TemplMount extends HTMLElement {
         const template = options.template;
         //        if(!template.hasAttribute('loaded')){
         template.innerHTML = templateString;
+        template.loaded = true;
         template.setAttribute('loaded', '');
         options.tm.emit(template, 'load', {});
         // template.dispatchEvent(new CustomEvent('load', {
@@ -98,10 +99,11 @@ export class TemplMount extends HTMLElement {
             });
             const init = t.hasAttribute('request-init') ? JSON.parse(t.getAttribute('request-init')) : {};
             this.swapAttr(t, href);
-            console.log(options.target);
+            //console.log(options.target);
             if (options.target !== undefined && t.hasAttribute('stream')) {
                 const { streamOrator, TemplateProcessor } = await import('stream-orator/stream-orator.js');
                 await streamOrator(href, init, options.target, new TemplateProcessor(t));
+                options.tm.emit(options.target, 'stream-complete', { template: options.template });
                 this.loadLocalTemplate(options.target.innerHTML, options);
             }
             else {
