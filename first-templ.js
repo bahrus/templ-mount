@@ -9,7 +9,6 @@ export class FirstTempl {
     constructor(tm) {
         this.tm = tm;
         this._templateLookup = {};
-        console.log(tm[listening]);
         if (tm[listening] === true)
             return;
         tm[listening] = true;

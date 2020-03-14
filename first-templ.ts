@@ -8,7 +8,6 @@ const propAdded = Symbol();
 
 export class FirstTempl {
     constructor(public tm: TemplMount) {
-        console.log(tm[listening]);
         if (tm[listening] === true) return;
         tm[listening] = true;
         const remoteTemplateObserver = document.createElement(CssObserve.is) as CssObserve;
