@@ -1,11 +1,11 @@
 import {CssObserve} from 'css-observe/css-observe.js';
 import {TemplMount} from './templ-mount.js'; 
-import {getShadowContainer} from 'xtal-element/getShadowContainer.js'; 
+// import {getShadowContainer} from 'xtal-element/getShadowContainer.js'; 
 const listening = Symbol();
 const activatedIds: Set<string> = new Set<string>();
 export class SecondTempl{
     constructor(public tm: TemplMount){
-        const shadowContainer = getShadowContainer(tm);
+        const shadowContainer = tm.getRootNode();
         if(shadowContainer[listening] === true) return;
         shadowContainer[listening] = true;
         const templateObserver = document.createElement(CssObserve.is) as CssObserve;

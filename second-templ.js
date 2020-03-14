@@ -1,11 +1,11 @@
 import { CssObserve } from 'css-observe/css-observe.js';
-import { getShadowContainer } from 'xtal-element/getShadowContainer.js';
+// import {getShadowContainer} from 'xtal-element/getShadowContainer.js'; 
 const listening = Symbol();
 const activatedIds = new Set();
 export class SecondTempl {
     constructor(tm) {
         this.tm = tm;
-        const shadowContainer = getShadowContainer(tm);
+        const shadowContainer = tm.getRootNode();
         if (shadowContainer[listening] === true)
             return;
         shadowContainer[listening] = true;
