@@ -8,15 +8,13 @@
   "author": "bahrus <anderson.bruce.b@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "xtal-element": "0.0.99",
+    "xtal-element": "0.0.101",
     "css-observe": "0.0.17",
-    "stream-orator": "0.0.4"
+    "stream-orator": "0.0.5"
   },
   "devDependencies": {
-    "@types/tape": "4.2.33",
-    "@webcomponents/webcomponentsjs": "2.4.0",
-    "xtal-test": "0.0.31",
-    "tape": "4.10.2",
+    "@webcomponents/webcomponentsjs": "2.4.3",
+    "xtal-test": "0.0.44",
     "es-module-shims": "0.4.6",
     "open-borders": "0.0.4"
   },
