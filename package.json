@@ -8,8 +8,8 @@
   "author": "bahrus <anderson.bruce.b@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "xtal-element": "0.0.101",
-    "css-observe": "0.0.17",
+    "xtal-element": "0.0.179",
+    "css-observe": "0.0.19",
     "stream-orator": "0.0.5"
   },
   "devDependencies": {

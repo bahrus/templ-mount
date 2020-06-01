@@ -7,12 +7,10 @@
     <title>Document</title>
 </head>
 <body>
-    <!-- <templ-mount href=include1.html imp-key></templ-mount> -->
 
-    <templ-mount></templ-mount>
-    <template href=include1.html></template>
+    <template import href=include1.html as=include></template>
 
-    <div imp-key=include1.html></div>
+    <div imp-key=include></div>
 
         <!-- Use experimental import maps -->
         <script defer src="../node_modules/es-module-shims/dist/es-module-shims.js"></script>

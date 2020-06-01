@@ -49,15 +49,11 @@ export class TemplMount extends HTMLElement implements ITemplMount{
     }
     static loadLocalTemplate(templateString: string, options: TemplateSecondArg){
         const template = options.template;
-//        if(!template.hasAttribute('loaded')){
-            template.innerHTML = templateString;
-            (<any>template).loaded = true;
-            template.setAttribute('loaded', '');
-            options.tm.emit<'load'>(template, 'load', {});
-            // template.dispatchEvent(new CustomEvent('load', {
-            //     bubbles: true,
-            // }));
-//        }
+        template.innerHTML = templateString;
+        (<any>template).loaded = true;
+        template.setAttribute('loaded', '');
+        options.tm.emit<'load'>(template, 'load', {});
+
     }
 
     //https://gist.github.com/GuillaumeJasmin/9119436
@@ -94,7 +90,6 @@ export class TemplMount extends HTMLElement implements ITemplMount{
 
             const init: RequestInit = t.hasAttribute('request-init') ? JSON.parse(t.getAttribute('request-init')) : {};
             this.swapAttr(t, href);
-            //console.log(options.target);
             if(options.target !== undefined && t.hasAttribute('stream')){
                 const {streamOrator, TemplateProcessor} = await import('stream-orator/stream-orator.js');
                 await streamOrator(href, init, options.target, new TemplateProcessor(t));
@@ -131,25 +126,9 @@ export class TemplMount extends HTMLElement implements ITemplMount{
         
     }
 
-    // attributeChangedCallback(n: string, ov: string, nv: string){
-    //     switch(n){
-    //         case import_key:
-    //             this._importKey = nv;
-    //             break;
-    //     }
-    // }
 
     _importKey = 'imp-key';
-    // get importKey(){
-    //     return this._importKey;
-    // }
-    // /**
-    //  * Set the key to use to import templates.
-    //  * @attr import-key
-    //  */
-    // set importKey(nv: string){
-    //     this.setAttribute(import_key, nv);
-    // }
+
 
     static swapAttr(templ: HTMLTemplateElement, href: string){
         templ.removeAttribute('href');
@@ -158,24 +137,28 @@ export class TemplMount extends HTMLElement implements ITemplMount{
 
     async connectedCallback(){
         this.style.display = 'none';
-        this.loadFirstTempl();
+        const ft = await this.loadFirstTempl();
         this.loadSecondTempl();
         if(self[root] === undefined){
             self[root] = true;
-            Array.from(document.querySelectorAll('import[import][href]')).forEach(el =>{
+            Array.from(document.querySelectorAll('template[import][href]')).forEach(el =>{
                 const templ = el as HTMLTemplateElement;
                 const options : TemplateSecondArg = {
                     template: templ,
                     tm: this
                 };
                 TemplMount.template(templ.getAttribute('href'), options);
+                
+                // const {FirstTempl} = await import('./first-templ.js');
+                ft.watchElVisibility(templ.getAttribute('as'), templ.getAttribute('href'), templ);
             })
         }
     }
 
     async loadFirstTempl(){
         const {FirstTempl} = await import('./first-templ.js');
-        new FirstTempl(this);
+        const ft = new FirstTempl(this);
+        return ft;
     }
 
     async loadSecondTempl(){
