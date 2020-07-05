@@ -6,15 +6,15 @@
   "author": "bahrus <anderson.bruce.b@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "xtal-element": "0.0.179",
-    "css-observe": "0.0.19",
+    "xtal-element": "0.0.223",
+    "css-observe": "0.0.21",
     "stream-orator": "0.0.5"
   },
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "2.4.3",
-    "xtal-test": "0.0.44",
-    "es-module-shims": "0.4.6",
-    "open-borders": "0.0.4"
+    "xtal-test": "0.0.46",
+    "es-module-shims": "0.4.7",
+    "open-borders": "0.0.5"
   },
   "version": "0.0.57",
   "scripts": {
