@@ -8,7 +8,6 @@
 
 # \<templ-mount\>
 
-
 <details>
 
 <summary>Status Summary</summary>
@@ -30,9 +29,9 @@ templ-mount helps load templates from url's, which point to HTML files or stream
 
 templ-mount remembers the day its creator first installed a PWA (Flipkart), and was blown away by the liberating effect this could have on web development.  PWA's swept aside significant barriers to the web, in terms of achieving parity with native apps.
 
-templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find ways of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server. And, in fact, this *has* been the focus of many talented, creative developers at the [cutting edges](https://codesandbox.io/s/floral-worker-xwbwv), who are using their engineering prowess to overcome the significant hurdles to good performance imposed by browser vendor lethargy.  
+templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find ways of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server (or cloud). And, in fact, this *has* been the focus of many talented, creative developers at the [cutting edges](https://codesandbox.io/s/floral-worker-xwbwv), who are using their engineering prowess to overcome the significant hurdles to good performance imposed by browser vendor lethargy.  
 
-The ability to import HTML (and other data formats) from the ~~heavens~~ server down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier and simpler to get Lighthouse's blessing.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g the ability to truly stream in HTML as it renders, resolving and preemptively downloading relative references, centrally resolving package dependencies via import maps, providing sand-boxing support when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api ([as](https://github.com/github/include-fragment-element) [are](https://www.filamentgroup.com/lab/html-includes/) [many](https://github.com/whatwg/html/issues/2791) [of](https://github.com/Juicy/imported-template/) [templ-mount's](https://api.jquery.com/load/) [compatriots](https://www.npmjs.com/package/@vanillawc/wc-include)).
+The ability to stream HTML (and other data formats) from the ~~heavens~~ server/cloud down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier and simpler to get Lighthouse's blessings.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g. the ability to truly stream in HTML as it renders, resolving and preemptively downloading relative references, centrally resolving package dependencies, providing sand-boxing support when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api ([as](https://github.com/github/include-fragment-element) [are](https://www.filamentgroup.com/lab/html-includes/) [many](https://github.com/whatwg/html/issues/2791) [of](https://github.com/Juicy/imported-template/) [templ-mount's](https://api.jquery.com/load/) [compatriots](https://www.npmjs.com/package/@vanillawc/wc-include)).
 
 </details>
 
@@ -40,9 +39,11 @@ The ability to import HTML (and other data formats) from the ~~heavens~~ server 
 
 It seems that HTML Templates, in particular node cloning [often](https://jsperf.com/clonenode-vs-createelement-performance/32) [provides](https://jsperf.com/innerhtml-vs-importnode/6) [the](https://github.com/sophiebits/innerhtml-vs-createelement-vs-clonenode) [best](https://stackoverflow.com/questions/676249/deep-cloning-vs-setting-of-innerhtml-whats-faster) performing way to generate HTML repeatedly.  They also provide the ability to download content ahead of time, before it is scrolled into view, and stored in a low memory object, thanks to the inertness of HTML templates.  Then, when needed, the content can materialize.  If the content moves out of view, it could, if it is helpful, be temporarily placed into a deep hibernation mode.  In other words, delete the materialized content, while holding on to the low-memory template from which it derived.  This approach might be most beneficial on a low memory device.
 
-One of the driving forces behind this component is it allows applications to follow the [rule of least power](https://en.wikipedia.org/wiki/Rule_of_least_power) and to send data to the browser in the format that the browser needs to ultimately consume, without (expensive) translations from one format into another.  It can work well with server-side-centric frameworks, like PHP, asp.net MVC, Ruby on Rails, Django, pug, Java EE MVC, etc.
+One of the driving forces behind this component is it allows applications to follow the [rule of least power](https://en.wikipedia.org/wiki/Rule_of_least_power) and to send data to the browser in the format that the browser needs to ultimately consume, without (expensive) translations from one format into another.  It can work well with server-side-centric frameworks, like PHP, asp.net (core) MVC, Ruby on Rails, Django, pug, Java EE MVC, etc.
 
 If this functionality (or some variation) were [built into the browser](https://discourse.wicg.io/t/add-src-attribute-to-template/2721), it would also **provide a way of injecting ShadowDOM without JS, a [long](https://discourse.wicg.io/t/declarative-shadow-dom/1904/15) [sought](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Declarative-Shadow-DOM.md) after [feature](https://github.com/whatwg/dom/issues/510)**.
+
+**NB:** A promising renewal of declarative Shadow DOM support is being debated.  
 
 ## Significant to-do items.
 
@@ -106,7 +107,7 @@ as=penguins-poop></template>
 
 **NB** If using this web component in a Game of Thrones website, the web component could find itself on trial for allegedly [poisoning the King](https://discourse.wicg.io/t/proposal-symbol-namespacing-of-attributes/3515).  
 
-## Lazy downloading, lazy loading into the DOM tree (Stream support to be investigated)
+## Lazy downloading, lazy loading into the DOM tree (with preliminary stream support via stream-orator)
 
 Maybe we would rather save users' bandwidth, because they are unlikely to load some hidden content, and/or they are on an expensive network.  
 
@@ -128,9 +129,7 @@ We can lazy load the downloading as well, only beginning the download when the c
 </details>
 ```
 
-
-
-Browser standard bearers seem to consider providing a solution that
+Browser standard-bearers seem to consider providing a solution that
 
 1.  Saves people from wasting bandwidth needlessly
 2.  Avoids premature loading into memory on a [low memory device](https://www.kaiostech.com/meet-the-devices-that-are-powered-by-kaios/), 
@@ -140,7 +139,7 @@ to be promoting an inferior user experience.
 
 Sure, if you are a high-flying financier, and you need your web browser to be open at all times to your stock portfolio, which needs to update with every stock fluctuation, of course lazy loading isn't the best user experience. Time is Money!
 
-But what about Tiny Tim, your assistant's little brother, suffering from renal tubular acidosis, an easily curable disease?  He toils away, shining people's shoes (shoes -- if only he could afford such a luxury).  One of his customers forgot to bring cash, and paid Tiny Tim instead with a disposable feature phone the customer was about to throw away.  This is Tiny Tim's opportunity to look up a community hospital that will treat him for free, but the phone only has 3 minutes of battery life left, and is down to the last 580KB of data, struggling with 1x speed at best.  
+But what about Tiny Tim, your assistant's little brother, suffering from renal tubular acidosis, an easily curable disease?  He toils away, shining people's shoes (shoes -- if only he could afford such a luxury).  One of his customers forgot to bring cash, and paid Tiny Tim instead with a disposable feature phone the customer was about to throw away.  This is Tiny Tim's opportunity to look up a community hospital that will treat him for free, but the phone only has 3 minutes of battery life left, and is down to the last 580KB of data, struggling with 1g speed at best.  
 
 Tim searches for "community hospitals near me", and watches his remaining data disappear while downloading, as part of the original payload, an ad sponsoring the search.
 
@@ -298,7 +297,24 @@ If the content of a template is embedded inside a template tag already (as part 
 ```
 
 
-This, of course, would also provide JS-free, declarative Shadow DOM support if implemented natively (and similar ideas to this have previously been floated by others).
+This, of course, would also provide JS-free, declarative Shadow DOM support if implemented natively, and similar ideas to this have previously been floated by others -- however, it appears that this idea might not line up very well with current popular approaches of hydrating.  Perhaps if template instantiation were added, this approach would be more useful for those frameworks.
+
+## Dehydrating server-rendered content [TODO, tentative]
+
+
+<template import from=penguins_poop></template>
+
+<details>
+    <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
+    <article id=penguins_poop>
+        <a href=//www.target.com/b/pedialax/-/N-55lp4 slot="AdInsert">Pedia-Lax</a>
+        <p>Chinstrap and Adélie penguins generate considerable 
+            pressures to propel their faeces away from the edge of the nest.
+            ...
+        </p>
+    </article>
+    ...
+</details>
 
 
 ## Activating content
