@@ -302,7 +302,7 @@ This, of course, would also provide JS-free, declarative Shadow DOM support if i
 ## Dehydrating server-rendered content [TODO, tentative]
 
 
-<template import from=penguins_poop></template>
+<template import from=penguins_poop as penguins-poop></template>
 
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
