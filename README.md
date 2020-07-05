@@ -299,24 +299,6 @@ If the content of a template is embedded inside a template tag already (as part 
 
 This, of course, would also provide JS-free, declarative Shadow DOM support if implemented natively, and similar ideas to this have previously been floated by others -- however, it appears that this idea might not line up very well with current popular approaches of hydrating.  Perhaps if template instantiation were added, this approach would be more useful for those frameworks.
 
-## Dehydrating server-rendered content [TODO, tentative]
-
-
-<template import from=penguins_poop as penguins-poop></template>
-
-<details>
-    <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-    <article id=penguins_poop>
-        <a href=//www.target.com/b/pedialax/-/N-55lp4 slot="AdInsert">Pedia-Lax</a>
-        <p>Chinstrap and Adélie penguins generate considerable 
-            pressures to propel their faeces away from the edge of the nest.
-            ...
-        </p>
-    </article>
-    ...
-</details>
-
-
 ## Activating content
 
 If a template has the append-to-head attribute, then script and style tags inside will be added to the global head tag.  Due to strange Firefox behavior, it is recommended that js references be added via dynamic import:
@@ -375,6 +357,27 @@ The left hand side and right hand side of the snipping can be specified:
 
 An iFrame allows you to change the src attribute, and the contents inside get replaced, rather than appended to.  That is now supported, both as an attribute and as a property.
 
+
+
+
+## Dehydrating server-rendered content [TODO, tentative]
+
+<template import penguins-poop></template>
+
+<details>
+    <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
+    <article>
+        <a href=//www.target.com/b/pedialax/-/N-55lp4 slot="AdInsert">Pedia-Lax</a>
+        <p>Chinstrap and Adélie penguins generate considerable 
+            pressures to propel their faeces away from the edge of the nest.
+            ...
+        </p>
+        <template export as pengiuns-poop></template>
+    </article>
+    ...
+</details>
+
+Problem:  How to know when article is fully loaded?  Previous siblings of template export already loaded, but children of siblings?
 
 ## Defining a Web Component using templ-mount [untested idea]
 
