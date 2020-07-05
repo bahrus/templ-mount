@@ -2,7 +2,6 @@
   "name": "templ-mount",
   "description": "Allow templates to be loaded from url&#39;s",
   "main": "templ-mount.js",
-  "type": "module",
   "repository": "https://github.com/bahrus/templ-mount",
   "author": "bahrus <anderson.bruce.b@gmail.com>",
   "license": "MIT",
