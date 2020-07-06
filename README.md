@@ -420,11 +420,29 @@ myHeavyLifting.js gets a reference to the template via:
 ```JavaScript
 const scriptTag = window['2071aa02-e277-47f7-882a-a5a7c6218d4d'];
 const template = scriptTag.previousElementSibling;
+if(template.loaded){
+    define();
+}else{
+    template.addEventListener('load', e => define());
+}
 class Chessboard extends HTMLElement{
     ...
 }
 ...
-customElements.define('chess-board', Chessboard);
+function define(){
+    customElements.define('chess-board', Chessboard);
+}
+
+```
+
+What we need is a way of "flipping" a DOM element into a custom element
+
+```html
+    <chess-board></chess-board>
+    <delete-when-previous-sibling-is-defined></delete-when-previous-sibling-is-defined>
+    <table id=chessboard>
+    ...
+    </table>
 ```
 
 # Viewing This Element Locally
