@@ -362,22 +362,22 @@ An iFrame allows you to change the src attribute, and the contents inside get re
 
 ## Dehydrating server-rendered content [TODO, tentative]
 
-<template import penguins-poop></template>
+<template import penguins-poop on=DOMContentLoaded as penguins-poop></template>
 
 <details>
     <summary>Pressures produced when penguins pooh — calculations on avian defaecation</summary>
-    <article>
+    <article id=penguins-poop>
         <a href=//www.target.com/b/pedialax/-/N-55lp4 slot="AdInsert">Pedia-Lax</a>
         <p>Chinstrap and Adélie penguins generate considerable 
             pressures to propel their faeces away from the edge of the nest.
             ...
         </p>
-        <template export as pengiuns-poop></template>
     </article>
     ...
 </details>
 
-Problem:  How to know when article is fully loaded?  Previous siblings of template export already loaded, but children of siblings?
+
+
 
 ## Defining a Web Component using templ-mount [untested idea]
 
@@ -397,17 +397,35 @@ Suppose we stipulate that referencing a web component must consist of a single r
 
 In order to provide the quickest visual, our web component, chess-board.js (say) can do the following:
 
-1.  Dynamically, asynchronously reference templ-mount/templ-mount.js, which will start downloading templates as needed, if they contain the import href attributes.
-2.  Append (and hold on to a reference for) a template tag to document.body which points to the HTML for the original board via import href="chessboard.html".  templ-mount will begin the download for this template as soon as it is downloaded (~886 Bytes gzipped/compressed).  The url for the HTML file can be relative to chess-board.js, based on import.meta.url.
+<!-- 1.  Dynamically, asynchronously reference templ-mount/templ-mount.js, which will start downloading templates as needed, if they contain the import href attributes.
+2.  Append (and hold on to a reference for) a template tag to document.body which points to the HTML for the original board via import href="chessboard.html".  templ-mount will begin the download for this template as soon as it is downloaded (~886 Bytes gzipped/compressed).  The url for the HTML file can be relative to chess-board.js, based on import.meta.url. -->
+
+Server-render the original chessboard.  Use https://github.com/bahrus/nomodule
 
 ```html
 <body>
-    <template import href="..." as chessboard></template>
+    <template import chessboard on=DOMContentLoaded as chessboard></template>
+    <script nomodule type="module ish" src="myHeavyLifting.js"></script>
+
+
+    ...
+
+    <table id=chessboard>
+    ...
+    </table>
 </body>
 ```
-3)  Dynamically, asynchronously download JS needed to create non-original boards.  Call it chess-board-heavy-lifting.js.
-4)  If no moves are specified in the \<chess-board\>\</chess-board\/>, append attribute imp-key=chessboard, which will then be able to display the original chessboard, even without loading chess-board-heavy-lifting.js.
-5)  Subsequent boards could initially display the original board, maybe greyed out, then replaced by th actual board after  chess-board-heavy-lifting.js is retrieved.   
+myHeavyLifting.js gets a reference to the template via:
+
+```JavaScript
+const scriptTag = window['2071aa02-e277-47f7-882a-a5a7c6218d4d'];
+const template = scriptTag.previousElementSibling;
+class Chessboard extends HTMLElement{
+    ...
+}
+...
+customElements.define('chess-board', Chessboard);
+```
 
 # Viewing This Element Locally
 
