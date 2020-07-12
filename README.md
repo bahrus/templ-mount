@@ -29,7 +29,9 @@ templ-mount helps load templates from url's, which point to HTML files or stream
 
 templ-mount remembers the day its creator first installed a PWA (Flipkart), and was blown away by the liberating effect this could have on web development.  PWA's swept aside significant barriers to the web, in terms of achieving parity with native apps.
 
-templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find ways of building applications that can scale, while maintaining fidelity to the various commandments set forth by Lighthouse.  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server (or cloud). And, in fact, this *has* been the focus of many talented, creative developers at the [cutting edges](https://codesandbox.io/s/floral-worker-xwbwv), who are using their engineering prowess to overcome the significant hurdles to good performance imposed by browser vendor lethargy.  
+templ-mount thinks, though, that in order to satisfactorily reach the promised land of true native competitiveness, we will need to find ways of building applications that can [scale, while maintaining fidelity to the various commandments set forth by Lighthouse](https://www.seetheholyland.net/temple-mount/#attachment_4489).  A profound cultural shift (or rediscovery of [old techniques](https://www.liquidweb.com/kb/what-is-a-progressive-jpeg/)?)  is needed in our thinking about the relationship between the client and the server (or cloud). And, in fact, this *has* been the focus of many talented, creative developers at the [cutting edges](https://codesandbox.io/s/floral-worker-xwbwv), who are using their engineering prowess to overcome the significant hurdles to good performance imposed by browser vendor lethargy.
+
+[![Scale of Souls](https://www.seetheholyland.net/wp-content/uploads/Temple-Mount8.jpg)](https://www.seetheholyland.net/temple-mount/#attachment_4489)
 
 The ability to stream HTML (and other data formats) from the ~~heavens~~ server/cloud down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier and simpler to get Lighthouse's blessings.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g. the ability to truly stream in HTML as it renders, resolving and preemptively downloading relative references, centrally resolving package dependencies, providing sand-boxing support when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api ([as](https://github.com/github/include-fragment-element) [are](https://www.filamentgroup.com/lab/html-includes/) [many](https://github.com/whatwg/html/issues/2791) [of](https://github.com/Juicy/imported-template/) [templ-mount's](https://api.jquery.com/load/) [compatriots](https://www.npmjs.com/package/@vanillawc/wc-include)).
 
@@ -400,40 +402,47 @@ In order to provide the quickest visual, our web component, chess-board.js (say)
 <!-- 1.  Dynamically, asynchronously reference templ-mount/templ-mount.js, which will start downloading templates as needed, if they contain the import href attributes.
 2.  Append (and hold on to a reference for) a template tag to document.body which points to the HTML for the original board via import href="chessboard.html".  templ-mount will begin the download for this template as soon as it is downloaded (~886 Bytes gzipped/compressed).  The url for the HTML file can be relative to chess-board.js, based on import.meta.url. -->
 
-Server-render the original chessboard.  Use https://github.com/bahrus/nomodule
+Server-render the original chessboard inside a templ-mount tag.  Use https://github.com/bahrus/nomodule
 
 ```html
 <body>
-    <template import chessboard on=DOMContentLoaded as chessboard></template>
+    ...
+    <templ-mount>
+        <table id=chessboard>
+        ...
+        </table>
+    </templ-mount>
+    <template>
+        <chess-board moves="1.Nf3 d5 2.d4 c6 3.c4 e6 4.Nbd2 Nf6 5.e3 Nbd7 6.Bd3 Bd6 7.e4 dxe4 8.Nxe4 Nxe4"></chess-board>
+    </template>
     <script nomodule type="module ish" src="myHeavyLifting.js"></script>
 
-
     ...
-
-    <table id=chessboard>
-    ...
-    </table>
 </body>
 ```
 myHeavyLifting.js gets a reference to the template via:
 
 ```JavaScript
 const scriptTag = window['2071aa02-e277-47f7-882a-a5a7c6218d4d'];
-const template = scriptTag.previousElementSibling;
-if(template.loaded){
+const templMount = scriptTag.previousElementSibling;
+if(templMount.loaded){
     define();
 }else{
-    template.addEventListener('load', e => define());
+    templMount.addEventListener('load', e => define());
 }
 class Chessboard extends HTMLElement{
     ...
+    this[shadowRoot].appendChild(templMount.template);
 }
 ...
 function define(){
+    templMount.switchTo('chess-board');
     customElements.define('chess-board', Chessboard);
 }
 
 ```
+
+switchTo deletes the innerHTML inside templ-mount, and inserts
 
 What we need is a way of "flipping" a DOM element into a custom element
 
