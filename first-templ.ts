@@ -1,6 +1,6 @@
 import { CssObserve } from 'css-observe/css-observe.js';
 import { TemplMount } from './templ-mount.js';
-import {decorate} from 'trans-render/decorate.js';
+import {decorate} from 'trans-render/plugins/decorate.js';
 const listening = Symbol();
 const hrefSym = Symbol();
 const hrefSym2 = Symbol();
