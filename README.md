@@ -362,7 +362,7 @@ An iFrame allows you to change the src attribute, and the contents inside get re
 
 
 
-## Dehydrating server-rendered content [TODO, tentative]
+<!-- ## Dehydrating server-rendered content [TODO, tentative]
 
 <template import penguins-poop on=DOMContentLoaded as penguins-poop></template>
 
@@ -376,7 +376,7 @@ An iFrame allows you to change the src attribute, and the contents inside get re
         </p>
     </article>
     ...
-</details>
+</details> -->
 
 
 
