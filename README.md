@@ -22,7 +22,7 @@ The committee has recently been reminded of how this is [not how these things wo
 
 </details>
 
-templ-mount helps load templates from url's, which point to HTML files or streams.  It takes some ideas from [JQuery's](https://w3techs.com/technologies/overview/javascript_library) [load](https://api.jquery.com/load/)  function, and also [html-include-element](https://www.npmjs.com/package/html-include-element).
+templ-mount helps load templates from url's, which point to HTML files or streams.  It takes some ideas from [JQuery's](https://w3techs.com/technologies/overview/javascript_library) [load](https://api.jquery.com/load/)  function,  [html-include-element](https://www.npmjs.com/package/html-include-element) and the [streaming-element-backpressure](https://streams.spec.whatwg.org/demos/streaming-element-backpressure.html).
 
 <details>
     <summary>templ-mount's origin story</summary>
@@ -33,7 +33,7 @@ templ-mount thinks, though, that in order to satisfactorily reach the promised l
 
 [![Scale of Souls](https://www.seetheholyland.net/wp-content/uploads/Temple-Mount8.jpg)](https://www.seetheholyland.net/temple-mount/#attachment_4489)
 
-The ability to stream HTML (and other data formats) from the ~~heavens~~ server/cloud down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier and simpler to get Lighthouse's blessings.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g. the ability to truly stream in HTML as it renders, resolving and preemptively downloading relative references, centrally resolving package dependencies, providing sand-boxing support when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api ([as](https://github.com/github/include-fragment-element) [are](https://www.filamentgroup.com/lab/html-includes/) [many](https://github.com/whatwg/html/issues/2791) [of](https://github.com/Juicy/imported-template/) [templ-mount's](https://api.jquery.com/load/) [compatriots](https://www.npmjs.com/package/@vanillawc/wc-include)).
+The ability to stream HTML (and other data formats) from the ~~heavens~~ server/cloud down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier and simpler to get Lighthouse's blessings.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g. the ability to [truly stream in HTML as it renders](https://itnext.io/your-single-page-app-is-now-a-polyfill-7881fb01694e), resolving and preemptively downloading relative references, centrally resolving package dependencies, providing sand-boxing support when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api ([as](https://github.com/github/include-fragment-element) [are](https://www.filamentgroup.com/lab/html-includes/) [many](https://github.com/whatwg/html/issues/2791) [of](https://github.com/Juicy/imported-template/) [templ-mount's](https://api.jquery.com/load/) [compatriots](https://www.npmjs.com/package/@vanillawc/wc-include)).
 
 </details>
 
