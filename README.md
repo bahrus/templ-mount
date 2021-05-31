@@ -8,24 +8,23 @@
 
 # \<templ-mount\>
 
-<details>
 
-<summary>Status Summary</summary>
+
+## Status Summary
 
 The Committee for the Repair of templ-mount is coordinating fundamental adjustments, which include some breaking changes from version 0.0.48.
 
 Repairs were previously put on ice, based on the naive hope that desperately needed browser standards, providing a far more comprehensive solution than what templ-mount can provide, were just around the corner.   
 
-The committee has recently been reminded of how this is [not how these things work](https://www.youtube.com/watch?v=0-Yl6FmV6EE).
+The committee has recently been reminded of how this is [not how these things work](https://www.youtube.com/watch?v=AXgWZyb_HgE).
 
-[![Watch the video](https://img.youtube.com/vi/0-Yl6FmV6EE/maxresdefault.jpg)](https://www.youtube.com/watch?v=0-Yl6FmV6EE)
+[![Watch the video](https://img.youtube.com/vi/AXgWZyb_HgE/maxresdefault.jpg)](https://www.youtube.com/watch?v=AXgWZyb_HgE)
 
-</details>
+
 
 templ-mount helps load templates from url's, which point to HTML files or streams.  It takes some ideas from [JQuery's](https://w3techs.com/technologies/overview/javascript_library) [load](https://api.jquery.com/load/)  function,  [html-include-element](https://www.npmjs.com/package/html-include-element) and the [streaming-element-backpressure](https://streams.spec.whatwg.org/demos/streaming-element-backpressure.html).
 
-<details>
-    <summary>templ-mount's origin story</summary>
+## templ-mount's origin story
 
 templ-mount remembers the day its creator first installed a PWA (Flipkart), and was blown away by the liberating effect this could have on web development.  PWA's swept aside significant barriers to the web, in terms of achieving parity with native apps.
 
@@ -35,7 +34,6 @@ templ-mount thinks, though, that in order to satisfactorily reach the promised l
 
 The ability to stream HTML (and other data formats) from the ~~heavens~~ server/cloud down to ~~Earth~~ the browser would, in templ-mount's opinion, make it much easier and simpler to get Lighthouse's blessings.  Such functionality would best be served by native browser api's, due to the complexities involved -- e.g. the ability to [truly stream in HTML as it renders](https://itnext.io/your-single-page-app-is-now-a-polyfill-7881fb01694e), resolving and preemptively downloading relative references, centrally resolving package dependencies, providing sand-boxing support when needed, etc.   In the meantime, templ-mount is wandering the desert, in search of a surrogate api ([as](https://github.com/github/include-fragment-element) [are](https://www.filamentgroup.com/lab/html-includes/) [many](https://github.com/whatwg/html/issues/2791) [of](https://github.com/Juicy/imported-template/) [templ-mount's](https://api.jquery.com/load/) [compatriots](https://www.npmjs.com/package/@vanillawc/wc-include)).
 
-</details>
 
 ## Purpose
 
